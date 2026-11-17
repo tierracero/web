@@ -16,16 +16,19 @@ extension NumericValue {
 }
 
 public class NumericValueContainer: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
     
     var _changeHandler = {}
     
     public init<N> (_ value: N, important: Bool? = nil) where N: UniValue, N.UniValue: NumericValue {
         self.value = value.uniValue.numericValue + (important == true ? "!important" : "")
-        value.uniStateValue?.listen {
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.numericValue + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
     
     public var description: String { value }

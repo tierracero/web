@@ -25,7 +25,7 @@ open class BaseActiveStringElement: BaseActiveElement, _StringInitializable {
         value = title.uniValue
         title.uniStateValue?.listen { [weak self] in
             self?.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
     
     required public init() {

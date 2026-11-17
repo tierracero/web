@@ -34,6 +34,7 @@ enum CSSRuleType: Int {
 @MainActor
 open class CSSRule: RulesContent, CSSRulable {
     public var rulesContent: Rules.Item { .rule(self) }
+    fileprivate lazy var stateProperties = CSSStateProperties(owner: self)
     
     public internal(set) var domElement: JSValue?
 
@@ -71,6 +72,7 @@ open class CSSRule: RulesContent, CSSRulable {
         switch item {
         case .items(let v): v.forEach { parsePropertiesItem($0) }
         case .property(let v):
+            if bindStateProperty(v, to: self) { return }
             if let index = _properties.firstIndex(where: { $0.key == v.key }) {
                 _properties.remove(at: index)
             }
@@ -160,64 +162,92 @@ extension BaseElement: CSSRulable {}
 @MainActor extension CSSRulable {
     func _addProperty<P: _Property>(_ property: P) {
         let key = property.key
-        func invokeResizeEvent() {
-            if let s = self as? BaseElement, [
-                PropertyType.left.description,
-                PropertyType.right.description,
-                PropertyType.top.description,
-                PropertyType.bottom.description,
-                PropertyType.margin.description,
-                PropertyType.marginLeft.description,
-                PropertyType.marginTop.description,
-                PropertyType.marginRight.description,
-                PropertyType.marginBottom.description,
-                PropertyType.padding.description,
-                PropertyType.paddingLeft.description,
-                PropertyType.paddingTop.description,
-                PropertyType.paddingRight.description,
-                PropertyType.paddingBottom.description,
-                PropertyType.visibility.description,
-                PropertyType.display.description,
-                PropertyType.border.description,
-                PropertyType.borderTop.description,
-                PropertyType.borderLeft.description,
-                PropertyType.borderRight.description,
-                PropertyType.borderBottom.description,
-                PropertyType.borderWidth.description,
-                PropertyType.borderTopWidth.description,
-                PropertyType.borderLeftWidth.description,
-                PropertyType.borderRightWidth.description,
-                PropertyType.borderBottomWidth.description
-            ].contains(key) {
-                s.invokeResizeEvent()
+        let bindings: CSSStateProperties?
+        if let element = self as? BaseElement {
+            if let existing = element.storage[CSSStatePropertiesKey.self] {
+                bindings = existing
+            } else {
+                let created = CSSStateProperties(owner: element)
+                element.storage[CSSStatePropertiesKey.self] = created
+                bindings = created
             }
+        } else if let rule = self as? CSSRule {
+            bindings = rule.stateProperties
+        } else {
+            bindings = nil
         }
+        bindings?.properties[key] = property
         _setProperty(key, property.value, important: false)
-        invokeResizeEvent()
+        invokeResizeEvent(for: key)
         if let internalChangeable = property.propertyValue as? _PropertyValueInnerChangeable {
-            internalChangeable._changeHandler = { [self, property] in
+            internalChangeable._changeHandler = { [weak bindings, weak property] in
+                guard let property else { return }
                 let snapshot = property.propertyValue.description
-                Task { @MainActor [self] in
-                    self._setProperty(key, snapshot, important: false)
-                    invokeResizeEvent()
+                Task { @MainActor [weak bindings, weak property] in
+                    guard let bindings, let property,
+                          bindings.properties[key] === property,
+                          let owner = bindings.owner else { return }
+                    owner._setProperty(key, snapshot, important: false)
+                    owner.invokeResizeEvent(for: key)
                 }
             }
         }
-        property._content._changeHandler = { [self] newValue in
+        property._content._changeHandler = { [weak bindings, weak property] newValue in
             let snapshot: String? = newValue?.description
-            Task { @MainActor [self] in
-                guard let snapshot = snapshot else {
-                    self._removeProperty(key)
-                    invokeResizeEvent()
+            Task { @MainActor [weak bindings, weak property] in
+                guard let bindings, let property,
+                      bindings.properties[key] === property,
+                      let owner = bindings.owner else { return }
+                guard let snapshot else {
+                    owner._removeProperty(key)
+                    owner.invokeResizeEvent(for: key)
                     return
                 }
-                self._setProperty(key, snapshot, important: false)
-                invokeResizeEvent()
+                owner._setProperty(key, snapshot, important: false)
+                owner.invokeResizeEvent(for: key)
             }
         }
     }
-    
+
+    private func invokeResizeEvent(for key: String) {
+        if let s = self as? BaseElement, [
+            PropertyType.left.description,
+            PropertyType.right.description,
+            PropertyType.top.description,
+            PropertyType.bottom.description,
+            PropertyType.margin.description,
+            PropertyType.marginLeft.description,
+            PropertyType.marginTop.description,
+            PropertyType.marginRight.description,
+            PropertyType.marginBottom.description,
+            PropertyType.padding.description,
+            PropertyType.paddingLeft.description,
+            PropertyType.paddingTop.description,
+            PropertyType.paddingRight.description,
+            PropertyType.paddingBottom.description,
+            PropertyType.visibility.description,
+            PropertyType.display.description,
+            PropertyType.border.description,
+            PropertyType.borderTop.description,
+            PropertyType.borderLeft.description,
+            PropertyType.borderRight.description,
+            PropertyType.borderBottom.description,
+            PropertyType.borderWidth.description,
+            PropertyType.borderTopWidth.description,
+            PropertyType.borderLeftWidth.description,
+            PropertyType.borderRightWidth.description,
+            PropertyType.borderBottomWidth.description
+        ].contains(key) {
+            s.invokeResizeEvent()
+        }
+    }
+
     func _addProperty(_ key: String, _ value: String, important: Bool? = nil) {
+        if let element = self as? BaseElement {
+            element.storage[CSSStatePropertiesKey.self]?.properties.removeValue(forKey: key)
+        } else if let rule = self as? CSSRule {
+            rule.stateProperties.properties.removeValue(forKey: key)
+        }
         _setProperty(key, value, important: important)
     }
 
@@ -281,4 +311,23 @@ extension BaseElement {
             notifyListeners(self)
         }
     }
+}
+
+private struct CSSStatePropertiesKey: StorageKey {
+    typealias Value = CSSStateProperties
+}
+
+@MainActor private final class CSSStateProperties: AnyStorageValue {
+    weak var owner: (any CSSRulable & AnyObject)?
+    var properties: [String: AnyObject] = [:]
+
+    init<Owner: CSSRulable & AnyObject>(owner: Owner) { self.owner = owner }
+
+    func shutdown() { properties.removeAll() }
+}
+
+@MainActor private func bindStateProperty(_ property: AnyProperty, to owner: CSSRulable) -> Bool {
+    guard let property = property as? any _Property else { return false }
+    owner._addProperty(property)
+    return true
 }

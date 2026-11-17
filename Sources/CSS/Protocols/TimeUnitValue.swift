@@ -15,6 +15,8 @@ public protocol TimeUnitValue: CustomStringConvertible {
 }
 
 public class TimeUnitValueContainer: TimeUnitValue, UniValue, CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value: Double = 0
     @State public var timeUnit: TimeUnit = .ms
     public let important: Bool
@@ -29,32 +31,38 @@ public class TimeUnitValueContainer: TimeUnitValue, UniValue, CustomStringConver
         self.timeUnit = timeUnit.uniValue
         self.important = important == true
         if let state = value.uniStateValue {
-            $value.merge(with: state, leftChanged: { _ in
+            $value.merge(with: state, leftChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }, rightChanged: { _ in
+            }, rightChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            })
+            }).hold(in: _stateBindings)
         } else {
-            $value.listen {
+            $value.listen { [weak self] in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }
+            }.hold(in: _stateBindings)
         }
         if let state = timeUnit.uniStateValue {
-            $timeUnit.merge(with: state, leftChanged: { _ in
+            $timeUnit.merge(with: state, leftChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }, rightChanged: { _ in
+            }, rightChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            })
+            }).hold(in: _stateBindings)
         } else {
-            $timeUnit.listen {
+            $timeUnit.listen { [weak self] in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }
+            }.hold(in: _stateBindings)
         }
     }
     

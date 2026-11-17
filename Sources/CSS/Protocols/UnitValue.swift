@@ -17,6 +17,8 @@ public protocol UnitValuable: AnyUnitValuable {
 }
 
 public class UnitValue: UnitValuable, UniValue, _PropertyValueInnerChangeable, CustomStringConvertible {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value: Double = 0
     @State public var unit: Unit = .px
     
@@ -31,32 +33,38 @@ public class UnitValue: UnitValuable, UniValue, _PropertyValueInnerChangeable, C
         self.value = value.uniValue
         self.unit = important == true ? unit.uniValue.important : unit.uniValue
         if let state = value.uniStateValue {
-            $value.merge(with: state, leftChanged: { _ in
+            $value.merge(with: state, leftChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }, rightChanged: { _ in
+            }, rightChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            })
+            }).hold(in: _stateBindings)
         } else {
-            $value.listen {
+            $value.listen { [weak self] in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }
+            }.hold(in: _stateBindings)
         }
         if let state = unit.uniStateValue {
-            $unit.merge(with: state, leftChanged: { _ in
+            $unit.merge(with: state, leftChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }, rightChanged: { _ in
+            }, rightChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            })
+            }).hold(in: _stateBindings)
         } else {
-            $unit.listen {
+            $unit.listen { [weak self] in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -64,18 +72,21 @@ public class UnitValue: UnitValuable, UniValue, _PropertyValueInnerChangeable, C
         self.value = value.uniValue
         self.unit = important == true ? unit.important : unit
         if let state = value.uniStateValue {
-            $value.merge(with: state, leftChanged: { _ in
+            $value.merge(with: state, leftChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }, rightChanged: { _ in
+            }, rightChanged: { [weak self] _ in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            })
+            }).hold(in: _stateBindings)
         } else {
-            $value.listen {
+            $value.listen { [weak self] in
+                guard let self else { return }
                 self._changeHandler()
                 self.uniStateValue?.manualChangeNotify()
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }

@@ -58,6 +58,8 @@ import DOM
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_align-content.asp)
 public class AlignContentProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AlignContentType> { .alignContent }
     public var propertyValue: AlignContentType
     var _content = _PropertyContent<AlignContentType>()
@@ -68,7 +70,10 @@ public class AlignContentProperty: _Property {
 
     public convenience init (_ type: State<AlignContentType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -108,6 +113,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_align-items.asp)
 public class AlignItemsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AlignItemsType> { .alignItems }
     public var propertyValue: AlignItemsType
     var _content = _PropertyContent<AlignItemsType>()
@@ -118,7 +125,10 @@ public class AlignItemsProperty: _Property {
 
     public convenience init (_ type: State<AlignItemsType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -158,6 +168,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_align-self.asp)
 public class AlignSelfProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AlignSelfType> { .alignSelf }
     public var propertyValue: AlignSelfType
     var _content = _PropertyContent<AlignSelfType>()
@@ -168,7 +180,10 @@ public class AlignSelfProperty: _Property {
 
     public convenience init (_ type: State<AlignSelfType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -208,6 +223,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_all.asp)
 public class AllProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AllType> { .all }
     public var propertyValue: AllType
     var _content = _PropertyContent<AllType>()
@@ -218,7 +235,10 @@ public class AllProperty: _Property {
 
     public convenience init (_ type: State<AllType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -258,15 +278,18 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-delay.asp)
 public class AnimationDelayProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TimeUnitValueContainer> { .animationDelay }
     public var propertyValue: TimeUnitValueContainer
     var _content = _PropertyContent<TimeUnitValueContainer>()
 
     public init<U>(_ value: U) where U: UniValue, U.UniValue: TimeUnitValue {
         propertyValue = TimeUnitValueContainer(value.uniValue.value.doubleValue, value.uniValue.timeUnit)
-        value.uniStateValue?.listen {
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: TimeUnitValueContainer($0.value.doubleValue, $0.timeUnit))
-        }
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -325,6 +348,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-direction.asp)
 public class AnimationDirectionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AnimationDirectionType> { .animationDirection }
     public var propertyValue: AnimationDirectionType
     var _content = _PropertyContent<AnimationDirectionType>()
@@ -335,7 +360,10 @@ public class AnimationDirectionProperty: _Property {
 
     public convenience init (_ type: State<AnimationDirectionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -375,13 +403,18 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-duration.asp)
 public class AnimationDurationProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TimeUnitValueContainer> { .animationDuration }
     public var propertyValue: TimeUnitValueContainer
     var _content = _PropertyContent<TimeUnitValueContainer>()
 
     public init<U>(_ value: U) where U: UniValue, U.UniValue: TimeUnitValue {
         propertyValue = TimeUnitValueContainer(value.uniValue.value.doubleValue, value.uniValue.timeUnit)
-        value.uniStateValue?.listen { self._changed(to: TimeUnitValueContainer($0.value.doubleValue, $0.timeUnit)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: TimeUnitValueContainer($0.value.doubleValue, $0.timeUnit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -440,6 +473,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-fill-mode.asp)
 public class AnimationFillModeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AnimationFillModeType> { .animationFillMode }
     public var propertyValue: AnimationFillModeType
     var _content = _PropertyContent<AnimationFillModeType>()
@@ -450,7 +485,10 @@ public class AnimationFillModeProperty: _Property {
 
     public convenience init (_ type: State<AnimationFillModeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -490,13 +528,18 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-iteration-count.asp)
 public class AnimationIterationCountProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<String> { .animationIterationCount }
     public var propertyValue: String
     var _content = _PropertyContent<String>()
 
     public init <N>(_ n: N, important: Bool? = nil) where N: UniValue, N.UniValue == Int {
         propertyValue = "\(n.uniValue)" + (important == true ? "!important" : "")
-        n.uniStateValue?.listen { self._changed(to: "\($0)" + (important == true ? "!important" : "")) }
+        n.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: "\($0)" + (important == true ? "!important" : ""))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -529,13 +572,18 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-name.asp)
 public class AnimationNameProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<String> { .animationName }
     public var propertyValue: String
     var _content = _PropertyContent<String>()
 
     public init <S>(_ name: S, important: Bool? = nil) where S: UniValue, S.UniValue == String {
         propertyValue = name.uniValue + (important == true ? "!important" : "" )
-        name.uniStateValue?.listen { self._changed(to: $0 + (important == true ? "!important" : "" )) }
+        name.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0 + (important == true ? "!important" : "" ))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -568,6 +616,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-play-state.asp)
 public class AnimationPlayStateProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AnimationPlayStateType> { .animationPlayState }
     public var propertyValue: AnimationPlayStateType
     var _content = _PropertyContent<AnimationPlayStateType>()
@@ -578,7 +628,10 @@ public class AnimationPlayStateProperty: _Property {
 
     public convenience init (_ type: State<AnimationPlayStateType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -618,6 +671,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation.asp)
 public class AnimationProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<AnimationValue> { .animation }
     public var propertyValue: AnimationValue
     var _content = _PropertyContent<AnimationValue>()
@@ -628,7 +683,10 @@ public class AnimationProperty: _Property {
 
     public convenience init (_ type: State<AnimationValue>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 
     /// `duration` and `delay` are in seconds
@@ -759,6 +817,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp)
 public class AnimationTimingFunctionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TransitionTimingFunctionType> { .animationTimingFunction }
     public var propertyValue: TransitionTimingFunctionType
     var _content = _PropertyContent<TransitionTimingFunctionType>()
@@ -769,7 +829,10 @@ public class AnimationTimingFunctionProperty: _Property {
 
     public convenience init (_ type: State<TransitionTimingFunctionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -809,6 +872,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_backface-visibility.asp)
 public class BackfaceVisibilityProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackfaceVisibilityType> { .backfaceVisibility }
     public var propertyValue: BackfaceVisibilityType
     var _content = _PropertyContent<BackfaceVisibilityType>()
@@ -819,7 +884,10 @@ public class BackfaceVisibilityProperty: _Property {
 
     public convenience init (_ type: State<BackfaceVisibilityType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -859,6 +927,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_background-attachment.asp)
 public class BackgroundAttachmentProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundAttachmentType> { .backgroundAttachment }
     public var propertyValue: BackgroundAttachmentType
     var _content = _PropertyContent<BackgroundAttachmentType>()
@@ -869,7 +939,10 @@ public class BackgroundAttachmentProperty: _Property {
 
     public convenience init (_ type: State<BackgroundAttachmentType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -909,6 +982,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_background-blend-mode.asp)
 public class BackgroundBlendModeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundBlendModeType> { .backgroundBlendMode }
     public var propertyValue: BackgroundBlendModeType
     var _content = _PropertyContent<BackgroundBlendModeType>()
@@ -919,7 +994,10 @@ public class BackgroundBlendModeProperty: _Property {
 
     public convenience init (_ type: State<BackgroundBlendModeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -959,6 +1037,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_background-clip.asp)
 public class BackgroundClipProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundClipType> { .backgroundClip }
     public var propertyValue: BackgroundClipType
     public var propertyAliases: [AnyProperty]
@@ -971,7 +1051,10 @@ public class BackgroundClipProperty: _Property {
 
     public convenience init (_ type: State<BackgroundClipType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -1007,6 +1090,8 @@ extension Stylesheetable {
 
 extension BackgroundClipProperty {
     public class Webkit: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<BackgroundClipType> { .backgroundClip_webKit }
         public var propertyValue: BackgroundClipType
         var _content = _PropertyContent<BackgroundClipType>()
@@ -1017,7 +1102,10 @@ extension BackgroundClipProperty {
 
         public convenience init (_ type: State<BackgroundClipType>) {
             self.init(type.wrappedValue)
-            type.listen { self._changed(to: $0) }
+            type.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: $0)
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1036,6 +1124,8 @@ extension PropertyKey {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_background-color.asp)
 public class BackgroundColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .backgroundColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -1046,17 +1136,19 @@ public class BackgroundColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -1065,8 +1157,9 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -1075,8 +1168,9 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -1085,8 +1179,9 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -1095,7 +1190,7 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -1108,7 +1203,8 @@ public class BackgroundColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -1117,8 +1213,9 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -1127,8 +1224,9 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -1137,8 +1235,9 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -1147,7 +1246,7 @@ public class BackgroundColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -1229,13 +1328,18 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_background-image.asp)
 public class BackgroundImageProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<String> { .backgroundImage }
     public var propertyValue: String
     var _content = _PropertyContent<String>()
 
     public init <S>(_ src: S, important: Bool? = nil) where S: UniValue, S.UniValue == String {
         propertyValue = "url(\(src.uniValue))" + (important == true ? "!important" : "")
-        src.uniStateValue?.listen { self._changed(to: $0 + (important == true ? "!important" : "")) }
+        src.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0 + (important == true ? "!important" : ""))
+        }.hold(in: _stateBindings)
     }
 
     public init (_ function: CSSFunction, important: Bool? = nil) {
@@ -1279,6 +1383,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_background-origin.asp)
 public class BackgroundOriginProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundOriginType> { .backgroundOrigin }
     public var propertyValue: BackgroundOriginType
     var _content = _PropertyContent<BackgroundOriginType>()
@@ -1289,7 +1395,10 @@ public class BackgroundOriginProperty: _Property {
 
     public convenience init (_ type: State<BackgroundOriginType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -1329,6 +1438,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_background-position.asp)
 public class BackgroundPositionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundPositionType> { .backgroundPosition }
     public var propertyValue: BackgroundPositionType
     var _content = _PropertyContent<BackgroundPositionType>()
@@ -1339,7 +1450,10 @@ public class BackgroundPositionProperty: _Property {
 
     public convenience init (_ type: State<BackgroundPositionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -1379,6 +1493,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_background.asp)
 public class BackgroundProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundValue> { .background }
     public var propertyValue: BackgroundValue
     var _content = _PropertyContent<BackgroundValue>()
@@ -1389,7 +1505,10 @@ public class BackgroundProperty: _Property {
 
     public convenience init (_ type: State<BackgroundValue>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 
     public init (
@@ -1556,6 +1675,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_background-repeat.asp)
 public class BackgroundRepeatProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundRepeatType> { .backgroundRepeat }
     public var propertyValue: BackgroundRepeatType
     var _content = _PropertyContent<BackgroundRepeatType>()
@@ -1566,7 +1687,10 @@ public class BackgroundRepeatProperty: _Property {
 
     public convenience init (_ type: State<BackgroundRepeatType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -1606,6 +1730,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_background-size.asp)
 public class BackgroundSizeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BackgroundSizeValue> { .backgroundSize }
     public var propertyValue: BackgroundSizeValue
     var _content = _PropertyContent<BackgroundSizeValue>()
@@ -1618,7 +1744,10 @@ public class BackgroundSizeProperty: _Property {
     
     public convenience init (all: State<BackgroundSizeType>) {
         self.init(all: all.wrappedValue)
-        all.listen { self._changed(to: BackgroundSizeValue(all: $0)) }
+        all.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BackgroundSizeValue(all: $0))
+        }.hold(in: _stateBindings)
     }
     
     public init <L>(all length: L) where L: UniValue, L.UniValue: UnitValuable {
@@ -1646,21 +1775,33 @@ public class BackgroundSizeProperty: _Property {
     public convenience init (h: State<BackgroundSizeType>, v: BackgroundSizeType, important: Bool? = nil) {
         let h = h.stateValue
         self.init(h: h.wrappedValue, v: v, important: important)
-        h.listen { self._changed(to: BackgroundSizeValue(h: $0, v: v, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BackgroundSizeValue(h: $0, v: v, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (h: BackgroundSizeType, v: State<BackgroundSizeType>, important: Bool? = nil) {
         let v = v.stateValue
         self.init(h: h, v: v.wrappedValue, important: important)
-        v.listen { self._changed(to: BackgroundSizeValue(h: h, v: $0, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BackgroundSizeValue(h: h, v: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (h: State<BackgroundSizeType>, v: State<BackgroundSizeType>, important: Bool? = nil) {
         let h = h.stateValue
         let v = v.stateValue
         self.init(h: h.wrappedValue, v: v.wrappedValue, important: important)
-        h.listen { self._changed(to: BackgroundSizeValue(h: $0, v: v.wrappedValue, important: important)) }
-        v.listen { self._changed(to: BackgroundSizeValue(h: h.wrappedValue, v: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BackgroundSizeValue(h: $0, v: v.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BackgroundSizeValue(h: h.wrappedValue, v: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -1669,100 +1810,140 @@ extension PropertyKey {
 }
 
 public class BackgroundSizeValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
 
     public init (all: BackgroundSizeType) {
         value = all.value
-        $value.listen { self._changeHandler() }
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
     
     public init (all: State<BackgroundSizeType>) {
         value = all.wrappedValue.value
-        all.listen {
+        all.listen { [weak self] in
+            guard let self else { return }
             self.value = all.wrappedValue.value
             self._changeHandler()
-        }
-        $value.listen { self._changeHandler() }
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
     
     public init <L>(all length: L) where L: UniValue, L.UniValue: UnitValuable {
         value = BackgroundSizeType.length(length.uniValue).value
-        length.uniStateValue?.listen {
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = BackgroundSizeType.length(length.uniValue).value
             self._changeHandler()
-        }
-        $value.listen { self._changeHandler() }
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
 
     public init (h: BackgroundSizeType, v: BackgroundSizeType, important: Bool? = nil) {
         value = [h.value, v.value].joined(separator: " ") + (important == true ? "!important" : "")
-        $value.listen { self._changeHandler() }
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
     
     public init <H>(h: H, v: BackgroundSizeType, important: Bool? = nil) where H: UniValue, H.UniValue: UnitValuable {
         value = [h.uniValue.description, v.value].joined(separator: " ") + (important == true ? "!important" : "")
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.description, v.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        $value.listen { self._changeHandler() }
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
     
     public init <V>(h: BackgroundSizeType, v: V, important: Bool? = nil) where V: UniValue, V.UniValue: UnitValuable {
         value = [h.value, v.uniValue.description].joined(separator: " ") + (important == true ? "!important" : "")
-        v.uniStateValue?.listen {
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = [h.description, $0.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        $value.listen { self._changeHandler() }
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
     
     public init <H, V>(h: H, v: V, important: Bool? = nil) where H: UniValue, H.UniValue: UnitValuable, V: UniValue, V.UniValue: UnitValuable {
         value = [h.uniValue.description, v.uniValue.description].joined(separator: " ") + (important == true ? "!important" : "")
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.description, v.uniValue.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = [h.uniValue.description, $0.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        $value.listen { self._changeHandler() }
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
     
     public init (h: State<BackgroundSizeType>, v: BackgroundSizeType, important: Bool? = nil) {
         value = [h.wrappedValue.value, v.value].joined(separator: " ") + (important == true ? "!important" : "")
-        h.listen {
+        h.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, v.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        $value.listen { self._changeHandler() }
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
 
     public init (h: BackgroundSizeType, v: State<BackgroundSizeType>, important: Bool? = nil) {
         value = [h.value, v.wrappedValue.value].joined(separator: " ") + (important == true ? "!important" : "")
-        v.listen {
+        v.listen { [weak self] in
+            guard let self else { return }
             self.value = [h.value, $0.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        $value.listen { self._changeHandler() }
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
 
     public init (h: State<BackgroundSizeType>, v: State<BackgroundSizeType>, important: Bool? = nil) {
         value = [h.wrappedValue.value, v.wrappedValue.value].joined(separator: " ") + (important == true ? "!important" : "")
-        h.listen {
+        h.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, v.wrappedValue.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        v.listen {
+        }.hold(in: _stateBindings)
+        v.listen { [weak self] in
+            guard let self else { return }
             self.value = [h.wrappedValue.value, $0.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        $value.listen {
+        }.hold(in: _stateBindings)
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -1859,6 +2040,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-bottom_color.asp)
 public class BorderBottomColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .borderBottomColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -1869,17 +2052,19 @@ public class BorderBottomColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -1888,8 +2073,9 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -1898,8 +2084,9 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -1908,8 +2095,9 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -1918,7 +2106,7 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -1931,7 +2119,8 @@ public class BorderBottomColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -1940,8 +2129,9 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -1950,8 +2140,9 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -1960,8 +2151,9 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -1970,7 +2162,7 @@ public class BorderBottomColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -2052,6 +2244,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-bottom-left-radius.asp)
 public class BorderBottomLeftRadiusProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderRadiusType> { .borderBottomLeftRadius }
     public var propertyValue: BorderRadiusType
     var _content = _PropertyContent<BorderRadiusType>()
@@ -2062,12 +2256,18 @@ public class BorderBottomLeftRadiusProperty: _Property {
 
     public convenience init (_ type: State<BorderRadiusType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ length: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(length.uniValue))
-        length.uniStateValue?.listen { self._changed(to: .length($0)) }
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2114,6 +2314,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-bottom.asp)
 public class BorderBottomProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderValue> { .borderBottom }
     public var propertyValue: BorderValue
     var _content = _PropertyContent<BorderValue>()
@@ -2124,42 +2326,78 @@ public class BorderBottomProperty: _Property {
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style, color: color.wrappedValue, important: important)
-        color.listen { self._changed(to: BorderValue(width: width, style: style, color: $0, important: important)) }
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2241,6 +2479,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-bottom-right-radius.asp)
 public class BorderBottomRightRadiusProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderRadiusType> { .borderBottomRightRadius }
     public var propertyValue: BorderRadiusType
     var _content = _PropertyContent<BorderRadiusType>()
@@ -2251,12 +2491,18 @@ public class BorderBottomRightRadiusProperty: _Property {
 
     public convenience init (_ type: State<BorderRadiusType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ type: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(type.uniValue))
-        type.uniStateValue?.listen { self._changed(to: .length($0)) }
+        type.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2303,6 +2549,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-bottom_style.asp)
 public class BorderBottomStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderStyleType> { .borderBottomStyle }
     public var propertyValue: BorderStyleType
     var _content = _PropertyContent<BorderStyleType>()
@@ -2313,7 +2561,10 @@ public class BorderBottomStyleProperty: _Property {
 
     public convenience init (_ type: State<BorderStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2353,6 +2604,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-bottom_width.asp)
 public class BorderBottomWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderWidthType> { .borderBottomWidth }
     public var propertyValue: BorderWidthType
     var _content = _PropertyContent<BorderWidthType>()
@@ -2363,12 +2616,18 @@ public class BorderBottomWidthProperty: _Property {
 
     public convenience init (_ type: State<BorderWidthType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ type: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(type.uniValue))
-        type.uniStateValue?.listen { self._changed(to: .length($0)) }
+        type.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2415,6 +2674,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-collapse.asp)
 public class BorderCollapseProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderCollapseType> { .borderCollapse }
     public var propertyValue: BorderCollapseType
     var _content = _PropertyContent<BorderCollapseType>()
@@ -2425,7 +2686,10 @@ public class BorderCollapseProperty: _Property {
 
     public convenience init (_ type: State<BorderCollapseType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2465,6 +2729,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-color.asp)
 public class BorderColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .borderColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -2475,17 +2741,19 @@ public class BorderColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -2494,8 +2762,9 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -2504,8 +2773,9 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -2514,8 +2784,9 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -2524,7 +2795,7 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -2537,7 +2808,8 @@ public class BorderColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -2546,8 +2818,9 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -2556,8 +2829,9 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -2566,8 +2840,9 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -2576,7 +2851,7 @@ public class BorderColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -2658,6 +2933,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-image-outset.asp)
 public class BorderImageOutsetProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderImageOutsetType> { .borderImageOutset }
     public var propertyValue: BorderImageOutsetType
     var _content = _PropertyContent<BorderImageOutsetType>()
@@ -2668,12 +2945,18 @@ public class BorderImageOutsetProperty: _Property {
 
     public convenience init (_ type: State<BorderImageOutsetType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ type: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(type.uniValue))
-        type.uniStateValue?.listen { self._changed(to: .length($0)) }
+        type.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2720,6 +3003,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-image.asp)
 public class BorderImageProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderImageValue> { .borderImage }
     public var propertyValue: BorderImageValue
     var _content = _PropertyContent<BorderImageValue>()
@@ -2730,7 +3015,10 @@ public class BorderImageProperty: _Property {
 
     public convenience init (_ type: State<BorderImageValue>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 
     public init (
@@ -2811,6 +3099,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-image-repeat.asp)
 public class BorderImageRepeatProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderImageRepeatType> { .borderImageRepeat }
     public var propertyValue: BorderImageRepeatType
     var _content = _PropertyContent<BorderImageRepeatType>()
@@ -2821,7 +3111,10 @@ public class BorderImageRepeatProperty: _Property {
 
     public convenience init (_ type: State<BorderImageRepeatType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2861,6 +3154,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-image-slice.asp)
 public class BorderImageSliceProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderImageSliceType> { .borderImageSlice }
     public var propertyValue: BorderImageSliceType
     var _content = _PropertyContent<BorderImageSliceType>()
@@ -2871,7 +3166,10 @@ public class BorderImageSliceProperty: _Property {
 
     public convenience init (_ type: State<BorderImageSliceType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -2951,6 +3249,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-image-width.asp)
 public class BorderImageWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderWidthType> { .borderImageWidth }
     public var propertyValue: BorderWidthType
     var _content = _PropertyContent<BorderWidthType>()
@@ -2961,7 +3261,10 @@ public class BorderImageWidthProperty: _Property {
 
     public convenience init (_ type: State<BorderWidthType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -3001,6 +3304,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-left_color.asp)
 public class BorderLeftColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .borderLeftColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -3011,17 +3316,19 @@ public class BorderLeftColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -3030,8 +3337,9 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -3040,8 +3348,9 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -3050,8 +3359,9 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -3060,7 +3370,7 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -3073,7 +3383,8 @@ public class BorderLeftColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(.hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -3082,8 +3393,9 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -3092,8 +3404,9 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -3102,8 +3415,9 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -3112,7 +3426,7 @@ public class BorderLeftColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -3194,6 +3508,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-left.asp)
 public class BorderLeftProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderValue> { .borderLeft }
     public var propertyValue: BorderValue
     var _content = _PropertyContent<BorderValue>()
@@ -3204,42 +3520,78 @@ public class BorderLeftProperty: _Property {
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style, color: color.wrappedValue)
-        color.listen { self._changed(to: BorderValue(width: width, style: style, color: $0)) }
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style, color: $0))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color.wrappedValue)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color.wrappedValue)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue)) }
-        color.listen { self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color.wrappedValue)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -3321,6 +3673,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-left_style.asp)
 public class BorderLeftStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderStyleType> { .borderLeftStyle }
     public var propertyValue: BorderStyleType
     var _content = _PropertyContent<BorderStyleType>()
@@ -3331,7 +3685,10 @@ public class BorderLeftStyleProperty: _Property {
 
     public convenience init (_ type: State<BorderStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -3371,6 +3728,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-left_width.asp)
 public class BorderLeftWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderWidthType> { .borderLeftWidth }
     public var propertyValue: BorderWidthType
     var _content = _PropertyContent<BorderWidthType>()
@@ -3381,12 +3740,18 @@ public class BorderLeftWidthProperty: _Property {
 
     public convenience init (_ type: State<BorderWidthType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ length: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(length.uniValue))
-        length.uniStateValue?.listen { self._changed(to: .length($0)) }
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -3433,6 +3798,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border.asp)
 public class BorderProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderValue> { .border }
     public var propertyValue: BorderValue
     var _content = _PropertyContent<BorderValue>()
@@ -3443,42 +3810,78 @@ public class BorderProperty: _Property {
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style, color: color.wrappedValue, important: important)
-        color.listen { self._changed(to: BorderValue(width: width, style: style, color: $0, important: important)) }
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -3570,6 +3973,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-radius.asp)
 public class BorderRadiusProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderRadiusValue> { .borderRadius }
     public var propertyValue: BorderRadiusValue
     var _content = _PropertyContent<BorderRadiusValue>()
@@ -3581,7 +3986,10 @@ public class BorderRadiusProperty: _Property {
     public convenience init <U: UnitValuable>(_ state: State<U>) {
         let s = state.stateValue
         self.init(s.wrappedValue)
-        s.listen { self._changed(to: BorderRadiusValue(all: .length($0))) }
+        s.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(all: .length($0)))
+        }.hold(in: _stateBindings)
     }
     
     public init (all: BorderRadiusType) {
@@ -3591,12 +3999,18 @@ public class BorderRadiusProperty: _Property {
     public convenience init (all type: State<BorderRadiusType>) {
         let state = type.stateValue
         self.init(all: state.wrappedValue)
-        state.listen { self._changed(to: BorderRadiusValue(all: $0)) }
+        state.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(all: $0))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(all type: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(all: .length(type.uniValue))
-        type.uniStateValue?.listen { self._changed(to: BorderRadiusValue(all: .length($0))) }
+        type.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(all: .length($0)))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: TL/BR
@@ -3607,46 +4021,82 @@ public class BorderRadiusProperty: _Property {
     
     public init <L>(topLeft: L, bottomRight: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         propertyValue = BorderRadiusValue(topLeft: .length(topLeft.uniValue), bottomRight: bottomRight, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), bottomRight: bottomRight, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), bottomRight: bottomRight, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public init <L>(topLeft: BorderRadiusType, bottomRight: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         propertyValue = BorderRadiusValue(topLeft: topLeft, bottomRight: .length(bottomRight.uniValue), important: important)
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, bottomRight: .length($0), important: important)) }
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, bottomRight: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
     
     public init <TL, BR>(topLeft: TL, bottomRight: BR, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, BR: UniValue, BR.UniValue: UnitValuable {
         propertyValue = BorderRadiusValue(topLeft: .length(topLeft.uniValue), bottomRight: .length(bottomRight.uniValue), important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), bottomRight: .length(bottomRight.uniValue), important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), bottomRight: .length($0), important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), bottomRight: .length(bottomRight.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), bottomRight: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, bottomRight: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, bottomRight: bottomRight, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, bottomRight: bottomRight, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, bottomRight: bottomRight, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, bottomRight: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, bottomRight: bottomRight, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, bottomRight: .length(bottomRight.uniValue), important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, bottomRight: .length($0), important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, bottomRight: .length(bottomRight.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, bottomRight: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, bottomRight: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, bottomRight: bottomRight.wrappedValue, important: important)
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, bottomRight: $0, important: important)) }
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, bottomRight: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, bottomRight: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, bottomRight: bottomRight.wrappedValue, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), bottomRight: bottomRight.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), bottomRight: $0, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), bottomRight: bottomRight.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), bottomRight: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, bottomRight: bottomRight.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, bottomRight: bottomRight.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, bottomRight: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, bottomRight: bottomRight.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, bottomRight: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: TL/TR/BL
@@ -3657,139 +4107,274 @@ public class BorderRadiusProperty: _Property {
 
     public convenience init <L>(topLeft: L, topRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(topLeft: BorderRadiusType, topRight: L, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomLeft: .length($0), important: important)) }
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, TR>(topLeft: TL, topRight: TR, bottomLeft: BorderRadiusType, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, TR: UniValue, TR.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, BL>(topLeft: TL, topRight: BorderRadiusType, bottomLeft: BL, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomLeft: .length($0), important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TR, BL>(topLeft: BorderRadiusType, topRight: TR, bottomLeft: BL, important: Bool? = nil) where TR: UniValue, TR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomLeft: .length($0), important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <TL, TR, BL>(topLeft: TL, topRight: TR, bottomLeft: BL, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, TR: UniValue, TR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomLeft: .length($0), important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init (topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: L, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomLeft: .length($0), important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomLeft: .length($0), important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomLeft: $0, important: important)) }
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomLeft: $0, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(topLeft: BorderRadiusType, topRight: L, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomLeft: $0, important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init (topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomLeft: .length($0), important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: L, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: TL/TR/BR/BL
@@ -3800,356 +4385,758 @@ public class BorderRadiusProperty: _Property {
     
     public convenience init <L>(topLeft: L, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(topLeft: BorderRadiusType, topRight: L, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: L, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: .length($0), important: important)) }
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, TR>(topLeft: TL, topRight: TR, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, TR: UniValue, TR.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, BR>(topLeft: TL, topRight: BorderRadiusType, bottomRight: BR, bottomLeft: BorderRadiusType, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, BR: UniValue, BR.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, BL>(topLeft: TL, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: BL, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight, bottomLeft: .length($0), important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TR, BR>(topLeft: BorderRadiusType, topRight: TR, bottomRight: BR, bottomLeft: BorderRadiusType, important: Bool? = nil) where TR: UniValue, TR.UniValue: UnitValuable, BR: UniValue, BR.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TR, BL>(topLeft: BorderRadiusType, topRight: TR, bottomRight: BorderRadiusType, bottomLeft: BL, important: Bool? = nil) where TR: UniValue, TR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length($0), important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <BR, BL>(topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: BR, bottomLeft: BL, important: Bool? = nil) where BR: UniValue, BR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important)) }
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, TR, BR>(topLeft: TL, topRight: TR, bottomRight: BR, bottomLeft: BorderRadiusType, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, TR: UniValue, TR.UniValue: UnitValuable, BR: UniValue, BR.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, TR, BL>(topLeft: TL, topRight: TR, bottomRight: BorderRadiusType, bottomLeft: BL, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, TR: UniValue, TR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length($0), important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, BR, BL>(topLeft: TL, topRight: BorderRadiusType, bottomRight: BR, bottomLeft: BL, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, BR: UniValue, BR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TR, BR, BL>(topLeft: BorderRadiusType, topRight: TR, bottomRight: BR, bottomLeft: BL, important: Bool? = nil) where TR: UniValue, TR.UniValue: UnitValuable, BR: UniValue, BR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <TL, TR, BR, BL>(topLeft: TL, topRight: TR, bottomRight: BR, bottomLeft: BL, important: Bool? = nil) where TL: UniValue, TL.UniValue: UnitValuable, TR: UniValue, TR.UniValue: UnitValuable, BR: UniValue, BR.UniValue: UnitValuable, BL: UniValue, BL.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length($0), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length($0), bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: .length(topRight.uniValue), bottomRight: .length(bottomRight.uniValue), bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: L, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length($0), important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: L, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important)) }
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: L, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: L, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important)) }
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: L, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length($0), important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: L, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: L, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomRight: L, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: L, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: BorderRadiusType, topRight: L, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: L, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important)) }
-        bottomLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: .length(bottomLeft.uniValue), important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: .length($0), important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: BorderRadiusType, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: L, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: .length(bottomRight.uniValue), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length($0), bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: .length(bottomRight.uniValue), bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: BorderRadiusType, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: State<BorderRadiusType>, topRight: L, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length($0), bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: .length(topRight.uniValue), bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(topLeft: L, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) where L: UniValue, L.UniValue: UnitValuable {
         self.init(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.uniStateValue?.listen { self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topLeft.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length($0), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: .length(topLeft.uniValue), topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, topRight: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, bottomLeft: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)
-        topLeft.listen { self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        topRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomRight.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important)) }
-        bottomLeft.listen { self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important)) }
+        topLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: $0, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        topRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: $0, bottomRight: bottomRight.wrappedValue, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: $0, bottomLeft: bottomLeft.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottomLeft.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderRadiusValue(topLeft: topLeft.wrappedValue, topRight: topRight.wrappedValue, bottomRight: bottomRight.wrappedValue, bottomLeft: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -4159,22 +5146,26 @@ extension PropertyKey {
 }
 
 public class BorderRadiusValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
 
     public init (all: BorderRadiusType) {
         value = all.description
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (all: State<BorderRadiusType>) {
         self.init(all: all.wrappedValue)
-        all.listen {
+        all.listen { [weak self] in
+            guard let self else { return }
             self.value = all.wrappedValue.description
-        }
+        }.hold(in: _stateBindings)
     }
 
     private static func values(_ values: BorderRadiusType..., important: Bool? = nil) -> String {
@@ -4189,49 +5180,56 @@ public class BorderRadiusValue: CustomStringConvertible, _PropertyValueInnerChan
 
     public init (topLeft: BorderRadiusType, bottomRight: BorderRadiusType, important: Bool? = nil) {
         value = Self.values(topLeft, bottomRight, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, bottomRight: BorderRadiusType, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, bottomRight: bottomRight, important: important)
-        topLeft.listen {
+        topLeft.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.values($0, bottomRight, important: important)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: BorderRadiusType, bottomRight: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft, bottomRight: bottomRight.wrappedValue, important: important)
-        bottomRight.listen {
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.values(topLeft, $0, important: important)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (topLeft: State<BorderRadiusType>, bottomRight: State<BorderRadiusType>, important: Bool? = nil) {
         self.init(topLeft: topLeft.wrappedValue, bottomRight: bottomRight.wrappedValue)
-        topLeft.listen {
+        topLeft.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.values($0, bottomRight.wrappedValue, important: important)
-        }
-        bottomRight.listen {
+        }.hold(in: _stateBindings)
+        bottomRight.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.values(topLeft.wrappedValue, $0, important: important)
-        }
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Other
 
     public init (topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         value = Self.values(topLeft, topRight, bottomLeft, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (topLeft: BorderRadiusType, topRight: BorderRadiusType, bottomRight: BorderRadiusType, bottomLeft: BorderRadiusType, important: Bool? = nil) {
         value = Self.values(topLeft, topRight, bottomRight, bottomLeft, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -4832,6 +5830,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-right_color.asp)
 public class BorderRightColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .borderRightColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -4842,17 +5842,19 @@ public class BorderRightColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -4861,8 +5863,9 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -4871,8 +5874,9 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -4881,8 +5885,9 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -4891,7 +5896,7 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -4904,7 +5909,8 @@ public class BorderRightColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -4913,8 +5919,9 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -4923,8 +5930,9 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -4933,8 +5941,9 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -4943,7 +5952,7 @@ public class BorderRightColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -5025,6 +6034,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-right.asp)
 public class BorderRightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderValue> { .borderRight }
     public var propertyValue: BorderValue
     var _content = _PropertyContent<BorderValue>()
@@ -5035,42 +6046,78 @@ public class BorderRightProperty: _Property {
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style, color: color.wrappedValue, important: important)
-        color.listen { self._changed(to: BorderValue(width: width, style: style, color: $0, important: important)) }
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5152,6 +6199,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-right_style.asp)
 public class BorderRightStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderStyleType> { .borderRightStyle }
     public var propertyValue: BorderStyleType
     var _content = _PropertyContent<BorderStyleType>()
@@ -5162,7 +6211,10 @@ public class BorderRightStyleProperty: _Property {
 
     public convenience init (_ type: State<BorderStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5202,6 +6254,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-right_width.asp)
 public class BorderRightWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderWidthType> { .borderRightWidth }
     public var propertyValue: BorderWidthType
     var _content = _PropertyContent<BorderWidthType>()
@@ -5212,12 +6266,18 @@ public class BorderRightWidthProperty: _Property {
 
     public convenience init (_ type: State<BorderWidthType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ length: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(length.uniValue))
-        length.uniStateValue?.listen { self._changed(to: .length($0)) }
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5265,6 +6325,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-spacing.asp)
 public class BorderSpacingProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderSpacingValue> { .borderSpacing }
     public var propertyValue: BorderSpacingValue
     var _content = _PropertyContent<BorderSpacingValue>()
@@ -5273,15 +6335,24 @@ public class BorderSpacingProperty: _Property {
 
     public init <A>(all: A, important: Bool? = nil) where A: UniValue, A.UniValue: UnitValuable {
         propertyValue = BorderSpacingValue(all: all.uniValue, important: important)
-        all.uniStateValue?.listen { self._changed(to: BorderSpacingValue(all: $0, important: important)) }
+        all.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderSpacingValue(all: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: H/V
 
     public init <H, V>(h: H, v: V, important: Bool? = nil) where H: UniValue, H.UniValue: UnitValuable, V: UniValue, V.UniValue: UnitValuable {
         propertyValue = BorderSpacingValue(h: h.uniValue, v: v.uniValue, important: important)
-        h.uniStateValue?.listen { self._changed(to: BorderSpacingValue(h: $0, v: v.uniValue, important: important)) }
-        v.uniStateValue?.listen { self._changed(to: BorderSpacingValue(h: h.uniValue, v: $0, important: important)) }
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderSpacingValue(h: $0, v: v.uniValue, important: important))
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderSpacingValue(h: h.uniValue, v: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5291,6 +6362,8 @@ extension PropertyKey {
 }
 
 public class BorderSpacingValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
@@ -5301,16 +6374,18 @@ public class BorderSpacingValue: CustomStringConvertible, _PropertyValueInnerCha
         } else {
             value = all.description
         }
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init<H: UnitValuable, V: UnitValuable>(h: H, v: V, important: Bool? = nil) {
         value = [h.description, v.description, important == true ? "!important" : nil].compactMap { $0 }.joined(separator: " ")
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -5351,6 +6426,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-style.asp)
 public class BorderStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderStyleValue> { .borderStyle }
     public var propertyValue: BorderStyleValue
     var _content = _PropertyContent<BorderStyleValue>()
@@ -5366,7 +6443,10 @@ public class BorderStyleProperty: _Property {
     public convenience init (_ types: [State<BorderStyleType>], important: Bool? = nil) {
         self.init(types.map { $0.wrappedValue }, important: important)
         types.forEach {
-            $0.listen { self._changed(to: BorderStyleValue(types.map { $0.wrappedValue }, important: important)) }
+            $0.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: BorderStyleValue(types.map { $0.wrappedValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -5377,7 +6457,10 @@ public class BorderStyleProperty: _Property {
     public convenience init <U>(mixed types: [U], important: Bool? = nil) where U: UniValue, U.UniValue == BorderStyleType {
         self.init(types.map { $0.uniValue }, important: important)
         types.forEach {
-            $0.uniStateValue?.listen { self._changed(to: BorderStyleValue(types.map { $0.uniValue }, important: important)) }
+            $0.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: BorderStyleValue(types.map { $0.uniValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -5463,6 +6546,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-top_color.asp)
 public class BorderTopColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .borderTopColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -5473,17 +6558,19 @@ public class BorderTopColorProperty: _Property {
     
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -5492,8 +6579,9 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -5502,8 +6590,9 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -5512,8 +6601,9 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -5522,7 +6612,7 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -5535,7 +6625,8 @@ public class BorderTopColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -5544,8 +6635,9 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -5554,8 +6646,9 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -5564,8 +6657,9 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -5574,7 +6668,7 @@ public class BorderTopColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -5656,6 +6750,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-top-left-radius.asp)
 public class BorderTopLeftRadiusProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderRadiusType> { .borderTopLeftRadius }
     public var propertyValue: BorderRadiusType
     var _content = _PropertyContent<BorderRadiusType>()
@@ -5666,12 +6762,18 @@ public class BorderTopLeftRadiusProperty: _Property {
 
     public convenience init (_ type: State<BorderRadiusType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ length: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(length.uniValue))
-        length.uniStateValue?.listen { self._changed(to: .length($0)) }
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5718,6 +6820,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-top.asp)
 public class BorderTopProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderValue> { .borderTop }
     public var propertyValue: BorderValue
     var _content = _PropertyContent<BorderValue>()
@@ -5728,42 +6832,78 @@ public class BorderTopProperty: _Property {
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType? = nil, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style, color: color.wrappedValue, important: important)
-        color.listen { self._changed(to: BorderValue(width: width, style: style, color: $0, important: important)) }
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: Color? = nil, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: BorderStyleType, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: BorderWidthType, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        style.listen { self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important)) }
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (width: State<BorderWidthType?>, style: State<BorderStyleType>, color: State<Color?>, important: Bool? = nil) {
         self.init(width: width.wrappedValue, style: style.wrappedValue, color: color.wrappedValue, important: important)
-        width.listen { self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important)) }
-        style.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important)) }
-        color.listen { self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important)) }
+        width.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: $0, style: style.wrappedValue, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        style.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: $0, color: color.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        color.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: BorderValue(width: width.wrappedValue, style: style.wrappedValue, color: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5845,6 +6985,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_border-top-right-radius.asp)
 public class BorderTopRightRadiusProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderRadiusType> { .borderTopRightRadius }
     public var propertyValue: BorderRadiusType
     var _content = _PropertyContent<BorderRadiusType>()
@@ -5855,12 +6997,18 @@ public class BorderTopRightRadiusProperty: _Property {
 
     public convenience init (_ type: State<BorderRadiusType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(_ length: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(length.uniValue))
-        length.uniStateValue?.listen { self._changed(to: .length($0)) }
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5907,6 +7055,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-top_style.asp)
 public class BorderTopStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderStyleType> { .borderTopStyle }
     public var propertyValue: BorderStyleType
     var _content = _PropertyContent<BorderStyleType>()
@@ -5917,7 +7067,10 @@ public class BorderTopStyleProperty: _Property {
 
     public convenience init (_ type: State<BorderStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -5957,6 +7110,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-top_width.asp)
 public class BorderTopWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderWidthType> { .borderTopWidth }
     public var propertyValue: BorderWidthType
     var _content = _PropertyContent<BorderWidthType>()
@@ -5967,12 +7122,18 @@ public class BorderTopWidthProperty: _Property {
 
     public convenience init (_ type: State<BorderWidthType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <L>(_ length: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(length.uniValue))
-        length.uniStateValue?.listen { self._changed(to: .length($0)) }
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -6019,6 +7180,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_border-width.asp)
 public class BorderWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BorderWidthValue> { .borderWidth }
     public var propertyValue: BorderWidthValue
     var _content = _PropertyContent<BorderWidthValue>()
@@ -6034,7 +7197,10 @@ public class BorderWidthProperty: _Property {
     public convenience init (_ types: [State<BorderWidthType>], important: Bool? = nil) {
         self.init(types.map { $0.wrappedValue }, important: important)
         types.forEach {
-            $0.listen { self._changed(to: BorderWidthValue(types.map { $0.wrappedValue }, important: important)) }
+            $0.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: BorderWidthValue(types.map { $0.wrappedValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -6045,7 +7211,10 @@ public class BorderWidthProperty: _Property {
     public convenience init <A>(mixed types: [A], important: Bool? = nil) where A: UniValue, A.UniValue == BorderWidthType {
         self.init(types.map { $0.uniValue }, important: important)
         types.forEach {
-            $0.uniStateValue?.listen { self._changed(to: BorderWidthValue(types.map { $0.uniValue }, important: important)) }
+            $0.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: BorderWidthValue(types.map { $0.uniValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -6131,26 +7300,40 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_pos_bottom.asp)
 public class BottomProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .bottom }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
 
     public init<U>(_ value: U) where U: UniValue, U.UniValue: UnitValuable {
         propertyValue = UnitValue(value.uniValue.value.doubleValue, value.uniValue.unit)
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
 
     public convenience init <D>(_ value: D, _ unit: Unit, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0, unit, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0, unit, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <D>(_ value: D, _ unit: State<Unit>, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit.wrappedValue, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0, unit.wrappedValue, important: important)) }
-        unit.listen { self._changed(to: UnitValue(value.uniValue, $0, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0, unit.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        unit.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue(value.uniValue, $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -6197,6 +7380,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_box-decoration-break.asp)
 public class BoxDecorationBreakProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BoxDecorationBreakType> { .boxDecorationBreak }
     public var propertyValue: BoxDecorationBreakType
     public var propertyAliases: [AnyProperty]
@@ -6209,7 +7394,10 @@ public class BoxDecorationBreakProperty: _Property {
 
     public convenience init (_ type: State<BoxDecorationBreakType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -6247,6 +7435,8 @@ extension Stylesheetable {
 
 extension BoxDecorationBreakProperty {
     public class O: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<BoxDecorationBreakType> { .boxDecorationBreak_o }
         public var propertyValue: BoxDecorationBreakType
         var _content = _PropertyContent<BoxDecorationBreakType>()
@@ -6257,7 +7447,10 @@ extension BoxDecorationBreakProperty {
 
         public convenience init (_ type: State<BoxDecorationBreakType>) {
             self.init(type.wrappedValue)
-            type.listen { self._changed(to: $0) }
+            type.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: $0)
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -6270,6 +7463,8 @@ extension PropertyKey {
 
 extension BoxDecorationBreakProperty {
     public class Webkit: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<BoxDecorationBreakType> { .boxDecorationBreak_webKit }
         public var propertyValue: BoxDecorationBreakType
         var _content = _PropertyContent<BoxDecorationBreakType>()
@@ -6280,7 +7475,10 @@ extension BoxDecorationBreakProperty {
 
         public convenience init (_ type: State<BoxDecorationBreakType>) {
             self.init(type.wrappedValue)
-            type.listen { self._changed(to: $0) }
+            type.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: $0)
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -6476,6 +7674,8 @@ extension PropertyKey {
 }
 
 public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerChangeable, PropertyValueImportantable, _StringPropertyValue {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -6529,10 +7729,11 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
         let unwrappedValues = values.map { $0.uniValue }
         self.value = Self.makeMultiple(unwrappedValues, important: important)
         values.compactMap { $0.uniStateValue }.forEach {
-            $0.listen {
+            $0.listen { [weak self] in
+                guard let self else { return }
                 self.value = Self.makeMultiple(unwrappedValues, important: important)
                 self._changeHandler()
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -6541,10 +7742,11 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
         let unwrappedValues = values.map { $0.uniValue }
         self.value = Self.makeMultiple(unwrappedValues, important: important)
         values.forEach {
-            $0.uniStateValue?.listen {
+            $0.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
                 self.value = Self.makeMultiple(unwrappedValues, important: important)
                 self._changeHandler()
-            }
+            }.hold(in: _stateBindings)
             $0.uniValue._changeHandler = {
                 self.value = Self.makeMultiple(unwrappedValues, important: important)
                 self._changeHandler()
@@ -6556,18 +7758,21 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
     where H: UniValue, V: UniValue, I: UniValue,
               H.UniValue: UnitValuable, V.UniValue: UnitValuable, I.UniValue == Bool {
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V>(h: H, v: V, important: Bool? = nil)
@@ -6580,22 +7785,26 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
     where H: UniValue, V: UniValue, B: UniValue, I: UniValue,
               H.UniValue: UnitValuable, V.UniValue: UnitValuable, B.UniValue: UnitValuable, I.UniValue == Bool {
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, blur: blur.uniValue.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, blur: blur.uniValue.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        blur.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        blur.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: $0.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, B>(h: H, v: V, blur: B, important: Bool? = nil)
@@ -6609,26 +7818,31 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
               H.UniValue: UnitValuable, V.UniValue: UnitValuable, B.UniValue: UnitValuable,
               S.UniValue: UnitValuable, I.UniValue == Bool {
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, blur: blur.uniValue.description, spread: spread.uniValue.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        blur.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        blur.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: $0.description, spread: spread.uniValue.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        spread.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        spread.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: $0.description, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, B, S>(h: H, v: V, blur: B, spread: S, important: Bool? = nil)
@@ -6643,26 +7857,31 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
               H.UniValue: UnitValuable, V.UniValue: UnitValuable, B.UniValue: UnitValuable,
               S.UniValue: UnitValuable, I.UniValue == Bool {
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: color, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        blur.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        blur.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: $0.description, spread: spread.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        spread.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        spread.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: $0.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: color, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, B, S>(h: H, v: V, blur: B, spread: S, color: Color, important: Bool? = nil)
@@ -6678,30 +7897,36 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
               S.UniValue: UnitValuable, C.Value == Color, I.UniValue == Bool {
         let colorState = color.stateValue
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        blur.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        blur.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: $0.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        spread.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        spread.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: $0.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        colorState.listen {
+        }.hold(in: _stateBindings)
+        colorState.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: $0, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, B, S, C>(h: H, v: V, blur: B, spread: S, color: C, important: Bool? = nil)
@@ -6716,22 +7941,26 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
               H.UniValue: UnitValuable, V.UniValue: UnitValuable,
               S.UniValue: UnitValuable, I.UniValue == Bool {
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, spread: spread.uniValue.description, color: color, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, spread: spread.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, spread: spread.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        spread.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        spread.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, spread: $0.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, spread: spread.uniValue.description, color: color, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, S>(h: H, v: V, spread: S, color: Color, important: Bool? = nil)
@@ -6747,26 +7976,31 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
               S.UniValue: UnitValuable, C.Value == Color, I.UniValue == Bool {
         let colorState = color.stateValue
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        spread.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        spread.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, spread: $0.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        colorState.listen {
+        }.hold(in: _stateBindings)
+        colorState.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, spread: spread.uniValue.description, color: $0, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, spread: spread.uniValue.description, color: colorState.wrappedValue, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, S, C>(h: H, v: V, spread: S, color: C, important: Bool? = nil)
@@ -6781,22 +8015,26 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
               H.UniValue: UnitValuable, V.UniValue: UnitValuable,
               B.UniValue: UnitValuable, I.UniValue == Bool {
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, color: color, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, blur: blur.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, blur: blur.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        blur.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        blur.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: $0.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, color: color, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, B>(h: H, v: V, blur: B, color: Color, important: Bool? = nil)
@@ -6812,26 +8050,31 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
               B.UniValue: UnitValuable, C.Value == Color, I.UniValue == Bool {
         let colorState = color.stateValue
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, blur: blur.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, blur: blur.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        blur.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        blur.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: $0.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        colorState.listen {
+        }.hold(in: _stateBindings)
+        colorState.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, color: $0, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, blur: blur.uniValue.description, color: colorState.wrappedValue, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, B, C>(h: H, v: V, blur: B, color: C, important: Bool? = nil)
@@ -6845,18 +8088,21 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
     where H: UniValue, V: UniValue, I: UniValue,
               H.UniValue: UnitValuable, V.UniValue: UnitValuable, I.UniValue == Bool {
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, color: color, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, color: color, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, color: color, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V>(h: H, v: V, color: Color, important: Bool? = nil)
@@ -6870,22 +8116,26 @@ public final class BoxShadowValue: CustomStringConvertible, _PropertyValueInnerC
           H.UniValue: UnitValuable, V.UniValue: UnitValuable, C.Value == Color, I.UniValue == Bool {
         let colorState = color.stateValue
         value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: $0.description, v: v.uniValue.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        v.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        v.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: $0.description, color: colorState.wrappedValue, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        colorState.listen {
+        }.hold(in: _stateBindings)
+        colorState.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, color: $0, inset: inset.uniValue, important: important)
             self._changeHandler()
-        }
-        inset.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        inset.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = Self.makeValue(h: h.uniValue.description, v: v.uniValue.description, color: colorState.wrappedValue, inset: $0, important: important)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<H, V, C>(h: H, v: V, color: C, important: Bool? = nil)
@@ -7123,6 +8373,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_box-sizing.asp)
 public class BoxSizingProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BoxSizingType> { .boxSizing }
     public var propertyValue: BoxSizingType
     var _content = _PropertyContent<BoxSizingType>()
@@ -7133,7 +8385,10 @@ public class BoxSizingProperty: _Property {
 
     public convenience init (_ type: State<BoxSizingType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -7173,6 +8428,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_break-after.asp)
 public class BreakAfterProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BreakType> { .breakAfter }
     public var propertyValue: BreakType
     var _content = _PropertyContent<BreakType>()
@@ -7183,7 +8440,10 @@ public class BreakAfterProperty: _Property {
 
     public convenience init (_ type: State<BreakType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -7223,6 +8483,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_break-before.asp)
 public class BreakBeforeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BreakType> { .breakBefore }
     public var propertyValue: BreakType
     var _content = _PropertyContent<BreakType>()
@@ -7233,7 +8495,10 @@ public class BreakBeforeProperty: _Property {
 
     public convenience init (_ type: State<BreakType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -7273,6 +8538,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_break-inside.asp)
 public class BreakInsideProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<BreakInsideType> { .breakInside }
     public var propertyValue: BreakInsideType
     var _content = _PropertyContent<BreakInsideType>()
@@ -7283,7 +8550,10 @@ public class BreakInsideProperty: _Property {
 
     public convenience init (_ type: State<BreakInsideType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -7323,6 +8593,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_tab_caption-side.asp)
 public class CaptionSideProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<CaptionSideType> { .captionSide }
     public var propertyValue: CaptionSideType
     var _content = _PropertyContent<CaptionSideType>()
@@ -7333,7 +8605,10 @@ public class CaptionSideProperty: _Property {
 
     public convenience init (_ type: State<CaptionSideType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -7373,6 +8648,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_caret-color.asp)
 public class CaretColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .caretColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -7383,17 +8660,19 @@ public class CaretColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -7402,8 +8681,9 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -7412,8 +8692,9 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -7422,8 +8703,9 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -7432,7 +8714,7 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -7445,7 +8727,8 @@ public class CaretColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -7454,8 +8737,9 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -7464,8 +8748,9 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -7474,8 +8759,9 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -7484,7 +8770,7 @@ public class CaretColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -7566,6 +8852,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_class_clear.asp)
 public class ClearProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ClearType> { .clear }
     public var propertyValue: ClearType
     var _content = _PropertyContent<ClearType>()
@@ -7576,7 +8864,10 @@ public class ClearProperty: _Property {
 
     public convenience init (_ type: State<ClearType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -7616,6 +8907,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_pos_clip.asp)
 public class ClipProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ClipValue> { .clip }
     public var propertyValue: ClipValue
     var _content = _PropertyContent<ClipValue>()
@@ -7627,7 +8920,10 @@ public class ClipProperty: _Property {
     public convenience init <A>(all type: A, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let state = type.stateValue
         self.init(all: state.wrappedValue, important: important)
-        state.listen { self._changed(to: ClipValue(all: $0, important: important)) }
+        state.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(all: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: V/H
@@ -7639,21 +8935,33 @@ public class ClipProperty: _Property {
     public convenience init <U1: UnitValuable, A>(v: A, h: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let v = v.stateValue
         self.init(v: v.wrappedValue, h: h, important: important)
-        v.listen { self._changed(to: ClipValue(v: $0, h: h, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(v: $0, h: h, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B>(v: U1, h: B, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let h = h.stateValue
         self.init(v: v, h: h.wrappedValue, important: important)
-        h.listen { self._changed(to: ClipValue(v: v, h: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(v: v, h: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B>(v: A, h: B, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let v = v.stateValue
         let h = h.stateValue
         self.init(v: v.wrappedValue, h: h.wrappedValue, important: important)
-        v.listen { self._changed(to: ClipValue(v: $0, h: h.wrappedValue, important: important)) }
-        h.listen { self._changed(to: ClipValue(v: v.wrappedValue, h: $0, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(v: $0, h: h.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(v: v.wrappedValue, h: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Top/H/Bottom
@@ -7665,43 +8973,70 @@ public class ClipProperty: _Property {
     public convenience init <U1: UnitValuable, U2: UnitValuable, A>(top: A, h: U1, bottom: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let top = top.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, h: h, bottom: bottom, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, h: h, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B>(top: U1, h: B, bottom: U2, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let h = h.stateValue
         self.init(top: top, h: h.wrappedValue, bottom: bottom, important: important)
-        h.listen { self._changed(to: ClipValue(top: top, h: $0, bottom: bottom, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, h: $0, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, C>(top: U1, h: U2, bottom: C, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let bottom = bottom.stateValue
         self.init(top: top, h: h, bottom: bottom.wrappedValue, important: important)
-        bottom.listen { self._changed(to: ClipValue(top: top, h: h, bottom: $0, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B>(top: A, h: B, bottom: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let top = top.stateValue
         let h = h.stateValue
         self.init(top: top.wrappedValue, h: h.wrappedValue, bottom: bottom, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, h: h.wrappedValue, bottom: bottom, important: important)) }
-        h.listen { self._changed(to: ClipValue(top: top.wrappedValue, h: $0, bottom: bottom, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, h: h.wrappedValue, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, h: $0, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, C>(top: A, h: U1, bottom: C, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let top = top.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom.wrappedValue, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top.wrappedValue, h: h, bottom: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B, C>(top: U1, h: B, bottom: C, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let h = h.stateValue
         let bottom = bottom.stateValue
         self.init(top: top, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)
-        h.listen { self._changed(to: ClipValue(top: top, h: $0, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top, h: h.wrappedValue, bottom: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, h: $0, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, h: h.wrappedValue, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B, C>(top: A, h: B, bottom: C, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
@@ -7709,9 +9044,18 @@ public class ClipProperty: _Property {
         let h = h.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)) }
-        h.listen { self._changed(to: ClipValue(top: top.wrappedValue, h: $0, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top.wrappedValue, h: h.wrappedValue, bottom: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, h: $0, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, h: h.wrappedValue, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Top/Right/Bottom/Left
@@ -7723,73 +9067,121 @@ public class ClipProperty: _Property {
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, A>(top: A, right: U1, bottom: U2, left: U3, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let top = top.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom, left: left, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right, bottom: bottom, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, B>(top: U1, right: B, bottom: U2, left: U3, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let right = right.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom, left: left, important: important)
-        right.listen { self._changed(to: ClipValue(top: top, right: $0, bottom: bottom, left: left, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: $0, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, C>(top: U1, right: U2, bottom: C, left: U3, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let bottom = bottom.stateValue
         self.init(top: top, right: right, bottom: bottom.wrappedValue, left: left, important: important)
-        bottom.listen { self._changed(to: ClipValue(top: top, right: right, bottom: $0, left: left, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, D>(top: U1, right: U2, bottom: U3, left: D, important: Bool? = nil) where D: StateConvertible, D.Value: UnitValuable {
         let left = left.stateValue
         self.init(top: top, right: right, bottom: bottom, left: left.wrappedValue, important: important)
-        left.listen { self._changed(to: ClipValue(top: top, right: right, bottom: bottom, left: $0, important: important)) }
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, B>(top: A, right: B, bottom: U1, left: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let top = top.stateValue
         let right = right.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: left, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left, important: important)) }
-        right.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, C>(top: A, right: U1, bottom: C, left: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let top = top.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: left, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: $0, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, D>(top: A, right: U1, bottom: U2, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let top = top.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: bottom, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B, C>(top: U1, right: B, bottom: C, left: U2, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let right = right.stateValue
         let bottom = bottom.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)
-        right.listen { self._changed(to: ClipValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: $0, left: left, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B, D>(top: U1, right: B, bottom: U2, left: D, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let right = right.stateValue
         let left = left.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)
-        right.listen { self._changed(to: ClipValue(top: top, right: $0, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: bottom, left: $0, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: $0, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, C, D>(top: U1, right: U2, bottom: C, left: D, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        bottom.listen { self._changed(to: ClipValue(top: top, right: right, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: ClipValue(top: top, right: right, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B, C>(top: A, right: B, bottom: C, left: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
@@ -7797,9 +9189,18 @@ public class ClipProperty: _Property {
         let right = right.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)) }
-        right.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B, D>(top: A, right: B, bottom: U1, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -7807,9 +9208,18 @@ public class ClipProperty: _Property {
         let right = right.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)) }
-        right.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, C, D>(top: A, right: U1, bottom: C, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -7817,9 +9227,18 @@ public class ClipProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B, C, D>(top: U1, right: B, bottom: C, left: D, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -7827,9 +9246,18 @@ public class ClipProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        right.listen { self._changed(to: ClipValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B, C, D>(top: A, right: B, bottom: C, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -7838,10 +9266,22 @@ public class ClipProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        right.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ClipValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -7851,6 +9291,8 @@ extension PropertyKey {
 }
 
 public class ClipValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
@@ -7869,30 +9311,34 @@ public class ClipValue: CustomStringConvertible, _PropertyValueInnerChangeable {
         } else {
             value = all.description
         }
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable>(v: U1, h: U2, important: Bool? = nil) {
         value = Self.values(top: v, right: h, bottom: v, left: h, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable>(top: U1, h: U2, bottom: U3, important: Bool? = nil) {
         value = Self.values(top: top, right: h, bottom: bottom, left: h, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, U4: UnitValuable>(top: U1, right: U2, bottom: U3, left: U4, important: Bool? = nil) {
         value = Self.values(top: top, right: right, bottom: bottom, left: left, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -8133,6 +9579,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_color.asp)
 public class ColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .color }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -8143,17 +9591,19 @@ public class ColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -8162,8 +9612,9 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -8172,8 +9623,9 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -8182,8 +9634,9 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -8192,7 +9645,7 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -8205,7 +9658,8 @@ public class ColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -8214,8 +9668,9 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -8224,8 +9679,9 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -8234,8 +9690,9 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -8244,7 +9701,7 @@ public class ColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -8326,6 +9783,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-count.asp)
 public class ColumnCountProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Int> { .columnCount }
     public var propertyValue: Int
     var _content = _PropertyContent<Int>()
@@ -8334,7 +9793,10 @@ public class ColumnCountProperty: _Property {
     /// - Parameter n: Pass `Int` or `State<Int>`
     public init <U>(_ n: U) where U: UniValue, U.UniValue == Int {
         propertyValue = n.uniValue
-        n.uniStateValue?.listen { self._changed(to: $0) }
+        n.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -8368,6 +9830,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-fill.asp)
 public class ColumnFillProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ColumnFillType> { .columnFill }
     public var propertyValue: ColumnFillType
     var _content = _PropertyContent<ColumnFillType>()
@@ -8378,7 +9842,10 @@ public class ColumnFillProperty: _Property {
 
     public convenience init (_ type: State<ColumnFillType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -8418,26 +9885,40 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-gap.asp)
 public class ColumnGapProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .columnGap }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
 
     public init <U>(_ value: U) where U: UniValue, U.UniValue: UnitValuable {
         propertyValue = UnitValue(value.uniValue.value.doubleValue, value.uniValue.unit)
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
 
     public convenience init <D>(_ value: D, _ unit: Unit, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.doubleValue, unit, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.doubleValue, unit, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <D>(_ value: D, _ unit: State<Unit>, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit.wrappedValue, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.doubleValue, unit.wrappedValue, important: important)) }
-        unit.listen { self._changed(to: UnitValue(value.uniValue, $0, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.doubleValue, unit.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        unit.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue(value.uniValue, $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -8486,6 +9967,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-rule-color.asp)
 public class ColumnRuleColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .columnRuleColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -8496,17 +9979,19 @@ public class ColumnRuleColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B, A>(r: R, g: G, b: B, a: A, important: Bool? = nil)
     where R: UniValue, G: UniValue, B: UniValue, A: UniValue,
               R.UniValue == Int, G.UniValue == Int, B.UniValue == Int, A.UniValue == Double {
         self.init(important == true ? .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue).important : .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue))
-        r.uniStateValue?.listen {
+        r.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba($0, g.uniValue, b.uniValue, a.uniValue).important
@@ -8515,8 +10000,9 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        g.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        g.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, $0, b.uniValue, a.uniValue).important
@@ -8525,8 +10011,9 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        b.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        b.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, $0, a.uniValue).important
@@ -8535,8 +10022,9 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .rgba(r.uniValue, g.uniValue, b.uniValue, $0).important
@@ -8545,7 +10033,7 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <R, G, B>(r: R, g: G, b: B, important: Bool? = nil)
@@ -8558,7 +10046,8 @@ public class ColumnRuleColorProperty: _Property {
     where H: UniValue, S: UniValue, L: UniValue, A: UniValue,
               H.UniValue == Double, S.UniValue == Double, L.UniValue == Double, A.UniValue == Double {
         self.init(important == true ? .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue).important : .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue))
-        h.uniStateValue?.listen {
+        h.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla($0, s.uniValue, l.uniValue, a.uniValue).important
@@ -8567,8 +10056,9 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        s.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        s.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, $0, l.uniValue, a.uniValue).important
@@ -8577,8 +10067,9 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        l.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        l.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, $0, a.uniValue).important
@@ -8587,8 +10078,9 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
-        a.uniStateValue?.listen {
+        }.hold(in: _stateBindings)
+        a.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             let color: Color
             if important == true {
                 color = .hsla(h.uniValue, s.uniValue, l.uniValue, $0).important
@@ -8597,7 +10089,7 @@ public class ColumnRuleColorProperty: _Property {
             }
             self.propertyValue = color
             self._content._changeHandler(color)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <H, S, L>(h: H, s: S, l: L, important: Bool? = nil)
@@ -8733,6 +10225,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-rule-style.asp)
 public class ColumnRuleStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ColumnRuleStyleType> { .columnRuleStyle }
     public var propertyValue: ColumnRuleStyleType
     var _content = _PropertyContent<ColumnRuleStyleType>()
@@ -8743,7 +10237,10 @@ public class ColumnRuleStyleProperty: _Property {
 
     public convenience init (_ type: State<ColumnRuleStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -8783,6 +10280,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-rule-width.asp)
 public class ColumnRuleWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ColumnRuleWidthType> { .columnRuleWidth }
     public var propertyValue: ColumnRuleWidthType
     var _content = _PropertyContent<ColumnRuleWidthType>()
@@ -8793,7 +10292,10 @@ public class ColumnRuleWidthProperty: _Property {
 
     public convenience init (_ type: State<ColumnRuleWidthType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -8833,6 +10335,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-span.asp)
 public class ColumnSpanProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ColumnSpanType> { .columnSpan }
     public var propertyValue: ColumnSpanType
     var _content = _PropertyContent<ColumnSpanType>()
@@ -8843,7 +10347,10 @@ public class ColumnSpanProperty: _Property {
 
     public convenience init (_ type: State<ColumnSpanType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -8883,14 +10390,22 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_columns.asp)
 public class ColumnsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ColumnsValue> { .columns }
     public var propertyValue: ColumnsValue
     var _content = _PropertyContent<ColumnsValue>()
 
     public init<W, C>(width: W, count: C, important: Bool? = nil) where W: UniValue, W.UniValue: UnitValuable, C: UniValue, C.UniValue == Int {
         propertyValue = ColumnsValue(width: width.uniValue, count: count.uniValue, important: important)
-        width.uniStateValue?.listen { self._changed(to: ColumnsValue(width: $0, count: count.uniValue, important: important)) }
-        count.uniStateValue?.listen { self._changed(to: ColumnsValue(width: width.uniValue, count: $0, important: important)) }
+        width.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ColumnsValue(width: $0, count: count.uniValue, important: important))
+        }.hold(in: _stateBindings)
+        count.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: ColumnsValue(width: width.uniValue, count: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -8936,26 +10451,40 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_column-width.asp)
 public class ColumnWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .columnWidth }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
     
     public init <U>(_ value: U) where U: UniValue, U.UniValue: UnitValuable {
         propertyValue = UnitValue(value.uniValue.value.doubleValue, value.uniValue.unit)
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
 
     public convenience init <D>(_ value: D, _ unit: Unit, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.doubleValue, unit, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.doubleValue, unit, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <D>(_ value: D, _ unit: State<Unit>, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit.wrappedValue, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.doubleValue, unit.wrappedValue, important: important)) }
-        unit.listen { self._changed(to: UnitValue(value.uniValue, $0, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.doubleValue, unit.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        unit.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue(value.uniValue, $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9002,6 +10531,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_gen_content.asp)
 public class ContentProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ContentType> { .content }
     public var propertyValue: ContentType
     var _content = _PropertyContent<ContentType>()
@@ -9012,7 +10543,10 @@ public class ContentProperty: _Property {
 
     public convenience init (_ type: State<ContentType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9052,6 +10586,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_gen_counter-increment.asp)
 public class CounterIncrementProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<CounterResetType> { .counterIncrement }
     public var propertyValue: CounterResetType
     var _content = _PropertyContent<CounterResetType>()
@@ -9062,7 +10598,10 @@ public class CounterIncrementProperty: _Property {
 
     public convenience init (_ type: State<CounterResetType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9102,6 +10641,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_gen_counter-reset.asp)
 public class CounterResetProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<CounterResetType> { .counterReset }
     public var propertyValue: CounterResetType
     var _content = _PropertyContent<CounterResetType>()
@@ -9112,7 +10653,10 @@ public class CounterResetProperty: _Property {
 
     public convenience init (_ type: State<CounterResetType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9152,6 +10696,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_class_cursor.asp)
 public class CursorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<CursorType> { .cursor }
     public var propertyValue: CursorType
     var _content = _PropertyContent<CursorType>()
@@ -9162,7 +10708,10 @@ public class CursorProperty: _Property {
 
     public convenience init (_ type: State<CursorType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9202,6 +10751,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_direction.asp)
 public class DirectionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<DirectionType> { .direction }
     public var propertyValue: DirectionType
     var _content = _PropertyContent<DirectionType>()
@@ -9212,7 +10763,10 @@ public class DirectionProperty: _Property {
 
     public convenience init (_ type: State<DirectionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9252,6 +10806,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_class_display.asp)
 public class DisplayProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<DisplayType> { .display }
     public var propertyValue: DisplayType
     var _content = _PropertyContent<DisplayType>()
@@ -9262,7 +10818,10 @@ public class DisplayProperty: _Property {
 
     public convenience init (_ type: State<DisplayType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9302,6 +10861,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_tab_empty-cells.asp)
 public class EmptyCellsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<EmptyCellsType> { .emptyCells }
     public var propertyValue: EmptyCellsType
     var _content = _PropertyContent<EmptyCellsType>()
@@ -9312,7 +10873,10 @@ public class EmptyCellsProperty: _Property {
 
     public convenience init (_ type: State<EmptyCellsType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9352,6 +10916,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_filter.asp)
 public class FilterProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FilterType> { .filter }
     public var propertyValue: FilterType
     var _content = _PropertyContent<FilterType>()
@@ -9362,7 +10928,10 @@ public class FilterProperty: _Property {
 
     public convenience init (_ type: State<FilterType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9402,26 +10971,40 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_flex-basis.asp)
 public class FlexBasisProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .flexBasis }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
 
     public init<U>(_ value: U) where U: UniValue, U.UniValue: UnitValuable {
         propertyValue = UnitValue(value.uniValue.value.doubleValue, value.uniValue.unit)
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
 
     public convenience init <D>(_ value: D, _ unit: Unit, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0, unit, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0, unit, important: important))
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <D>(_ value: D, _ unit: State<Unit>, important: Bool? = nil) where D: UniValue, D.UniValue == Double {
         self.init(UnitValue(value.uniValue, unit.wrappedValue, important: important))
-        value.uniStateValue?.listen { self._changed(to: UnitValue($0, unit.wrappedValue, important: important)) }
-        unit.listen { self._changed(to: UnitValue(value.uniValue, $0, important: important)) }
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0, unit.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        unit.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue(value.uniValue, $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9470,6 +11053,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_flex-direction.asp)
 public class FlexDirectionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FlexDirectionType> { .flexDirection }
     public var propertyValue: FlexDirectionType
     var _content = _PropertyContent<FlexDirectionType>()
@@ -9480,7 +11065,10 @@ public class FlexDirectionProperty: _Property {
 
     public convenience init (_ type: State<FlexDirectionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9547,6 +11135,8 @@ extension PropertyKey {
 }
 
 public class FlexFlowValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -9557,30 +11147,34 @@ public class FlexFlowValue: CustomStringConvertible, _PropertyValueInnerChangeab
 
     public convenience init (direction: State<FlexDirectionType>, wrap: FlexWrapType, important: Bool? = nil) {
         self.init(direction: direction.wrappedValue, wrap: wrap, important: important)
-        direction.listen {
+        direction.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, wrap.value, important == true ? "!important" : nil].compactMap { $0 }.joined(separator: " ")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (direction: FlexDirectionType, wrap: State<FlexWrapType>, important: Bool? = nil) {
         self.init(direction: direction, wrap: wrap.wrappedValue, important: important)
-        wrap.listen {
+        wrap.listen { [weak self] in
+            guard let self else { return }
             self.value = [direction.value, $0.value, important == true ? "!important" : nil].compactMap { $0 }.joined(separator: " ")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (direction: State<FlexDirectionType>, wrap: State<FlexWrapType>, important: Bool? = nil) {
         self.init(direction: direction.wrappedValue, wrap: wrap.wrappedValue)
-        direction.listen {
+        direction.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, wrap.wrappedValue.value, important == true ? "!important" : nil].compactMap { $0 }.joined(separator: " ")
             self._changeHandler()
-        }
-        wrap.listen {
+        }.hold(in: _stateBindings)
+        wrap.listen { [weak self] in
+            guard let self else { return }
             self.value = [direction.wrappedValue.value, $0.value, important == true ? "!important" : nil].compactMap { $0 }.joined(separator: " ")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -9670,6 +11264,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_flex.asp)
 public class FlexProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FlexValue> { .flex }
     public var propertyValue: FlexValue
     public var propertyAliases: [AnyProperty]
@@ -9678,9 +11274,18 @@ public class FlexProperty: _Property {
     public init<G, S, B>(grow: G, shrink: S, basis: B, important: Bool? = nil) where G:UniValue, G.UniValue: NumericValue, S:UniValue, S.UniValue: NumericValue, B:UniValue, B.UniValue: UnitValuable {
         propertyValue = .init(grow: grow.uniValue, shrink: shrink.uniValue, basis: basis.uniValue, important: important)
         propertyAliases = [MS(grow: grow, shrink: shrink, basis: basis, important: important)]
-        grow.uniStateValue?.listen { self._changed(to: .init(grow: $0, shrink: shrink.uniValue, basis: basis.uniValue, important: important)) }
-        shrink.uniStateValue?.listen { self._changed(to: .init(grow: grow.uniValue, shrink: $0, basis: basis.uniValue, important: important)) }
-        basis.uniStateValue?.listen { self._changed(to: .init(grow: grow.uniValue, shrink: shrink.uniValue, basis:$0, important: important)) }
+        grow.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init(grow: $0, shrink: shrink.uniValue, basis: basis.uniValue, important: important))
+        }.hold(in: _stateBindings)
+        shrink.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init(grow: grow.uniValue, shrink: $0, basis: basis.uniValue, important: important))
+        }.hold(in: _stateBindings)
+        basis.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init(grow: grow.uniValue, shrink: shrink.uniValue, basis:$0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9718,15 +11323,26 @@ extension Stylesheetable {
 
 extension FlexProperty {
     public class MS: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<FlexValue> { .flex_ms }
         public var propertyValue: FlexValue
         var _content = _PropertyContent<FlexValue>()
 
         public init<G, S, B>(grow: G, shrink: S, basis: B, important: Bool? = nil) where G:UniValue, G.UniValue: NumericValue, S:UniValue, S.UniValue: NumericValue, B:UniValue, B.UniValue: UnitValuable {
             propertyValue = .init(grow: grow.uniValue, shrink: shrink.uniValue, basis: basis.uniValue, important: important)
-            grow.uniStateValue?.listen { self._changed(to: .init(grow: $0, shrink: shrink.uniValue, basis: basis.uniValue, important: important)) }
-            shrink.uniStateValue?.listen { self._changed(to: .init(grow: grow.uniValue, shrink: $0, basis: basis.uniValue, important: important)) }
-            basis.uniStateValue?.listen { self._changed(to: .init(grow: grow.uniValue, shrink: shrink.uniValue, basis:$0, important: important)) }
+            grow.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(grow: $0, shrink: shrink.uniValue, basis: basis.uniValue, important: important))
+            }.hold(in: _stateBindings)
+            shrink.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(grow: grow.uniValue, shrink: $0, basis: basis.uniValue, important: important))
+            }.hold(in: _stateBindings)
+            basis.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(grow: grow.uniValue, shrink: shrink.uniValue, basis:$0, important: important))
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -9779,6 +11395,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_flex-wrap.asp)
 public class FlexWrapProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FlexWrapType> { .flexWrap }
     public var propertyValue: FlexWrapType
     var _content = _PropertyContent<FlexWrapType>()
@@ -9789,7 +11407,10 @@ public class FlexWrapProperty: _Property {
 
     public convenience init (_ type: State<FlexWrapType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9829,6 +11450,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_class_float.asp)
 public class FloatProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FloatType> { .float }
     public var propertyValue: FloatType
     var _content = _PropertyContent<FloatType>()
@@ -9839,7 +11462,10 @@ public class FloatProperty: _Property {
 
     public convenience init (_ type: State<FloatType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -9884,6 +11510,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family)
 public class FontFamilyProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontFamilyValue> { .fontFamily }
     public var propertyValue: FontFamilyValue
     var _content = _PropertyContent<FontFamilyValue>()
@@ -9899,7 +11527,10 @@ public class FontFamilyProperty: _Property {
     public convenience init (_ types: [State<FontFamilyType>], important: Bool? = nil) {
         self.init(types.map { $0.wrappedValue }, important: important)
         types.forEach {
-            $0.listen { self._changed(to: .init(types.map { $0.wrappedValue }, important: important)) }
+            $0.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.wrappedValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -9910,7 +11541,10 @@ public class FontFamilyProperty: _Property {
     public convenience init <T>(mixed types: [T], important: Bool? = nil) where T: UniValue, T.UniValue == FontFamilyType {
         self.init(types.map { $0.uniValue }, important: important)
         types.forEach {
-            $0.uniStateValue?.listen { self._changed(to: .init(types.map { $0.uniValue }, important: important)) }
+            $0.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.uniValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -9925,6 +11559,8 @@ extension PropertyKey {
 }
 
 public class FontFamilyValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -9940,17 +11576,19 @@ public class FontFamilyValue: CustomStringConvertible, _PropertyValueInnerChange
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontFamilyType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.map { $0.value }.joined(separator: ", ") + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontFamilyType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -10016,6 +11654,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-kerning)
 public class FontKerningProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontKerningType> { .fontKerning }
     public var propertyValue: FontKerningType
     var _content = _PropertyContent<FontKerningType>()
@@ -10026,7 +11666,10 @@ public class FontKerningProperty: _Property {
 
     public convenience init (_ type: State<FontKerningType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -10075,6 +11718,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-language-override)
 public class FontLanguageOverrideProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontLanguageOverrideType> { .fontLanguageOverride }
     public var propertyValue: FontLanguageOverrideType
     var _content = _PropertyContent<FontLanguageOverrideType>()
@@ -10085,7 +11730,10 @@ public class FontLanguageOverrideProperty: _Property {
 
     public convenience init (_ type: State<FontLanguageOverrideType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -10126,6 +11774,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_font_font.asp)
 public class FontProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontValue> { .font }
     public var propertyValue: FontValue
     var _content = _PropertyContent<FontValue>()
@@ -10136,9 +11786,10 @@ public class FontProperty: _Property {
     
     public init (_ type: State<FontType>) {
         propertyValue = .init(type.wrappedValue)
-        type.listen {
+        type.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0))
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <F: UnitValuable, L: UnitValuable>(
@@ -10159,6 +11810,8 @@ extension PropertyKey {
 }
 
 public class FontValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -10169,10 +11822,11 @@ public class FontValue: CustomStringConvertible, _PropertyValueInnerChangeable {
 
     public convenience init (_ type: State<FontType>) {
         self.init(type.wrappedValue)
-        type.listen {
+        type.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <F: UnitValuable, L: UnitValuable>(
@@ -10268,6 +11922,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size-adjust)
 public class FontSizeAdjustProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontSizeAdjustValue> { .fontSizeAdjust }
     public var propertyValue: FontSizeAdjustValue
     var _content = _PropertyContent<FontSizeAdjustValue>()
@@ -10279,12 +11935,18 @@ public class FontSizeAdjustProperty: _Property {
     public convenience init (_ type: State<FontSizeAdjustType>) {
         let type = type.stateValue
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: .init($0)) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0))
+        }.hold(in: _stateBindings)
     }
 
     public init <N>(_ numeric: N, important: Bool? = nil) where N: UniValue, N.UniValue: NumericValue {
         propertyValue = .init(numeric.uniValue, important: important)
-        numeric.uniStateValue?.listen { self._changed(to: .init($0, important: important)) }
+        numeric.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -10294,6 +11956,8 @@ extension PropertyKey {
 }
 
 public class FontSizeAdjustValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -10305,10 +11969,11 @@ public class FontSizeAdjustValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init <T>(_ type: T) where T: StateConvertible, T.Value == FontSizeAdjustType {
         let type = type.stateValue
         self.init(type.wrappedValue)
-        type.listen {
+        type.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (_ numeric: NumericValue, important: Bool? = nil) {
@@ -10318,10 +11983,11 @@ public class FontSizeAdjustValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init <T>(_ numeric: T, important: Bool? = nil) where T: StateConvertible, T.Value == NumericValue {
         let numeric = numeric.stateValue
         self.init(numeric.wrappedValue, important : important)
-        numeric.listen {
+        numeric.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.numericValue + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -10388,6 +12054,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-size)
 public class FontSizeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontSizeType> { .fontSize }
     public var propertyValue: FontSizeType
     var _content = _PropertyContent<FontSizeType>()
@@ -10398,12 +12066,18 @@ public class FontSizeProperty: _Property {
 
     public convenience init (_ type: State<FontSizeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <L>(_ length: L) where L: UniValue, L.UniValue: UnitValuable {
         self.init(.length(length.uniValue))
-        length.uniStateValue?.listen { self._changed(to: .length($0)) }
+        length.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .length($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -10464,6 +12138,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch)
 public class FontStretchProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontStretchType> { .fontStretch }
     public var propertyValue: FontStretchType
     var _content = _PropertyContent<FontStretchType>()
@@ -10474,7 +12150,10 @@ public class FontStretchProperty: _Property {
 
     public convenience init (_ type: State<FontStretchType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -10517,6 +12196,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-style)
 public class FontStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontStyleType> { .fontStyle }
     public var propertyValue: FontStyleType
     var _content = _PropertyContent<FontStyleType>()
@@ -10527,7 +12208,10 @@ public class FontStyleProperty: _Property {
 
     public convenience init (_ type: State<FontStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -10570,6 +12254,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-synthesis)
 public class FontSynthesisProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontSynthesisType> { .fontSynthesis }
     public var propertyValue: FontSynthesisType
     var _content = _PropertyContent<FontSynthesisType>()
@@ -10580,7 +12266,10 @@ public class FontSynthesisProperty: _Property {
 
     public convenience init (_ type: State<FontSynthesisType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -10631,6 +12320,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates)
 public class FontVariantAlternatesProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontVariantAlternatesValue> { .fontVariantAlternates }
     public var propertyValue: FontVariantAlternatesValue
     var _content = _PropertyContent<FontVariantAlternatesValue>()
@@ -10646,7 +12337,10 @@ public class FontVariantAlternatesProperty: _Property {
     public convenience init (_ types: [State<FontVariantAlternatesType>], important: Bool? = nil) {
         self.init(types.map { $0.wrappedValue }, important: important)
         types.forEach {
-            $0.listen { self._changed(to: .init(types.map { $0.wrappedValue }, important: important)) }
+            $0.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.wrappedValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -10657,7 +12351,10 @@ public class FontVariantAlternatesProperty: _Property {
     public convenience init <T>(mixed types: [T], important: Bool? = nil) where T: UniValue, T.UniValue == FontVariantAlternatesType {
         self.init(types.map { $0.uniValue }, important: important)
         types.forEach {
-            $0.uniStateValue?.listen { self._changed(to: .init(types.map { $0.uniValue }, important: important)) }
+            $0.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.uniValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -10672,6 +12369,8 @@ extension PropertyKey {
 }
 
 public class FontVariantAlternatesValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -10691,25 +12390,27 @@ public class FontVariantAlternatesValue: CustomStringConvertible, _PropertyValue
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantAlternatesType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen { types in
+        types.listen { [weak self] types in
+            guard let self else { return }
             var vals = types.map { $0.value }
             if important == true {
                 vals.append("!important")
             }
             self.value = vals.joined(separator: " ")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantAlternatesType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             if important == true {
                 self.value = $0.value + "!important"
             } else {
                 self.value = $0.value
             }
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -10777,6 +12478,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-caps)
 public class FontVariantCapsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontVariantCapsValue> { .fontVariantCaps }
     public var propertyValue: FontVariantCapsValue
     var _content = _PropertyContent<FontVariantCapsValue>()
@@ -10792,7 +12495,10 @@ public class FontVariantCapsProperty: _Property {
     public convenience init (_ types: [State<FontVariantCapsType>], important: Bool? = nil) {
         self.init(types.map { $0.wrappedValue }, important: important)
         types.forEach {
-            $0.listen { self._changed(to: .init(types.map { $0.wrappedValue }, important: important)) }
+            $0.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.wrappedValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -10803,7 +12509,10 @@ public class FontVariantCapsProperty: _Property {
     public convenience init <T>(mixed types: [T], important: Bool? = nil) where T: UniValue, T.UniValue == FontVariantCapsType {
         self.init(types.map { $0.uniValue }, important: important)
         types.forEach {
-            $0.uniStateValue?.listen { self._changed(to: .init(types.map { $0.uniValue }, important: important)) }
+            $0.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.uniValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -10818,6 +12527,8 @@ extension PropertyKey {
 }
 
 public class FontVariantCapsValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -10833,17 +12544,19 @@ public class FontVariantCapsValue: CustomStringConvertible, _PropertyValueInnerC
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantCapsType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.map { $0.value }.joined(separator: " ") + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantCapsType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -10915,6 +12628,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-east-asian)
 public class FontVariantEastAsianProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontVariantEastAsianValue> { .fontVariantEastAsian }
     public var propertyValue: FontVariantEastAsianValue
     var _content = _PropertyContent<FontVariantEastAsianValue>()
@@ -10930,7 +12645,10 @@ public class FontVariantEastAsianProperty: _Property {
     public convenience init (_ types: [State<FontVariantEastAsianType>], important: Bool? = nil) {
         self.init(types.map { $0.wrappedValue }, important: important)
         types.forEach {
-            $0.listen { self._changed(to: .init(types.map { $0.wrappedValue }, important: important)) }
+            $0.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.wrappedValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -10941,7 +12659,10 @@ public class FontVariantEastAsianProperty: _Property {
     public convenience init <T>(mixed types: [T], important: Bool? = nil) where T: UniValue, T.UniValue == FontVariantEastAsianType {
         self.init(types.map { $0.uniValue }, important: important)
         types.forEach {
-            $0.uniStateValue?.listen { self._changed(to: .init(types.map { $0.uniValue }, important: important)) }
+            $0.uniStateValue?.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: .init(types.map { $0.uniValue }, important: important))
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -10956,6 +12677,8 @@ extension PropertyKey {
 }
 
 public class FontVariantEastAsianValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -10971,17 +12694,19 @@ public class FontVariantEastAsianValue: CustomStringConvertible, _PropertyValueI
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantEastAsianType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.map { $0.value }.joined(separator: " ") + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantEastAsianType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -11052,6 +12777,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-ligatures)
 public class FontVariantLigaturesProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontVariantLigaturesValue> { .fontVariantLigatures }
     public var propertyValue: FontVariantLigaturesValue
     var _content = _PropertyContent<FontVariantLigaturesValue>()
@@ -11067,17 +12794,19 @@ public class FontVariantLigaturesProperty: _Property {
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantLigaturesType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0, important: important))
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantLigaturesType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0, important: important))
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11087,6 +12816,8 @@ extension PropertyKey {
 }
 
 public class FontVariantLigaturesValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -11102,17 +12833,19 @@ public class FontVariantLigaturesValue: CustomStringConvertible, _PropertyValueI
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantLigaturesType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.map { $0.value }.joined(separator: " ") + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantLigaturesType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -11171,6 +12904,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-numeric)
 public class FontVariantNumericProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontVariantNumericValue> { .fontVariantNumeric }
     public var propertyValue: FontVariantNumericValue
     var _content = _PropertyContent<FontVariantNumericValue>()
@@ -11186,17 +12921,19 @@ public class FontVariantNumericProperty: _Property {
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantNumericType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0, important: important))
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantNumericType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0, important: important))
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11206,6 +12943,8 @@ extension PropertyKey {
 }
 
 public class FontVariantNumericValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -11221,17 +12960,19 @@ public class FontVariantNumericValue: CustomStringConvertible, _PropertyValueInn
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantNumericType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.map { $0.value }.joined(separator: " ") + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantNumericType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -11283,6 +13024,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-position)
 public class FontVariantPositionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontVariantPositionType> { .fontVariantPosition }
     public var propertyValue: FontVariantPositionType
     var _content = _PropertyContent<FontVariantPositionType>()
@@ -11293,7 +13036,10 @@ public class FontVariantPositionProperty: _Property {
 
     public convenience init (_ type: State<FontVariantPositionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11334,6 +13080,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant)
 public class FontVariantProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<FontVariantValue> { .fontVariant }
     public var propertyValue: FontVariantValue
     var _content = _PropertyContent<FontVariantValue>()
@@ -11349,17 +13097,19 @@ public class FontVariantProperty: _Property {
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0, important: important))
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0, important: important))
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11369,6 +13119,8 @@ extension PropertyKey {
 }
 
 public class FontVariantValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -11388,25 +13140,27 @@ public class FontVariantValue: CustomStringConvertible, _PropertyValueInnerChang
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == [FontVariantType] {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             if important == true {
                 self.value = $0.map { $0.value }.joined(separator: " ") + "!important"
             } else {
                 self.value = $0.map { $0.value }.joined(separator: " ")
             }
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <V>(_ types: V, important: Bool? = nil) where V: StateConvertible, V.Value == FontVariantType {
         let types = types.stateValue
         self.init(types.wrappedValue, important: important)
-        types.listen {
+        types.listen { [weak self] in
+            guard let self else { return }
             if important == true {
                 self.value = $0.value + "!important"
             } else {
                 self.value = $0.value
             }
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -11483,6 +13237,8 @@ extension PropertyKey {
 }
 
 public class FontWeightValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -11494,10 +13250,11 @@ public class FontWeightValue: CustomStringConvertible, _PropertyValueInnerChange
     public convenience init <F>(_ type: F) where F: StateConvertible, F.Value == FontWeightType {
         let type = type.stateValue
         self.init(type.wrappedValue)
-        type.listen {
+        type.listen { [weak self] in
+            guard let self else { return }
             self.value = type.wrappedValue.value
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (_ n: Int, important: Bool? = nil) {
@@ -11507,10 +13264,11 @@ public class FontWeightValue: CustomStringConvertible, _PropertyValueInnerChange
     public convenience init <V>(_ n: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let n = n.stateValue
         self.init(n.wrappedValue, important: important)
-        n.listen {
+        n.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -11562,6 +13320,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-area.asp)
 public class GridAreaProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<GridAreaValue> { .gridArea }
     public var propertyValue: GridAreaValue
     var _content = _PropertyContent<GridAreaValue>()
@@ -11577,9 +13337,10 @@ public class GridAreaProperty: _Property {
     public convenience init <S>(_ area: S, important: Bool? = nil) where S: StateConvertible, S.Value == String {
         let area = area.stateValue
         self.init(area.wrappedValue, important: important)
-        area.listen {
+        area.listen { [weak self] in
+            guard let self else { return }
             self._changed(to: .init($0, important: important))
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11646,6 +13407,8 @@ extension Stylesheetable {
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-auto-columns.asp)
 /// [Learn even more](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns)
 public class GridAutoColumnsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<GridAutoColumnsValue> { .gridAutoColumns }
     public var propertyValue: GridAutoColumnsValue
     var _content = _PropertyContent<GridAutoColumnsValue>()
@@ -11660,12 +13423,18 @@ public class GridAutoColumnsProperty: _Property {
 
     public convenience init (_ type: State<GridAutoColumnsType>, important: Bool? = nil) {
         self.init(type.wrappedValue, important: important)
-        type.listen { self._changed(to: .init($0, important: important)) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (_ type: State<[GridAutoColumnsType]>, important: Bool? = nil) {
         self.init(type.wrappedValue, important: important)
-        type.listen { self._changed(to: .init($0, important: important)) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11756,6 +13525,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-auto-flow.asp)
 public class GridAutoFlowProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<GridAutoFlowType> { .gridAutoFlow }
     public var propertyValue: GridAutoFlowType
     var _content = _PropertyContent<GridAutoFlowType>()
@@ -11766,7 +13537,10 @@ public class GridAutoFlowProperty: _Property {
 
     public convenience init (_ type: State<GridAutoFlowType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11806,6 +13580,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-auto-rows.asp)
 public class GridAutoRowsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<GridAutoRowsType> { .gridAutoRows }
     public var propertyValue: GridAutoRowsType
     var _content = _PropertyContent<GridAutoRowsType>()
@@ -11816,7 +13592,10 @@ public class GridAutoRowsProperty: _Property {
 
     public convenience init (_ type: State<GridAutoRowsType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -11906,6 +13685,8 @@ extension PropertyKey {
 }
 
 public class GridColumnEndValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -11921,10 +13702,11 @@ public class GridColumnEndValue: CustomStringConvertible, _PropertyValueInnerCha
     public convenience init <V>(columnLine: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let columnLine = columnLine.stateValue
         self.init(columnLine: columnLine.wrappedValue, important: important)
-        columnLine.listen {
+        columnLine.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (span n: Int, important: Bool? = nil) {
@@ -11934,10 +13716,11 @@ public class GridColumnEndValue: CustomStringConvertible, _PropertyValueInnerCha
     public convenience init <V>(span n: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let n = n.stateValue
         self.init(span: n.wrappedValue, important: important)
-        n.listen {
+        n.listen { [weak self] in
+            guard let self else { return }
             self.value = "span \($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public static var auto: GridColumnEndValue { .init() }
@@ -12002,6 +13785,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-column-gap.asp)
 public class GridColumnGapProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .gridColumnGap }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -12012,7 +13797,10 @@ public class GridColumnGapProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -12127,6 +13915,8 @@ extension PropertyKey {
 }
 
 public class GridColumnValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -12138,33 +13928,37 @@ public class GridColumnValue: CustomStringConvertible, _PropertyValueInnerChange
     public convenience init <S>(start: S, end: Int, important: Bool? = nil) where S: StateConvertible, S.Value == Int {
         let start = start.stateValue
         self.init(start: start.wrappedValue, end: end, important: important)
-        start.listen {
+        start.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0) / \(end)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <E>(start: Int, end: E, important: Bool? = nil) where E: StateConvertible, E.Value == Int {
         let end = end.stateValue
         self.init(start: start, end: end.wrappedValue, important: important)
-        end.listen {
+        end.listen { [weak self] in
+            guard let self else { return }
             self.value = "\(start) / \($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <S, E>(start: S, end: E, important: Bool? = nil) where S: StateConvertible, S.Value == Int, E: StateConvertible, E.Value == Int {
         let start = start.stateValue
         let end = end.stateValue
         self.init(start: start.wrappedValue, end: end.wrappedValue, important: important)
-        start.listen {
+        start.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0) / \(end)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        end.listen {
+        }.hold(in: _stateBindings)
+        end.listen { [weak self] in
+            guard let self else { return }
             self.value = "\(start) / \($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -12257,6 +14051,8 @@ extension PropertyKey {
 }
 
 public final class GridColumnStartValue: PropertyValueImportantable, _StringPropertyValue, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -12276,10 +14072,11 @@ public final class GridColumnStartValue: PropertyValueImportantable, _StringProp
     public convenience init <V>(columnLine: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let columnLine = columnLine.stateValue
         self.init(columnLine: columnLine.wrappedValue, important: important)
-        columnLine.listen {
+        columnLine.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0)"
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (span n: Int, important: Bool? = nil) {
@@ -12289,10 +14086,11 @@ public final class GridColumnStartValue: PropertyValueImportantable, _StringProp
     public convenience init <V>(span n: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let n = n.stateValue
         self.init(span: n.wrappedValue, important: important)
-        n.listen {
+        n.listen { [weak self] in
+            guard let self else { return }
             self.value = "span \($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public static var auto: GridColumnStartValue { .init() }
@@ -12392,6 +14190,8 @@ extension PropertyKey {
 }
 
 public class GridGapValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -12403,10 +14203,11 @@ public class GridGapValue: CustomStringConvertible, _PropertyValueInnerChangeabl
     public convenience init<R>(_ rowGap: R) where R: StateConvertible, R.Value: UnitValuable {
         let rowGap = rowGap.stateValue
         self.init(rowGap.wrappedValue)
-        rowGap.listen {
+        rowGap.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.description
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init<R: UnitValuable, C: UnitValuable>(_ rowGap: R, _ columnGap: C, important: Bool? = nil) {
@@ -12416,33 +14217,37 @@ public class GridGapValue: CustomStringConvertible, _PropertyValueInnerChangeabl
     public convenience init<R, C: UnitValuable>(_ rowGap: R, _ columnGap: C, important: Bool? = nil) where R: StateConvertible, R.Value: UnitValuable {
         let rowGap = rowGap.stateValue
         self.init(rowGap.wrappedValue, columnGap, important: important)
-        rowGap.listen {
+        rowGap.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.description, columnGap.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<R: UnitValuable, C>(_ rowGap: R, _ columnGap: C, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let columnGap = columnGap.stateValue
         self.init(rowGap, columnGap.wrappedValue, important: important)
-        columnGap.listen {
+        columnGap.listen { [weak self] in
+            guard let self else { return }
             self.value = [rowGap.description, $0.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<R, C>(_ rowGap: R, _ columnGap: C, important: Bool? = nil) where R: StateConvertible, R.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let rowGap = rowGap.stateValue
         let columnGap = columnGap.stateValue
         self.init(rowGap.wrappedValue, columnGap.wrappedValue, important: important)
-        rowGap.listen {
+        rowGap.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.description, columnGap.wrappedValue.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        columnGap.listen {
+        }.hold(in: _stateBindings)
+        columnGap.listen { [weak self] in
+            guard let self else { return }
             self.value = [rowGap.wrappedValue.description, $0.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -12752,6 +14557,8 @@ extension PropertyKey {
 }
 
 public final class GridRowEndValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -12773,10 +14580,11 @@ public final class GridRowEndValue: CustomStringConvertible, _PropertyValueInner
     public convenience init <V>(rowLine: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let rowLine = rowLine.stateValue
         self.init(rowLine: rowLine.wrappedValue, important: important)
-        rowLine.listen {
+        rowLine.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (span n: Int, important: Bool? = nil) {
@@ -12786,10 +14594,11 @@ public final class GridRowEndValue: CustomStringConvertible, _PropertyValueInner
     public convenience init <V>(span n: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let n = n.stateValue
         self.init(span: n.wrappedValue, important: important)
-        n.listen {
+        n.listen { [weak self] in
+            guard let self else { return }
             self.value = "span \($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public static var auto: GridRowEndValue { .init() }
@@ -12854,6 +14663,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-row-gap.asp)
 public class GridRowGapProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .gridRowGap }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -12864,7 +14675,10 @@ public class GridRowGapProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -12979,6 +14793,8 @@ extension PropertyKey {
 }
 
 public class GridRowValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -12990,33 +14806,37 @@ public class GridRowValue: CustomStringConvertible, _PropertyValueInnerChangeabl
     public convenience init <S>(start: S, end: Int, important: Bool? = nil) where S: StateConvertible, S.Value == Int {
         let start = start.stateValue
         self.init(start: start.wrappedValue, end: end, important: important)
-        start.listen {
+        start.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0) / \(end)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <E>(start: Int, end: E, important: Bool? = nil) where E: StateConvertible, E.Value == Int {
         let end = end.stateValue
         self.init(start: start, end: end.wrappedValue, important: important)
-        end.listen {
+        end.listen { [weak self] in
+            guard let self else { return }
             self.value = "\(start) / \($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <S, E>(start: S, end: E, important: Bool? = nil) where S: StateConvertible, S.Value == Int, E: StateConvertible, E.Value == Int {
         let start = start.stateValue
         let end = end.stateValue
         self.init(start: start.wrappedValue, end: end.wrappedValue, important: important)
-        start.listen {
+        start.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0) / \(end)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        end.listen {
+        }.hold(in: _stateBindings)
+        end.listen { [weak self] in
+            guard let self else { return }
             self.value = "\(start) / \($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -13098,6 +14918,8 @@ extension PropertyKey {
 }
 
 public final class GridRowStartValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -13119,10 +14941,11 @@ public final class GridRowStartValue: CustomStringConvertible, _PropertyValueInn
     public convenience init <V>(rowLine: V, important: Bool? = nil) where V: StateConvertible, V.Value == Int {
         let rowLine = rowLine.stateValue
         self.init(rowLine: rowLine.wrappedValue, important: important)
-        rowLine.listen {
+        rowLine.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0)" + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public static var auto: GridRowStartValue { .init() }
@@ -13177,6 +15000,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-template-areas.asp)
 public class GridTemplateAreasProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<GridTemplateAreasValue> { .gridTemplateAreas }
     public var propertyValue: GridTemplateAreasValue
     var _content = _PropertyContent<GridTemplateAreasValue>()
@@ -13192,7 +15017,10 @@ public class GridTemplateAreasProperty: _Property {
     public convenience init <V>(_ areas: V, important: Bool? = nil) where V: StateConvertible, V.Value == [String] {
         let areas = areas.stateValue
         self.init(areas.wrappedValue, important: important)
-        areas.listen { self._changed(to: .init($0, important: important)) }
+        areas.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13201,13 +15029,18 @@ extension PropertyKey {
 }
 
 public class GridTemplateAreasValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
 
     public init (_ area: [String], important: Bool? = nil) {
         value = "\"\(area.joined(separator: " "))\"" + (important == true ? "!important" : "")
-        $value.listen { self._changeHandler() }
+        $value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (_ areas: String..., important: Bool? = nil) {
@@ -13217,9 +15050,10 @@ public class GridTemplateAreasValue: CustomStringConvertible, _PropertyValueInne
     public convenience init <V>(_ area: V, important: Bool? = nil) where V: StateConvertible, V.Value == [String] {
         let area = area.stateValue
         self.init(area.wrappedValue, important: important)
-        area.listen {
+        area.listen { [weak self] in
+            guard let self else { return }
             self.value = "\"\($0.joined(separator: " "))\"" + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -13262,6 +15096,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-template-columns.asp)
 public class GridTemplateColumnsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<GridTemplateColumnsType> { .gridTemplateColumns }
     public var propertyValue: GridTemplateColumnsType
     var _content = _PropertyContent<GridTemplateColumnsType>()
@@ -13272,7 +15108,10 @@ public class GridTemplateColumnsProperty: _Property {
 
     public convenience init (_ type: State<GridTemplateColumnsType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13408,6 +15247,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_grid-template-rows.asp)
 public class GridTemplateRowsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<GridTemplateRowsType> { .gridTemplateRows }
     public var propertyValue: GridTemplateRowsType
     var _content = _PropertyContent<GridTemplateRowsType>()
@@ -13418,7 +15259,10 @@ public class GridTemplateRowsProperty: _Property {
 
     public convenience init (_ type: State<GridTemplateRowsType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13470,6 +15314,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_hanging-punctuation.asp)
 public class HangingPunctuationProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<HangingPunctuationType> { .hangingPunctuation }
     public var propertyValue: HangingPunctuationType
     var _content = _PropertyContent<HangingPunctuationType>()
@@ -13480,7 +15326,10 @@ public class HangingPunctuationProperty: _Property {
 
     public convenience init (_ type: State<HangingPunctuationType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13520,6 +15369,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_dim_height.asp)
 public class HeightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .height }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -13530,7 +15381,10 @@ public class HeightProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -13634,6 +15488,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_hyphens.asp)
 public class HyphensProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<HyphensType> { .hyphens }
     public var propertyValue: HyphensType
     public var propertyAliases: [AnyProperty]
@@ -13646,7 +15502,10 @@ public class HyphensProperty: _Property {
 
     public convenience init (_ type: State<HyphensType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13682,6 +15541,8 @@ extension Stylesheetable {
 
 extension HyphensProperty {
     public class MS: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<HyphensType> { .hyphens_ms }
         public var propertyValue: HyphensType
         var _content = _PropertyContent<HyphensType>()
@@ -13692,7 +15553,10 @@ extension HyphensProperty {
 
         public convenience init (_ type: State<HyphensType>) {
             self.init(type.wrappedValue)
-            type.listen { self._changed(to: $0) }
+            type.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: $0)
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -13703,6 +15567,8 @@ extension PropertyKey {
 
 extension HyphensProperty {
     public class Webkit: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<HyphensType> { .hyphens_webKit }
         public var propertyValue: HyphensType
         var _content = _PropertyContent<HyphensType>()
@@ -13713,7 +15579,10 @@ extension HyphensProperty {
 
         public convenience init (_ type: State<HyphensType>) {
             self.init(type.wrappedValue)
-            type.listen { self._changed(to: $0) }
+            type.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: $0)
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -13734,6 +15603,8 @@ extension PropertyKey {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering)
 public class ImageRenderingProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ImageRenderingType> { .imageRendering }
     public var propertyValue: ImageRenderingType
     var _content = _PropertyContent<ImageRenderingType>()
@@ -13744,7 +15615,10 @@ public class ImageRenderingProperty: _Property {
 
     public convenience init (_ type: State<ImageRenderingType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13784,6 +15658,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_isolation.asp)
 public class IsolationProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<IsolationType> { .isolation }
     public var propertyValue: IsolationType
     var _content = _PropertyContent<IsolationType>()
@@ -13794,7 +15670,10 @@ public class IsolationProperty: _Property {
 
     public convenience init (_ type: State<IsolationType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13834,6 +15713,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_justify-content.asp)
 public class JustifyContentProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<JustifyContentType> { .justifyContent }
     public var propertyValue: JustifyContentType
     var _content = _PropertyContent<JustifyContentType>()
@@ -13844,7 +15725,10 @@ public class JustifyContentProperty: _Property {
 
     public convenience init (_ type: State<JustifyContentType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -13884,6 +15768,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_pos_left.asp)
 public class LeftProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .left }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -13894,7 +15780,10 @@ public class LeftProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -13982,6 +15871,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_letter-spacing.asp)
 public class LetterSpacingProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<LetterSpacingType> { .letterSpacing }
     public var propertyValue: LetterSpacingType
     var _content = _PropertyContent<LetterSpacingType>()
@@ -13992,7 +15883,10 @@ public class LetterSpacingProperty: _Property {
 
     public convenience init (_ type: State<LetterSpacingType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -14048,6 +15942,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/line-break)
 public class LineBreakProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<LineBreakType> { .lineBreak }
     public var propertyValue: LineBreakType
     var _content = _PropertyContent<LineBreakType>()
@@ -14058,7 +15954,10 @@ public class LineBreakProperty: _Property {
 
     public convenience init (_ type: State<LineBreakType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -14101,6 +16000,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_dim_line-height.asp)
 public class LineHeightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<LineHeightType> { .lineHeight }
     public var propertyValue: LineHeightType
     var _content = _PropertyContent<LineHeightType>()
@@ -14111,7 +16012,10 @@ public class LineHeightProperty: _Property {
 
     public convenience init (_ type: State<LineHeightType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -14165,6 +16069,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_list-style-image.asp)
 public class ListStyleImageProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<URLValueContainer> { .listStyleImage }
     public var propertyValue: URLValueContainer
     var _content = _PropertyContent<URLValueContainer>()
@@ -14175,17 +16081,26 @@ public class ListStyleImageProperty: _Property {
 
     public convenience init (_ type: State<URLValue>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: .init($0)) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (_ type: State<String>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: .init($0)) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (_ type: State<URL>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: .init($0)) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init($0))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -14239,6 +16154,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_list-style-position.asp)
 public class ListStylePositionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ListStylePositionType> { .listStylePosition }
     public var propertyValue: ListStylePositionType
     var _content = _PropertyContent<ListStylePositionType>()
@@ -14249,7 +16166,10 @@ public class ListStylePositionProperty: _Property {
 
     public convenience init (_ type: State<ListStylePositionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -14342,6 +16262,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_list-style-type.asp)
 public class ListStyleTypeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ListStyleTypeType> { .listStyleType }
     public var propertyValue: ListStyleTypeType
     var _content = _PropertyContent<ListStyleTypeType>()
@@ -14352,7 +16274,10 @@ public class ListStyleTypeProperty: _Property {
 
     public convenience init (_ type: State<ListStyleTypeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -14392,6 +16317,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_margin-bottom.asp)
 public class MarginBottomProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<MarginSideValue> { .marginBottom }
     public var propertyValue: MarginSideValue
     var _content = _PropertyContent<MarginSideValue>()
@@ -14406,7 +16333,10 @@ public class MarginBottomProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit))) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit)))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -14433,15 +16363,18 @@ extension PropertyKey {
 }
 
 public final class MarginSideValue: Autoable, CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
 
     public init (_ value: String) {
         self.value = value
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (_ type: UnitValueType) {
@@ -14458,9 +16391,10 @@ public final class MarginSideValue: Autoable, CustomStringConvertible, _Property
 
     public convenience init <U: UnitValuable>(_ value: State<U>, important: Bool? = nil) {
         self.init(value.wrappedValue, important: important)
-        value.listen {
+        value.listen { [weak self] in
+            guard let self else { return }
             self.value = "\($0.value.doubleValue)\($0.unit.value)" + (important == true ? "!important" : "")
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -14534,6 +16468,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_margin-left.asp)
 public class MarginLeftProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<MarginSideValue> { .marginLeft }
     public var propertyValue: MarginSideValue
     var _content = _PropertyContent<MarginSideValue>()
@@ -14548,7 +16484,10 @@ public class MarginLeftProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit))) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit)))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -14642,6 +16581,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_margin.asp)
 public class MarginProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<MarginValue> { .margin }
     public var propertyValue: MarginValue
     var _content = _PropertyContent<MarginValue>()
@@ -14653,7 +16594,10 @@ public class MarginProperty: _Property {
     public convenience init <A>(all type: A) where A: StateConvertible, A.Value: UnitValuable {
         let state = type.stateValue
         self.init(all: state.wrappedValue)
-        state.listen { self._changed(to: MarginValue(all: $0)) }
+        state.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(all: $0))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: V/H
@@ -14673,33 +16617,51 @@ public class MarginProperty: _Property {
     public convenience init <A, U2: UnitValuable>(v: A, h: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let v = v.stateValue
         self.init(v: v.wrappedValue, h: h, important: important)
-        v.listen { self._changed(to: MarginValue(v: $0, h: h, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(v: $0, h: h, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A>(v: A, h: MarginSideValue, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let v = v.stateValue
         self.init(v: v.wrappedValue, h: h, important: important)
-        v.listen { self._changed(to: MarginValue(v: $0, h: h, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(v: $0, h: h, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B>(v: U1, h: B, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let h = h.stateValue
         self.init(v: v, h: h.wrappedValue, important: important)
-        h.listen { self._changed(to: MarginValue(v: v, h: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(v: v, h: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <B>(v: MarginSideValue, h: B, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let h = h.stateValue
         self.init(v: v, h: h.wrappedValue, important: important)
-        h.listen { self._changed(to: MarginValue(v: v, h: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(v: v, h: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B>(v: A, h: B, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let v = v.stateValue
         let h = h.stateValue
         self.init(v: v.wrappedValue, h: h.wrappedValue, important: important)
-        v.listen { self._changed(to: MarginValue(v: $0, h: h.wrappedValue, important: important)) }
-        h.listen { self._changed(to: MarginValue(v: v.wrappedValue, h: $0, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(v: $0, h: h.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(v: v.wrappedValue, h: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Top/H/Bottom
@@ -14715,63 +16677,102 @@ public class MarginProperty: _Property {
     public convenience init <U1: UnitValuable, U2: UnitValuable, A>(top: A, h: U1, bottom: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let top = top.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, h: h, bottom: bottom, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, h: h, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U3: UnitValuable, A>(top: A, h: MarginSideValue, bottom: U3, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let top = top.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, h: h, bottom: bottom, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, h: h, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B>(top: U1, h: B, bottom: U2, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let h = h.stateValue
         self.init(top: top, h: h.wrappedValue, bottom: bottom, important: important)
-        h.listen { self._changed(to: MarginValue(top: top, h: $0, bottom: bottom, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, h: $0, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, C>(top: U1, h: U2, bottom: C, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let bottom = bottom.stateValue
         self.init(top: top, h: h, bottom: bottom.wrappedValue, important: important)
-        bottom.listen { self._changed(to: MarginValue(top: top, h: h, bottom: $0, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, C>(top: U1, h: MarginSideValue, bottom: C, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let bottom = bottom.stateValue
         self.init(top: top, h: h, bottom: bottom.wrappedValue, important: important)
-        bottom.listen { self._changed(to: MarginValue(top: top, h: h, bottom: $0, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B>(top: A, h: B, bottom: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let top = top.stateValue
         let h = h.stateValue
         self.init(top: top.wrappedValue, h: h.wrappedValue, bottom: bottom, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, h: h.wrappedValue, bottom: bottom, important: important)) }
-        h.listen { self._changed(to: MarginValue(top: top.wrappedValue, h: $0, bottom: bottom, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, h: h.wrappedValue, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, h: $0, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, C>(top: A, h: U1, bottom: C, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let top = top.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom.wrappedValue, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top.wrappedValue, h: h, bottom: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, C>(top: A, h: MarginSideValue, bottom: C, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let top = top.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom.wrappedValue, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top.wrappedValue, h: h, bottom: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B, C>(top: U1, h: B, bottom: C, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let h = h.stateValue
         let bottom = bottom.stateValue
         self.init(top: top, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)
-        h.listen { self._changed(to: MarginValue(top: top, h: $0, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top, h: h.wrappedValue, bottom: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, h: $0, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, h: h.wrappedValue, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B, C>(top: A, h: B, bottom: C, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
@@ -14779,9 +16780,18 @@ public class MarginProperty: _Property {
         let h = h.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)) }
-        h.listen { self._changed(to: MarginValue(top: top.wrappedValue, h: $0, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top.wrappedValue, h: h.wrappedValue, bottom: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, h: $0, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, h: h.wrappedValue, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Top/Right/Bottom/Left
@@ -14793,73 +16803,121 @@ public class MarginProperty: _Property {
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, A>(top: A, right: U1, bottom: U2, left: U3, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let top = top.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom, left: left, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right, bottom: bottom, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, B>(top: U1, right: B, bottom: U2, left: U3, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let right = right.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom, left: left, important: important)
-        right.listen { self._changed(to: MarginValue(top: top, right: $0, bottom: bottom, left: left, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: $0, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, C>(top: U1, right: U2, bottom: C, left: U3, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let bottom = bottom.stateValue
         self.init(top: top, right: right, bottom: bottom.wrappedValue, left: left, important: important)
-        bottom.listen { self._changed(to: MarginValue(top: top, right: right, bottom: $0, left: left, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, D>(top: U1, right: U2, bottom: U3, left: D, important: Bool? = nil) where D: StateConvertible, D.Value: UnitValuable {
         let left = left.stateValue
         self.init(top: top, right: right, bottom: bottom, left: left.wrappedValue, important: important)
-        left.listen { self._changed(to: MarginValue(top: top, right: right, bottom: bottom, left: $0, important: important)) }
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, B>(top: A, right: B, bottom: U1, left: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let top = top.stateValue
         let right = right.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: left, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left, important: important)) }
-        right.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, C>(top: A, right: U1, bottom: C, left: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let top = top.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: left, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: $0, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, D>(top: A, right: U1, bottom: U2, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let top = top.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: bottom, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B, C>(top: U1, right: B, bottom: C, left: U2, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let right = right.stateValue
         let bottom = bottom.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)
-        right.listen { self._changed(to: MarginValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: $0, left: left, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B, D>(top: U1, right: B, bottom: U2, left: D, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let right = right.stateValue
         let left = left.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)
-        right.listen { self._changed(to: MarginValue(top: top, right: $0, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: bottom, left: $0, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: $0, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, C, D>(top: U1, right: U2, bottom: C, left: D, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        bottom.listen { self._changed(to: MarginValue(top: top, right: right, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: MarginValue(top: top, right: right, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B, C>(top: A, right: B, bottom: C, left: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
@@ -14867,9 +16925,18 @@ public class MarginProperty: _Property {
         let right = right.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)) }
-        right.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B, D>(top: A, right: B, bottom: U1, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -14877,9 +16944,18 @@ public class MarginProperty: _Property {
         let right = right.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)) }
-        right.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, C, D>(top: A, right: U1, bottom: C, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -14887,9 +16963,18 @@ public class MarginProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B, C, D>(top: U1, right: B, bottom: C, left: D, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -14897,9 +16982,18 @@ public class MarginProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        right.listen { self._changed(to: MarginValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B, C, D>(top: A, right: B, bottom: C, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -14908,10 +17002,22 @@ public class MarginProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        right.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: MarginValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -14920,6 +17026,8 @@ extension PropertyKey {
 }
 
 public class MarginValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
@@ -14930,59 +17038,67 @@ public class MarginValue: CustomStringConvertible, _PropertyValueInnerChangeable
 
     public init <U: UnitValuable>(all: U) {
         value = all.description
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A>(all: A) where A: StateConvertible, A.Value: UnitValuable {
         let all = all.stateValue
         self.init(all: all.wrappedValue)
-        all.listen {
+        all.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.description
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable>(v: U1, h: U2, important: Bool? = nil) {
         value = Self.values(v, h, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U2: UnitValuable>(v: MarginSideValue, h: U2, important: Bool? = nil) {
         value = Self.values(v, h, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable>(v: U1, h: MarginSideValue, important: Bool? = nil) {
         value = Self.values(v, h, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable>(top: U1, h: U2, bottom: U3, important: Bool? = nil) {
         value = Self.values(top, h, bottom, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U3: UnitValuable>(top: U1, h: MarginSideValue, bottom: U3, important: Bool? = nil) {
         value = Self.values(top, h, bottom, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, U4: UnitValuable>(top: U1, right: U2, bottom: U3, left: U4, important: Bool? = nil) {
         value = Self.values(top, right, bottom, left, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -15277,6 +17393,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_margin-right.asp)
 public class MarginRightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<MarginSideValue> { .marginRight }
     public var propertyValue: MarginSideValue
     var _content = _PropertyContent<MarginSideValue>()
@@ -15291,7 +17409,10 @@ public class MarginRightProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit))) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit)))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -15385,6 +17506,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_margin-top.asp)
 public class MarginTopProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<MarginSideValue> { .marginTop }
     public var propertyValue: MarginSideValue
     var _content = _PropertyContent<MarginSideValue>()
@@ -15399,7 +17522,10 @@ public class MarginTopProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit))) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: .init(UnitValue($0.value.doubleValue, $0.unit)))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -15494,6 +17620,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_dim_max-height.asp)
 public class MaxHeightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .maxHeight }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -15504,7 +17632,10 @@ public class MaxHeightProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -15591,6 +17722,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_dim_max-width.asp)
 public class MaxWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .maxWidth }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -15601,7 +17734,10 @@ public class MaxWidthProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -15689,6 +17825,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_dim_min-height.asp)
 public class MinHeightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .minHeight }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -15699,7 +17837,10 @@ public class MinHeightProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -15787,6 +17928,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_dim_min-width.asp)
 public class MinWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .minWidth }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -15797,7 +17940,10 @@ public class MinWidthProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -15891,6 +18037,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_mix-blend-mode.asp)
 public class MixBlendModeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<MixBlendModeType> { .mixBlendMode }
     public var propertyValue: MixBlendModeType
     var _content = _PropertyContent<MixBlendModeType>()
@@ -15901,7 +18049,10 @@ public class MixBlendModeProperty: _Property {
 
     public convenience init (_ type: State<MixBlendModeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -15941,6 +18092,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_object-fit.asp)
 public class ObjectFitProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ObjectFitType> { .objectFit }
     public var propertyValue: ObjectFitType
     var _content = _PropertyContent<ObjectFitType>()
@@ -15951,7 +18104,10 @@ public class ObjectFitProperty: _Property {
 
     public convenience init (_ type: State<ObjectFitType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -16083,6 +18239,8 @@ extension PropertyKey {
 }
 
 public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -16094,10 +18252,11 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init <X>(x: X) where X: StateConvertible, X.Value == ObjectPositionXType {
         let x = x.stateValue
         self.init(x: x.wrappedValue)
-        x.listen {
+        x.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (y: ObjectPositionYType) {
@@ -16107,10 +18266,11 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init <Y>(y: Y) where Y: StateConvertible, Y.Value == ObjectPositionYType {
         let y = y.stateValue
         self.init(y: y.wrappedValue)
-        y.listen {
+        y.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (x: ObjectPositionXType, y: ObjectPositionYType, important: Bool? = nil) {
@@ -16120,33 +18280,37 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init <X>(x: X, y: ObjectPositionYType, important: Bool? = nil) where X: StateConvertible, X.Value == ObjectPositionXType {
         let x = x.stateValue
         self.init(x: x.wrappedValue, y: y, important: important)
-        x.listen {
+        x.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, y.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <Y>(x: ObjectPositionXType, y: Y, important: Bool? = nil) where Y: StateConvertible, Y.Value == ObjectPositionYType {
         let y = y.stateValue
         self.init(x: x, y: y.wrappedValue, important: important)
-        y.listen {
+        y.listen { [weak self] in
+            guard let self else { return }
             self.value = [x.value, $0.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <X, Y>(x: X, y: Y, important: Bool? = nil) where X: StateConvertible, X.Value == ObjectPositionXType, Y: StateConvertible, Y.Value == ObjectPositionYType {
         let x = x.stateValue
         let y = y.stateValue
         self.init(x: x.wrappedValue, y: y.wrappedValue, important: important)
-        x.listen {
+        x.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, y.wrappedValue.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        y.listen {
+        }.hold(in: _stateBindings)
+        y.listen { [weak self] in
+            guard let self else { return }
             self.value = [x.wrappedValue.value, $0.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init<X: UnitValuable>(x: X) {
@@ -16156,10 +18320,11 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init<X>(x: X) where X: StateConvertible, X.Value: UnitValuable {
         let x = x.stateValue
         self.init(x: x.wrappedValue)
-        x.listen {
+        x.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.description
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init<Y: UnitValuable>(y: Y) {
@@ -16169,10 +18334,11 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init<Y>(y: Y) where Y: StateConvertible, Y.Value: UnitValuable {
         let y = y.stateValue
         self.init(y: y.wrappedValue)
-        y.listen {
+        y.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.description
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init<X: UnitValuable, Y: UnitValuable>(x: X, y: Y, important: Bool? = nil) {
@@ -16182,33 +18348,37 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init<X, Y: UnitValuable>(x: X, y: Y, important: Bool? = nil) where X: StateConvertible, X.Value: UnitValuable {
         let x = x.stateValue
         self.init(x: x.wrappedValue, y: y, important: important)
-        x.listen {
+        x.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.description, y.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<X: UnitValuable, Y>(x: X, y: Y, important: Bool? = nil) where Y: StateConvertible, Y.Value: UnitValuable {
         let y = y.stateValue
         self.init(x: x, y: y.wrappedValue, important: important)
-        y.listen {
+        y.listen { [weak self] in
+            guard let self else { return }
             self.value = [x.description, $0.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init<X, Y>(x: X, y: Y, important: Bool? = nil) where X: StateConvertible, X.Value: UnitValuable, Y: StateConvertible, Y.Value: UnitValuable {
         let x = x.stateValue
         let y = y.stateValue
         self.init(x: x.wrappedValue, y: y.wrappedValue, important: important)
-        x.listen {
+        x.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.description, y.wrappedValue.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        y.listen {
+        }.hold(in: _stateBindings)
+        y.listen { [weak self] in
+            guard let self else { return }
             self.value = [x.wrappedValue.description, $0.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init<X: UnitValuable>(x: X, y: ObjectPositionYType, important: Bool? = nil) {
@@ -16218,10 +18388,11 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init<X>(x: X, y: ObjectPositionYType, important: Bool? = nil) where X: StateConvertible, X.Value: UnitValuable {
         let x = x.stateValue
         self.init(x: x.wrappedValue, y: y, important: important)
-        x.listen {
+        x.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.description, y.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init<Y: UnitValuable>(x: ObjectPositionXType, y: Y, important: Bool? = nil) {
@@ -16231,10 +18402,11 @@ public class ObjectPositionValue: CustomStringConvertible, _PropertyValueInnerCh
     public convenience init<Y>(x: ObjectPositionXType, y: Y, important: Bool? = nil) where Y: StateConvertible, Y.Value: UnitValuable {
         let y = y.stateValue
         self.init(x: x, y: y.wrappedValue, important: important)
-        y.listen {
+        y.listen { [weak self] in
+            guard let self else { return }
             self.value = [x.value, $0.description].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -16438,6 +18610,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_order.asp)
 public class OrderProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<String> { .order }
     public var propertyValue: String
     var _content = _PropertyContent<String>()
@@ -16448,7 +18622,10 @@ public class OrderProperty: _Property {
 
     public convenience init (_ type: State<Int>, important: Bool? = nil) {
         self.init(type.wrappedValue, important: important)
-        type.listen { self._changed(to: "\($0)" + (important == true ? "!important" : "")) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: "\($0)" + (important == true ? "!important" : ""))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -16489,6 +18666,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/orphans)
 public class OrphansProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<String> { .orphans }
     public var propertyValue: String
     var _content = _PropertyContent<String>()
@@ -16499,7 +18678,10 @@ public class OrphansProperty: _Property {
 
     public convenience init (_ type: State<Int>, important: Bool? = nil) {
         self.init(type.wrappedValue, important: important)
-        type.listen { self._changed(to: "\($0)" + (important == true ? "!important" : "")) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: "\($0)" + (important == true ? "!important" : ""))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -16539,6 +18721,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_outline-color.asp)
 public class OutlineColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .outlineColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -16549,10 +18733,11 @@ public class OutlineColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (r: Int, g: Int, b: Int, a: Double, important: Bool? = nil) {
@@ -16608,6 +18793,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_outline-offset.asp)
 public class OutlineOffsetProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .outlineOffset }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -16618,7 +18805,10 @@ public class OutlineOffsetProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -16761,6 +18951,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_outline-style.asp)
 public class OutlineStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<OutlineStyleType> { .outlineStyle }
     public var propertyValue: OutlineStyleType
     var _content = _PropertyContent<OutlineStyleType>()
@@ -16771,7 +18963,10 @@ public class OutlineStyleProperty: _Property {
 
     public convenience init (_ type: State<OutlineStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -16811,6 +19006,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_outline-width.asp)
 public class OutlineWidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<OutlineWidthType> { .outlineWidth }
     public var propertyValue: OutlineWidthType
     var _content = _PropertyContent<OutlineWidthType>()
@@ -16821,7 +19018,10 @@ public class OutlineWidthProperty: _Property {
 
     public convenience init (_ type: State<OutlineWidthType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -16876,6 +19076,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow)
 public class OverflowProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<OverflowType> { .overflow }
     public var propertyValue: OverflowType
     var _content = _PropertyContent<OverflowType>()
@@ -16886,7 +19088,10 @@ public class OverflowProperty: _Property {
 
     public convenience init (_ type: State<OverflowType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -16929,6 +19134,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-wrap)
 public class OverflowWrapProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<OverflowWrapType> { .overflowWrap }
     public var propertyValue: OverflowWrapType
     var _content = _PropertyContent<OverflowWrapType>()
@@ -16939,7 +19146,10 @@ public class OverflowWrapProperty: _Property {
 
     public convenience init (_ type: State<OverflowWrapType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -16986,6 +19196,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_overflow-x.asp)
 public class OverflowXProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<OverflowType> { .overflowX }
     public var propertyValue: OverflowType
     var _content = _PropertyContent<OverflowType>()
@@ -16996,7 +19208,10 @@ public class OverflowXProperty: _Property {
 
     public convenience init (_ type: State<OverflowType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -17039,6 +19254,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_overflow-y.asp)
 public class OverflowYProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<OverflowType> { .overflowY }
     public var propertyValue: OverflowType
     var _content = _PropertyContent<OverflowType>()
@@ -17049,7 +19266,10 @@ public class OverflowYProperty: _Property {
 
     public convenience init (_ type: State<OverflowType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -17089,6 +19309,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_padding-bottom.asp)
 public class PaddingBottomProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .paddingBottom }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -17099,7 +19321,10 @@ public class PaddingBottomProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -17185,6 +19410,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_padding-left.asp)
 public class PaddingLeftProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .paddingLeft }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -17195,7 +19422,10 @@ public class PaddingLeftProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -17283,6 +19513,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_padding.asp)
 public class PaddingProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<PaddingValue> { .padding }
     public var propertyValue: PaddingValue
     var _content = _PropertyContent<PaddingValue>()
@@ -17294,7 +19526,10 @@ public class PaddingProperty: _Property {
     public convenience init <A>(all type: A) where A: StateConvertible, A.Value: UnitValuable {
         let state = type.stateValue
         self.init(all: state.wrappedValue)
-        state.listen { self._changed(to: PaddingValue(all: $0)) }
+        state.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(all: $0))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: V/H
@@ -17306,21 +19541,33 @@ public class PaddingProperty: _Property {
     public convenience init <U1: UnitValuable, A>(v: A, h: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let v = v.stateValue
         self.init(v: v.wrappedValue, h: h, important: important)
-        v.listen { self._changed(to: PaddingValue(v: $0, h: h, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(v: $0, h: h, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B>(v: U1, h: B, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let h = h.stateValue
         self.init(v: v, h: h.wrappedValue, important: important)
-        h.listen { self._changed(to: PaddingValue(v: v, h: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(v: v, h: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B>(v: A, h: B, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let v = v.stateValue
         let h = h.stateValue
         self.init(v: v.wrappedValue, h: h.wrappedValue, important: important)
-        v.listen { self._changed(to: PaddingValue(v: $0, h: h.wrappedValue, important: important)) }
-        h.listen { self._changed(to: PaddingValue(v: v.wrappedValue, h: $0, important: important)) }
+        v.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(v: $0, h: h.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(v: v.wrappedValue, h: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Top/H/Bottom
@@ -17332,43 +19579,70 @@ public class PaddingProperty: _Property {
     public convenience init <U1: UnitValuable, U2: UnitValuable, A>(top: A, h: U1, bottom: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let top = top.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, h: h, bottom: bottom, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, h: h, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B>(top: U1, h: B, bottom: U2, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let h = h.stateValue
         self.init(top: top, h: h.wrappedValue, bottom: bottom, important: important)
-        h.listen { self._changed(to: PaddingValue(top: top, h: $0, bottom: bottom, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, h: $0, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, C>(top: U1, h: U2, bottom: C, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let bottom = bottom.stateValue
         self.init(top: top, h: h, bottom: bottom.wrappedValue, important: important)
-        bottom.listen { self._changed(to: PaddingValue(top: top, h: h, bottom: $0, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B>(top: A, h: B, bottom: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let top = top.stateValue
         let h = h.stateValue
         self.init(top: top.wrappedValue, h: h.wrappedValue, bottom: bottom, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, h: h.wrappedValue, bottom: bottom, important: important)) }
-        h.listen { self._changed(to: PaddingValue(top: top.wrappedValue, h: $0, bottom: bottom, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, h: h.wrappedValue, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, h: $0, bottom: bottom, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, C>(top: A, h: U1, bottom: C, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let top = top.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, h: h, bottom: bottom.wrappedValue, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top.wrappedValue, h: h, bottom: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, h: h, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, h: h, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B, C>(top: U1, h: B, bottom: C, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let h = h.stateValue
         let bottom = bottom.stateValue
         self.init(top: top, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)
-        h.listen { self._changed(to: PaddingValue(top: top, h: $0, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top, h: h.wrappedValue, bottom: $0, important: important)) }
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, h: $0, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, h: h.wrappedValue, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B, C>(top: A, h: B, bottom: C, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
@@ -17376,9 +19650,18 @@ public class PaddingProperty: _Property {
         let h = h.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important)) }
-        h.listen { self._changed(to: PaddingValue(top: top.wrappedValue, h: $0, bottom: bottom.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top.wrappedValue, h: h.wrappedValue, bottom: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, h: h.wrappedValue, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        h.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, h: $0, bottom: bottom.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, h: h.wrappedValue, bottom: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Top/Right/Bottom/Left
@@ -17390,73 +19673,121 @@ public class PaddingProperty: _Property {
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, A>(top: A, right: U1, bottom: U2, left: U3, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable {
         let top = top.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom, left: left, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, B>(top: U1, right: B, bottom: U2, left: U3, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable {
         let right = right.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom, left: left, important: important)
-        right.listen { self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom, left: left, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, C>(top: U1, right: U2, bottom: C, left: U3, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable {
         let bottom = bottom.stateValue
         self.init(top: top, right: right, bottom: bottom.wrappedValue, left: left, important: important)
-        bottom.listen { self._changed(to: PaddingValue(top: top, right: right, bottom: $0, left: left, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, D>(top: U1, right: U2, bottom: U3, left: D, important: Bool? = nil) where D: StateConvertible, D.Value: UnitValuable {
         let left = left.stateValue
         self.init(top: top, right: right, bottom: bottom, left: left.wrappedValue, important: important)
-        left.listen { self._changed(to: PaddingValue(top: top, right: right, bottom: bottom, left: $0, important: important)) }
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, B>(top: A, right: B, bottom: U1, left: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable {
         let top = top.stateValue
         let right = right.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: left, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left, important: important)) }
-        right.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, C>(top: A, right: U1, bottom: C, left: U2, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let top = top.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: left, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: $0, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, A, D>(top: A, right: U1, bottom: U2, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let top = top.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: bottom, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B, C>(top: U1, right: B, bottom: C, left: U2, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
         let right = right.stateValue
         let bottom = bottom.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)
-        right.listen { self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: $0, left: left, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, B, D>(top: U1, right: B, bottom: U2, left: D, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let right = right.stateValue
         let left = left.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)
-        right.listen { self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: bottom, left: $0, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, U2: UnitValuable, C, D>(top: U1, right: U2, bottom: C, left: D, important: Bool? = nil) where C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        bottom.listen { self._changed(to: PaddingValue(top: top, right: right, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: PaddingValue(top: top, right: right, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B, C>(top: A, right: B, bottom: C, left: U1, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable {
@@ -17464,9 +19795,18 @@ public class PaddingProperty: _Property {
         let right = right.stateValue
         let bottom = bottom.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important)) }
-        right.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, B, D>(top: A, right: B, bottom: U1, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -17474,9 +19814,18 @@ public class PaddingProperty: _Property {
         let right = right.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important)) }
-        right.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, A, C, D>(top: A, right: U1, bottom: C, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -17484,9 +19833,18 @@ public class PaddingProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <U1: UnitValuable, B, C, D>(top: U1, right: B, bottom: C, left: D, important: Bool? = nil) where B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -17494,9 +19852,18 @@ public class PaddingProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        right.listen { self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A, B, C, D>(top: A, right: B, bottom: C, left: D, important: Bool? = nil) where A: StateConvertible, A.Value: UnitValuable, B: StateConvertible, B.Value: UnitValuable, C: StateConvertible, C.Value: UnitValuable, D: StateConvertible, D.Value: UnitValuable {
@@ -17505,10 +19872,22 @@ public class PaddingProperty: _Property {
         let bottom = bottom.stateValue
         let left = left.stateValue
         self.init(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)
-        top.listen { self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        right.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important)) }
-        bottom.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important)) }
-        left.listen { self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important)) }
+        top.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: $0, right: right.wrappedValue, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        right.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: $0, bottom: bottom.wrappedValue, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        bottom.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: $0, left: left.wrappedValue, important: important))
+        }.hold(in: _stateBindings)
+        left.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: PaddingValue(top: top.wrappedValue, right: right.wrappedValue, bottom: bottom.wrappedValue, left: $0, important: important))
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -17518,6 +19897,8 @@ extension PropertyKey {
 }
 
 public class PaddingValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
 
     var _changeHandler = {}
@@ -17528,30 +19909,34 @@ public class PaddingValue: CustomStringConvertible, _PropertyValueInnerChangeabl
 
     public init <U: UnitValuable>(all: U) {
         value = all.description
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable>(v: U1, h: U2, important: Bool? = nil) {
         value = Self.values(v, h, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable>(top: U1, h: U2, bottom: U3, important: Bool? = nil) {
         value = Self.values(top, h, bottom, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init <U1: UnitValuable, U2: UnitValuable, U3: UnitValuable, U4: UnitValuable>(top: U1, right: U2, bottom: U3, left: U4, important: Bool? = nil) {
         value = Self.values(top, right, bottom, left, important: important)
-        $value.listen {
+        $value.listen { [weak self] in
+            guard let self else { return }
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -17790,6 +20175,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_padding-right.asp)
 public class PaddingRightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .paddingRight }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -17800,7 +20187,10 @@ public class PaddingRightProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -17888,6 +20278,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_padding-top.asp)
 public class PaddingTopProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .paddingTop }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -17898,7 +20290,10 @@ public class PaddingTopProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -17986,6 +20381,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_print_pageba.asp)
 public class PageBreakAfterProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<PageBreakAfterType> { .pageBreakAfter }
     public var propertyValue: PageBreakAfterType
     var _content = _PropertyContent<PageBreakAfterType>()
@@ -17996,7 +20393,10 @@ public class PageBreakAfterProperty: _Property {
 
     public convenience init (_ type: State<PageBreakAfterType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18036,6 +20436,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_print_pagebb.asp)
 public class PageBreakBeforeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<PageBreakBeforeType> { .pageBreakBefore }
     public var propertyValue: PageBreakBeforeType
     var _content = _PropertyContent<PageBreakBeforeType>()
@@ -18046,7 +20448,10 @@ public class PageBreakBeforeProperty: _Property {
 
     public convenience init (_ type: State<PageBreakBeforeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18086,6 +20491,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_print_pagebi.asp)
 public class PageBreakInsideProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<PageBreakInsideType> { .pageBreakInside }
     public var propertyValue: PageBreakInsideType
     var _content = _PropertyContent<PageBreakInsideType>()
@@ -18096,7 +20503,10 @@ public class PageBreakInsideProperty: _Property {
 
     public convenience init (_ type: State<PageBreakInsideType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18179,6 +20589,8 @@ extension PropertyKey {
 }
 
 public class PerspectiveOriginValue: CustomStringConvertible, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     public var value: String
 
     var _changeHandler = {}
@@ -18190,33 +20602,37 @@ public class PerspectiveOriginValue: CustomStringConvertible, _PropertyValueInne
     public convenience init <X>(_ xAxis: X, _ yAxis: YAxis, important: Bool? = nil) where X: StateConvertible, X.Value == XAxis {
         let xAxis = xAxis.stateValue
         self.init(xAxis.wrappedValue, yAxis, important: important)
-        xAxis.listen {
+        xAxis.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, yAxis.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <Y>(_ xAxis: XAxis, _ yAxis: Y, important: Bool? = nil) where Y: StateConvertible, Y.Value == YAxis {
         let yAxis = yAxis.stateValue
         self.init(xAxis, yAxis.wrappedValue, important: important)
-        yAxis.listen {
+        yAxis.listen { [weak self] in
+            guard let self else { return }
             self.value = [xAxis.value, $0.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <X, Y>(_ xAxis: X, _ yAxis: Y, important: Bool? = nil) where X: StateConvertible, X.Value == XAxis, Y: StateConvertible, Y.Value == YAxis {
         let xAxis = xAxis.stateValue
         let yAxis = yAxis.stateValue
         self.init(xAxis.wrappedValue, yAxis.wrappedValue, important: important)
-        xAxis.listen {
+        xAxis.listen { [weak self] in
+            guard let self else { return }
             self.value = [$0.value, yAxis.wrappedValue.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
-        yAxis.listen {
+        }.hold(in: _stateBindings)
+        yAxis.listen { [weak self] in
+            guard let self else { return }
             self.value = [xAxis.wrappedValue.value, $0.value].joined(separator: " ") + (important == true ? "!important" : "")
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (_ xAxis: XAxis) {
@@ -18226,10 +20642,11 @@ public class PerspectiveOriginValue: CustomStringConvertible, _PropertyValueInne
     public convenience init <X>(_ xAxis: X) where X: StateConvertible, X.Value == XAxis {
         let xAxis = xAxis.stateValue
         self.init(xAxis.wrappedValue)
-        xAxis.listen {
+        xAxis.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public init (_ yAxis: YAxis) {
@@ -18239,10 +20656,11 @@ public class PerspectiveOriginValue: CustomStringConvertible, _PropertyValueInne
     public convenience init <Y>(_ yAxis: Y) where Y: StateConvertible, Y.Value == YAxis {
         let yAxis = yAxis.stateValue
         self.init(yAxis.wrappedValue)
-        yAxis.listen {
+        yAxis.listen { [weak self] in
+            guard let self else { return }
             self.value = $0.value
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
 
     public var description: String { value }
@@ -18357,6 +20775,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_perspective.asp)
 public class PerspectiveProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .perspective }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -18367,7 +20787,10 @@ public class PerspectiveProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -18461,6 +20884,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_pointer-events.asp)
 public class PointerEventsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<PointerEventsType> { .pointerEvents }
     public var propertyValue: PointerEventsType
     var _content = _PropertyContent<PointerEventsType>()
@@ -18472,7 +20897,10 @@ public class PointerEventsProperty: _Property {
     public convenience init <A>(_ type: A) where A: StateConvertible, A.Value == PointerEventsType {
         let type = type.stateValue
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18516,6 +20944,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_class_position.asp)
 public class PositionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<PositionType> { .position }
     public var propertyValue: PositionType
     var _content = _PropertyContent<PositionType>()
@@ -18526,7 +20956,10 @@ public class PositionProperty: _Property {
 
     public convenience init (_ type: State<PositionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18568,6 +21001,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_gen_quotes.asp)
 public class QuotesProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<QuotesType> { .quotes }
     public var propertyValue: QuotesType
     var _content = _PropertyContent<QuotesType>()
@@ -18578,7 +21013,10 @@ public class QuotesProperty: _Property {
 
     public convenience init (_ type: State<QuotesType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18621,6 +21059,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_resize.asp)
 public class ResizeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ResizeType> { .resize }
     public var propertyValue: ResizeType
     var _content = _PropertyContent<ResizeType>()
@@ -18631,7 +21071,10 @@ public class ResizeProperty: _Property {
 
     public convenience init (_ type: State<ResizeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18677,6 +21120,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_pos_right.asp)
 public class RightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .right }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -18687,7 +21132,10 @@ public class RightProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -18777,6 +21225,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_scroll-behavior.asp)
 public class ScrollBehaviorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<ScrollBehaviorType> { .scrollBehavior }
     public var propertyValue: ScrollBehaviorType
     var _content = _PropertyContent<ScrollBehaviorType>()
@@ -18787,7 +21237,10 @@ public class ScrollBehaviorProperty: _Property {
 
     public convenience init (_ type: State<ScrollBehaviorType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18828,6 +21281,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_tab_table-layout.asp)
 public class TableLayoutProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TableLayoutType> { .tableLayout }
     public var propertyValue: TableLayoutType
     var _content = _PropertyContent<TableLayoutType>()
@@ -18838,7 +21293,10 @@ public class TableLayoutProperty: _Property {
 
     public convenience init (_ type: State<TableLayoutType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18884,6 +21342,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size)
 public class TabSizeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TabSizeType> { .tabSize }
     public var propertyValue: TabSizeType
     var _content = _PropertyContent<TabSizeType>()
@@ -18894,7 +21354,10 @@ public class TabSizeProperty: _Property {
 
     public convenience init (_ type: State<TabSizeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -18948,6 +21411,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_text-align-last.asp)
 public class TextAlignLastProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextAlignLastType> { .textAlignLast }
     public var propertyValue: TextAlignLastType
     var _content = _PropertyContent<TextAlignLastType>()
@@ -18958,7 +21423,10 @@ public class TextAlignLastProperty: _Property {
 
     public convenience init (_ type: State<TextAlignLastType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19001,6 +21469,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_text-align.asp)
 public class TextAlignProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextAlignType> { .textAlign }
     public var propertyValue: TextAlignType
     var _content = _PropertyContent<TextAlignType>()
@@ -19011,7 +21481,10 @@ public class TextAlignProperty: _Property {
 
     public convenience init (_ type: State<TextAlignType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19057,6 +21530,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright)
 public class TextCombineUprightProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextCombineUprightType> { .textCombineUpright }
     public var propertyValue: TextCombineUprightType
     var _content = _PropertyContent<TextCombineUprightType>()
@@ -19067,7 +21542,10 @@ public class TextCombineUprightProperty: _Property {
 
     public convenience init (_ type: State<TextCombineUprightType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19110,6 +21588,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_text-decoration-color.asp)
 public class TextDecorationColorProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Color> { .textDecorationColor }
     public var propertyValue: Color
     var _content = _PropertyContent<Color>()
@@ -19120,10 +21600,11 @@ public class TextDecorationColorProperty: _Property {
 
     public convenience init (_ color: State<Color>) {
         self.init(color.wrappedValue)
-        color.listen {
+        color.listen { [weak self] in
+            guard let self else { return }
             self.propertyValue = $0
             self._content._changeHandler($0)
-        }
+        }.hold(in: _stateBindings)
     }
 
     public convenience init (r: Int, g: Int, b: Int, a: Double, important: Bool? = nil) {
@@ -19193,6 +21674,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_text-decoration-line.asp)
 public class TextDecorationLineProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextDecorationLineType> { .textDecorationLine }
     public var propertyValue: TextDecorationLineType
     var _content = _PropertyContent<TextDecorationLineType>()
@@ -19203,7 +21686,10 @@ public class TextDecorationLineProperty: _Property {
 
     public convenience init (_ type: State<TextDecorationLineType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19330,6 +21816,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_text-decoration-style.asp)
 public class TextDecorationStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextDecorationStyleType> { .textDecorationStyle }
     public var propertyValue: TextDecorationStyleType
     var _content = _PropertyContent<TextDecorationStyleType>()
@@ -19340,7 +21828,10 @@ public class TextDecorationStyleProperty: _Property {
 
     public convenience init (_ type: State<TextDecorationStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19390,6 +21881,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_text-indent.asp)
 public class TextIndentProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextIndentType> { .textIndent }
     public var propertyValue: TextIndentType
     var _content = _PropertyContent<TextIndentType>()
@@ -19400,7 +21893,10 @@ public class TextIndentProperty: _Property {
 
     public convenience init (_ type: State<TextIndentType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19456,6 +21952,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/text-justify)
 public class TextJustifyProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextJustifyType> { .textJustify }
     public var propertyValue: TextJustifyType
     var _content = _PropertyContent<TextJustifyType>()
@@ -19466,7 +21964,10 @@ public class TextJustifyProperty: _Property {
 
     public convenience init (_ type: State<TextJustifyType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19510,6 +22011,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/text-orientation)
 public class TextOrientationProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextOrientationType> { .textOrientation }
     public var propertyValue: TextOrientationType
     var _content = _PropertyContent<TextOrientationType>()
@@ -19520,7 +22023,10 @@ public class TextOrientationProperty: _Property {
 
     public convenience init (_ type: State<TextOrientationType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19564,6 +22070,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_text-overflow.asp)
 public class TextOverflowProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextOverflowType> { .textOverflow }
     public var propertyValue: TextOverflowType
     var _content = _PropertyContent<TextOverflowType>()
@@ -19574,7 +22082,10 @@ public class TextOverflowProperty: _Property {
 
     public convenience init (_ type: State<TextOverflowType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19616,6 +22127,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_text-shadow.asp)
 public class TextShadowProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<[TextShadowType]> { .textShadows }
     public var propertyValue: [TextShadowType]
     var _content = _PropertyContent<[TextShadowType]>()
@@ -19631,13 +22144,19 @@ public class TextShadowProperty: _Property {
     public convenience init <A>(_ value: A) where A: StateConvertible, A.Value == [TextShadowType] {
         let value = value.stateValue
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: $0) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A>(_ value: A) where A: StateConvertible, A.Value == TextShadowType {
         let value = value.stateValue
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: [$0]) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: [$0])
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19708,6 +22227,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_text-transform.asp)
 public class TextTransformProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TextTransformType> { .textTransform }
     public var propertyValue: TextTransformType
     var _content = _PropertyContent<TextTransformType>()
@@ -19718,7 +22239,10 @@ public class TextTransformProperty: _Property {
 
     public convenience init (_ type: State<TextTransformType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19771,6 +22295,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/CSS/text-underline-position)
 public class TextUnderlinePositionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<[TextUnderlinePositionType]> { .textUnderlinePositions }
     public var propertyValue: [TextUnderlinePositionType]
     var _content = _PropertyContent<[TextUnderlinePositionType]>()
@@ -19786,13 +22312,19 @@ public class TextUnderlinePositionProperty: _Property {
     public convenience init <A>(_ value: A) where A: StateConvertible, A.Value == [TextUnderlinePositionType] {
         let value = value.stateValue
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: $0) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 
     public convenience init <A>(_ value: A) where A: StateConvertible, A.Value == TextUnderlinePositionType {
         let value = value.stateValue
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: [$0]) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: [$0])
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -19857,6 +22389,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_pos_top.asp)
 public class TopProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .top }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -19867,7 +22401,10 @@ public class TopProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -19958,6 +22495,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_transform-origin.asp)
 public class TransformOriginProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TransformOriginType> { .transformOrigin }
     public var propertyValue: TransformOriginType
     var _content = _PropertyContent<TransformOriginType>()
@@ -19968,7 +22507,10 @@ public class TransformOriginProperty: _Property {
 
     public convenience init (_ type: State<TransformOriginType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20018,6 +22560,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_transform.asp)
 public class TransformProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TransformFunction> { .transform }
     public var propertyValue: TransformFunction
     var _content = _PropertyContent<TransformFunction>()
@@ -20028,7 +22572,10 @@ public class TransformProperty: _Property {
 
     public convenience init (_ type: State<TransformFunction>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20071,6 +22618,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_transform-style.asp)
 public class TransformStyleProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TransformStyleType> { .transformStyle }
     public var propertyValue: TransformStyleType
     var _content = _PropertyContent<TransformStyleType>()
@@ -20081,7 +22630,10 @@ public class TransformStyleProperty: _Property {
 
     public convenience init (_ type: State<TransformStyleType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20123,6 +22675,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_transition-delay.asp)
 public class TransitionDelayProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TimeType> { .transitionDelay }
     public var propertyValue: TimeType
     var _content = _PropertyContent<TimeType>()
@@ -20134,7 +22688,10 @@ public class TransitionDelayProperty: _Property {
     public convenience init <A>(_ value: A) where A: StateConvertible, A.Value == TimeType {
         let value = value.stateValue
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: $0) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20176,6 +22733,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_transition-duration.asp)
 public class TransitionDurationProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TimeType> { .transitionDuration }
     public var propertyValue: TimeType
     var _content = _PropertyContent<TimeType>()
@@ -20187,7 +22746,10 @@ public class TransitionDurationProperty: _Property {
     public convenience init <A>(_ value: A) where A: StateConvertible, A.Value == TimeType {
         let value = value.stateValue
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: $0) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20331,6 +22893,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_transition-property.asp)
 public class TransitionPropertyProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TransitionPropertyType> { .transitionProperty }
     public var propertyValue: TransitionPropertyType
     var _content = _PropertyContent<TransitionPropertyType>()
@@ -20341,7 +22905,10 @@ public class TransitionPropertyProperty: _Property {
 
     public convenience init (_ type: State<TransitionPropertyType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20383,6 +22950,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp)
 public class TransitionTimingFunctionProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<TransitionTimingFunctionType> { .transitionTimingFunction }
     public var propertyValue: TransitionTimingFunctionType
     var _content = _PropertyContent<TransitionTimingFunctionType>()
@@ -20393,7 +22962,10 @@ public class TransitionTimingFunctionProperty: _Property {
 
     public convenience init (_ type: State<TransitionTimingFunctionType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20437,6 +23009,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_unicode-bidi.asp)
 public class UnicodeBidiProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnicodeBidiType> { .unicodeBidi }
     public var propertyValue: UnicodeBidiType
     var _content = _PropertyContent<UnicodeBidiType>()
@@ -20447,7 +23021,10 @@ public class UnicodeBidiProperty: _Property {
 
     public convenience init (_ type: State<UnicodeBidiType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20495,6 +23072,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_user-select.asp)
 public class UserSelectProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UserSelectType> { .userSelect }
     public var propertyValue: UserSelectType
     public var propertyAliases: [AnyProperty]
@@ -20507,7 +23086,10 @@ public class UserSelectProperty: _Property {
 
     public convenience init (_ type: State<UserSelectType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20543,6 +23125,8 @@ extension Stylesheetable {
 
 extension UserSelectProperty {
     public class MS: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<UserSelectType> { .userSelect_ms }
         public var propertyValue: UserSelectType
         var _content = _PropertyContent<UserSelectType>()
@@ -20553,7 +23137,10 @@ extension UserSelectProperty {
 
         public convenience init (_ type: State<UserSelectType>) {
             self.init(type.wrappedValue)
-            type.listen { self._changed(to: $0) }
+            type.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: $0)
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -20564,6 +23151,8 @@ extension PropertyKey {
 
 extension UserSelectProperty {
     public class Webkit: _Property {
+    private let _stateBindings = TempStatesHolder()
+
         public var propertyKey: PropertyKey<UserSelectType> { .userSelect_webKit }
         public var propertyValue: UserSelectType
         var _content = _PropertyContent<UserSelectType>()
@@ -20574,7 +23163,10 @@ extension UserSelectProperty {
 
         public convenience init (_ type: State<UserSelectType>) {
             self.init(type.wrappedValue)
-            type.listen { self._changed(to: $0) }
+            type.listen { [weak self] in
+                guard let self else { return }
+                self._changed(to: $0)
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -20595,6 +23187,8 @@ extension PropertyKey {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_pos_vertical-align.asp)
 public class VerticalAlignProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<VerticalAlignType> { .verticalAlign }
     public var propertyValue: VerticalAlignType
     var _content = _PropertyContent<VerticalAlignType>()
@@ -20605,7 +23199,10 @@ public class VerticalAlignProperty: _Property {
 
     public convenience init (_ type: State<VerticalAlignType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20663,6 +23260,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_class_visibility.asp)
 public class VisibilityProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<VisibilityType> { .visibility }
     public var propertyValue: VisibilityType
     var _content = _PropertyContent<VisibilityType>()
@@ -20673,7 +23272,10 @@ public class VisibilityProperty: _Property {
 
     public convenience init (_ type: State<VisibilityType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20723,6 +23325,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_white-space.asp)
 public class WhiteSpaceProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<WhiteSpaceType> { .whiteSpace }
     public var propertyValue: WhiteSpaceType
     var _content = _PropertyContent<WhiteSpaceType>()
@@ -20733,7 +23337,10 @@ public class WhiteSpaceProperty: _Property {
 
     public convenience init (_ type: State<WhiteSpaceType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20767,6 +23374,8 @@ extension Stylesheetable {
 
 /// Sets the minimum number of lines that must be left at the top of a page when a page break occurs inside an element
 public class WidowsProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<Int> { .widows }
     public var propertyValue: Int
     var _content = _PropertyContent<Int>()
@@ -20777,7 +23386,10 @@ public class WidowsProperty: _Property {
 
     public convenience init (_ type: State<Int>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20830,6 +23442,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_dim_width.asp)
 public class WidthProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<UnitValue> { .width }
     public var propertyValue: UnitValue
     var _content = _PropertyContent<UnitValue>()
@@ -20840,7 +23454,10 @@ public class WidthProperty: _Property {
 
     public convenience init <U: UnitValuable>(_ value: State<U>) {
         self.init(value.wrappedValue)
-        value.listen { self._changed(to: UnitValue($0.value.doubleValue, $0.unit)) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: UnitValue($0.value.doubleValue, $0.unit))
+        }.hold(in: _stateBindings)
     }
 
     // MARK: Extended
@@ -20930,6 +23547,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_word-break.asp)
 public class WordBreakProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<WordBreakType> { .wordBreak }
     public var propertyValue: WordBreakType
     var _content = _PropertyContent<WordBreakType>()
@@ -20940,7 +23559,10 @@ public class WordBreakProperty: _Property {
 
     public convenience init (_ type: State<WordBreakType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -20982,6 +23604,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_text_word-spacing.asp)
 public class WordSpacingProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<WordSpacingType> { .wordSpacing }
     public var propertyValue: WordSpacingType
     var _content = _PropertyContent<WordSpacingType>()
@@ -20992,7 +23616,10 @@ public class WordSpacingProperty: _Property {
 
     public convenience init (_ type: State<WordSpacingType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -21046,6 +23673,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_word-wrap.asp)
 public class WordWrapProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<WordWrapType> { .wordWrap }
     public var propertyValue: WordWrapType
     var _content = _PropertyContent<WordWrapType>()
@@ -21056,7 +23685,10 @@ public class WordWrapProperty: _Property {
 
     public convenience init (_ type: State<WordWrapType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -21106,6 +23738,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/css3_pr_writing-mode.asp)
 public class WritingModeProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<WritingModeType> { .writingMode }
     public var propertyValue: WritingModeType
     var _content = _PropertyContent<WritingModeType>()
@@ -21116,7 +23750,10 @@ public class WritingModeProperty: _Property {
 
     public convenience init (_ type: State<WritingModeType>) {
         self.init(type.wrappedValue)
-        type.listen { self._changed(to: $0) }
+        type.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: $0)
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -21161,6 +23798,8 @@ extension Stylesheetable {
 ///
 /// [Learn more](https://www.w3schools.com/cssref/pr_pos_z-index.asp)
 public class ZIndexProperty: _Property {
+    private let _stateBindings = TempStatesHolder()
+
     public var propertyKey: PropertyKey<String> { .zIndex }
     public var propertyValue: String
     var _content = _PropertyContent<String>()
@@ -21171,7 +23810,10 @@ public class ZIndexProperty: _Property {
 
     public convenience init (_ value: State<Int>, important: Bool? = nil) {
         self.init(value.wrappedValue, important: important)
-        value.listen { self._changed(to: "\($0)" + (important == true ? "!important" : "")) }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changed(to: "\($0)" + (important == true ? "!important" : ""))
+        }.hold(in: _stateBindings)
     }
 }
 

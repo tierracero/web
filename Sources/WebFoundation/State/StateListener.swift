@@ -30,6 +30,11 @@ public final class StateListener {
         }
 
         values.heldListeners[id] = self
+        // A consumer owns its input for as long as it owns this subscription.
+        // A state listening to itself must not form a self-retaining cycle.
+        if (holder as? AnyState)?.id != sourceID {
+            values.heldSources[id] = state
+        }
 
         holderBoxes.removeAll { $0.value == nil }
 
@@ -58,6 +63,7 @@ public final class StateListener {
 
         boxes.forEach {
             $0.value?.heldListeners.removeValue(forKey: id)
+            $0.value?.heldSources.removeValue(forKey: id)
         }
     }
 }

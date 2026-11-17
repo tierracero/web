@@ -65,7 +65,10 @@ extension AcceptAttrable {
     @discardableResult
     public func accept<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         accept(value: value.stateValue.wrappedValue)
-        value.stateValue.listen { self.accept(value: $0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.accept(value: $0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -77,7 +80,10 @@ extension AcceptAttrable {
     @discardableResult
     public func accept<S>(_ value: S) -> Self where S: StateConvertible, S.Value == [String] {
         accept(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.accept($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.accept($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -138,7 +144,10 @@ extension AcceptCharsetAttrable {
     @discardableResult
     public func acceptCharset<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         acceptCharset(value: value.stateValue.wrappedValue)
-        value.stateValue.listen { self.acceptCharset(value: $0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.acceptCharset(value: $0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -150,7 +159,10 @@ extension AcceptCharsetAttrable {
     @discardableResult
     public func acceptCharset<S>(_ value: S) -> Self where S: StateConvertible, S.Value == [String] {
         acceptCharset(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.acceptCharset($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.acceptCharset($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -182,7 +194,10 @@ extension AccessKeyAttrable {
     @discardableResult
     public func accessKey<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         accessKey(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.accessKey($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.accessKey($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -222,7 +237,10 @@ extension ActionAttrable {
     @discardableResult
     public func action<S>(_ value: S) -> Self where S: StateConvertible, S.Value: URLConformable {
         action(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.action($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.action($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -260,7 +278,10 @@ extension AlignAttrable {
     @discardableResult
     public func align<S>(_ value: S) -> Self where S: StateConvertible, S.Value == AlignType {
         align(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.align($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.align($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -309,7 +330,10 @@ extension AltAttrable {
     @discardableResult
     public func alt<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         alt(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.alt($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.alt($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -357,7 +381,10 @@ extension AsAttrable {
     @discardableResult
     public func `as`<S>(_ value: S) -> Self where S: StateConvertible, S.Value == AsType {
         `as`(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.as($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.as($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -393,7 +420,10 @@ extension AsyncAttrable {
     @discardableResult
     public func async<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         async(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.async($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.async($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -425,7 +455,10 @@ extension AutocapitalizeAttrable {
     @discardableResult
     public func autocapitalize<S>(_ value: S) -> Self where S: StateConvertible, S.Value == AutocapitalizeType {
         autocapitalize(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.autocapitalize($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.autocapitalize($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -461,7 +494,10 @@ extension AutocompleteAttrable {
     @discardableResult
     public func autocomplete<S>(_ value: S) -> Self where S: StateConvertible, S.Value == AutocompleteType {
         autocomplete(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.autocomplete($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.autocomplete($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -511,7 +547,10 @@ extension AutofocusAttrable {
     @discardableResult
     public func autofocus<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         autofocus(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.autofocus($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.autofocus($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -571,7 +610,10 @@ extension AutoplayAttrable {
     @discardableResult
     public func autoplay<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         autoplay(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.autoplay($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.autoplay($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -632,7 +674,10 @@ extension CaptureAttrable {
     @discardableResult
     public func capture<S>(_ value: S) -> Self where S: StateConvertible, S.Value == CaptureType {
         capture(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.capture($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.capture($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -676,7 +721,10 @@ extension CharsetAttrable {
     @discardableResult
     public func charset<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         charset(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.charset($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.charset($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -713,7 +761,10 @@ extension CheckedAttrable {
     @discardableResult
     public func checked<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         checked(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.checked($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.checked($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -750,7 +801,10 @@ extension CiteAttrable {
     @discardableResult
     public func cite<S>(_ value: S) -> Self where S: StateConvertible, S.Value: URLConformable {
         cite(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.cite($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.cite($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -800,14 +854,15 @@ extension ClassAttrable {
     @discardableResult
     public func `class`<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Class {
         `class`(value.stateValue.wrappedValue)
-        value.stateValue.listen { (old, new: Class) in
+        value.stateValue.listen { [weak self] (old, new: Class) in
+            guard let self else { return }
             if old.names.count > 0 {
                 self.removeClass(old)
             }
             if new.names.count > 0 {
                 self.`class`(new)
             }
-        }
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -816,14 +871,15 @@ extension ClassAttrable {
         if let val = value.stateValue.wrappedValue {
             `class`(val)
         }
-        value.stateValue.listen { old, new in
+        value.stateValue.listen { [weak self] old, new in
+            guard let self else { return }
             if let old, old.names.count > 0 {
                 self.removeClass(old)
             }
             if let new, new.names.count > 0 {
                 self.`class`(new)
             }
-        }
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -833,7 +889,10 @@ extension ClassAttrable {
     @discardableResult
     public func `class`<S>(_ value: S) -> Self where S: StateConvertible, S.Value == [Class] {
         `class`(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.`class`($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.`class`($0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -900,7 +959,10 @@ extension ColsAttrable {
     @discardableResult
     public func cols<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         cols(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.cols($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.cols($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -936,7 +998,10 @@ extension ColSpanAttrable {
     @discardableResult
     public func colSpan<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         colSpan(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.colSpan($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.colSpan($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -973,7 +1038,10 @@ extension ContentAttrable {
     @discardableResult
     public func content<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         content(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.content($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.content($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1009,7 +1077,10 @@ extension PropertyAttrable {
     @discardableResult
     public func property<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         property(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.property($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.property($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1041,7 +1112,10 @@ extension ContentEditableAttrable {
     @discardableResult
     public func contentEditable<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         contentEditable(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.contentEditable($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.contentEditable($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1083,7 +1157,10 @@ extension ContextMenuAttrable {
     @discardableResult
     public func contextMenu<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         contextMenu(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.contextMenu($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.contextMenu($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1119,7 +1196,10 @@ extension ControlsAttrable {
     @discardableResult
     public func controls<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         controls(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.controls($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.controls($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1178,7 +1258,10 @@ extension CoordsAttrable {
     @discardableResult
     public func coords<S>(_ value: S) -> Self where S: StateConvertible, S.Value == [Int] {
         coords(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.coords($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.coords($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1214,7 +1297,10 @@ extension CrossOriginAttrable {
     @discardableResult
     public func crossOrigin<S>(_ value: S) -> Self where S: StateConvertible, S.Value == CrossOriginType {
         crossOrigin(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.crossOrigin($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.crossOrigin($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1254,7 +1340,10 @@ extension DateTimeAttrable {
     @discardableResult
     public func dateTime<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         dateTime(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.dateTime($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.dateTime($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1292,7 +1381,10 @@ extension DecodingAttrable {
     @discardableResult
     public func decoding<S>(_ value: S) -> Self where S: StateConvertible, S.Value == DecodingType {
         decoding(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.decoding($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.decoding($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1328,7 +1420,10 @@ extension DefaultAttrable {
     @discardableResult
     public func `default`<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         `default`(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.`default`($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.`default`($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1364,7 +1459,10 @@ extension DeferAttrable {
     @discardableResult
     public func `defer`<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         `defer`(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.`defer`($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.`defer`($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1396,7 +1494,10 @@ extension DirAttrable {
     @discardableResult
     public func dir<S>(_ value: S) -> Self where S: StateConvertible, S.Value == DirType {
         dir(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.dir($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.dir($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1434,7 +1535,10 @@ extension DisabledAttrable {
     @discardableResult
     public func disabled<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         disabled(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.disabled($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.disabled($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1498,7 +1602,10 @@ extension DownloadAttrable {
     @discardableResult
     public func download<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         download(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.download($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.download($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1531,7 +1638,10 @@ extension DraggableAttrable {
     @discardableResult
     public func draggable<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         draggable(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.draggable($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.draggable($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1567,7 +1677,10 @@ extension EncTypeAttrable {
     @discardableResult
     public func encType<S>(_ value: S) -> Self where S: StateConvertible, S.Value == EncType {
         encType(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.encType($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.encType($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1601,7 +1714,10 @@ extension EnterKeyHintAttrable {
     @discardableResult
     public func enterKeyHint<S>(_ value: S) -> Self where S: StateConvertible, S.Value == EnterKeyHintType {
         enterKeyHint(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.enterKeyHint($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.enterKeyHint($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1675,7 +1791,10 @@ extension ForAttrable {
     @discardableResult
     public func `for`<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         `for`(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.`for`($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.`for`($0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -1687,7 +1806,10 @@ extension ForAttrable {
     @discardableResult
     public func `for`<S>(_ values: S) -> Self where S: StateConvertible, S.Value == [String] {
         `for`(values.stateValue.wrappedValue)
-        values.stateValue.listen { self.`for`($0) }
+        values.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.`for`($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1724,7 +1846,10 @@ extension FormActionAttrable {
     @discardableResult
     public func formAction<S>(_ value: S) -> Self where S: StateConvertible, S.Value: URLConformable {
         formAction(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.formAction($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.formAction($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1779,7 +1904,10 @@ extension FormAttrable {
     @discardableResult
     public func form<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         form(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.form($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.form($0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -1792,7 +1920,10 @@ extension FormAttrable {
     @discardableResult
     public func form<S>(_ value: S) -> Self where S: StateConvertible, S.Value == BaseElement {
         form(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.form($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.form($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1858,7 +1989,10 @@ extension FormEncTypeAttrable {
     @discardableResult
     public func formEncType<S>(_ value: S) -> Self where S: StateConvertible, S.Value == EncType {
         formEncType(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.formEncType($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.formEncType($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1900,7 +2034,10 @@ extension FormMethodAttrable {
     @discardableResult
     public func formMethod<S>(_ value: S) -> Self where S: StateConvertible, S.Value == MethodType {
         formMethod(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.formMethod($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.formMethod($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1940,7 +2077,10 @@ extension FormNoValidateAttrable {
     @discardableResult
     public func formNoValidate<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         formNoValidate(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.formNoValidate($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.formNoValidate($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -1983,7 +2123,10 @@ extension FormTargetAttrable {
     @discardableResult
     public func formTarget<S>(_ value: S) -> Self where S: StateConvertible, S.Value == TargetType {
         formTarget(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.formTarget($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.formTarget($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2021,7 +2164,10 @@ extension HeadersAttrable {
     @discardableResult
     public func headers<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         headers(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.headers($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.headers($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2054,7 +2200,10 @@ extension HiddenAttrable {
     @discardableResult
     public func hidden<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         hidden(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.hidden($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.hidden($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2090,7 +2239,10 @@ extension HighAttrable {
     @discardableResult
     public func high<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Double {
         high(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.high($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.high($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2126,7 +2278,10 @@ extension HrefAttrable {
     @discardableResult
     public func href<S>(_ value: S) -> Self where S: StateConvertible, S.Value: URLConformable {
         href(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.href($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.href($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2165,7 +2320,10 @@ extension HrefLangAttrable {
     @discardableResult
     public func hrefLang<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         hrefLang(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.hrefLang($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.hrefLang($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2203,7 +2361,10 @@ extension HttpEquivAttrable {
     @discardableResult
     public func httpEquiv<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         httpEquiv(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.httpEquiv($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.httpEquiv($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2236,7 +2397,10 @@ extension IdAttrable {
     @discardableResult
     public func id<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Id {
         id(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.id($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.id($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2278,7 +2442,10 @@ extension InputModeAttrable {
     @discardableResult
     public func inputMode<S>(_ value: S) -> Self where S: StateConvertible, S.Value == InputTextType {
         inputMode(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.inputMode($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.inputMode($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2326,7 +2493,10 @@ extension IntegrityAttrable {
     @discardableResult
     public func integrity<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         integrity(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.integrity($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.integrity($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2359,7 +2529,10 @@ extension ItemPropAttrable {
     @discardableResult
     public func itemprop<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         itemprop(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.itemprop($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.itemprop($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2395,7 +2568,10 @@ extension KindAttrable {
     @discardableResult
     public func kind<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         kind(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.kind($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.kind($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2431,7 +2607,10 @@ extension LabelAttrable {
     @discardableResult
     public func label<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         label(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.label($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.label($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2465,7 +2644,10 @@ extension LangAttrable {
     @discardableResult
     public func lang<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         lang(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.lang($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.lang($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2497,7 +2679,10 @@ extension LanguageAttrable {
     @discardableResult
     public func language<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         language(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.language($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.language($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2547,7 +2732,10 @@ extension ListAttrable {
     @discardableResult
     public func list<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         list(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.list($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.list($0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -2559,7 +2747,10 @@ extension ListAttrable {
     @discardableResult
     public func list<S>(_ value: S) -> Self where S: StateConvertible, S.Value == BaseElement {
         list(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.list($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.list($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2598,7 +2789,10 @@ extension LoadingAttrable {
     @discardableResult
     public func loading<S>(_ value: S) -> Self where S: StateConvertible, S.Value == LoadingType {
         loading(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.loading($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.loading($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2635,7 +2829,10 @@ extension LoopAttrable {
     @discardableResult
     public func loop<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         loop(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.loop($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.loop($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2672,7 +2869,10 @@ extension LowAttrable {
     @discardableResult
     public func low<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Double {
         low(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.low($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.low($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2708,7 +2908,10 @@ extension MaxAttrable {
     @discardableResult
     public func max<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Double {
         max(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.max($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.max($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2744,7 +2947,10 @@ extension MaxDateAttrable {
     @discardableResult
     public func max<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         max(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.max($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.max($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2783,7 +2989,10 @@ extension MaxLengthAttrable {
     @discardableResult
     public func maxlength<S>(_ value: S) -> Self where S: StateConvertible, S.Value == UInt {
         maxlength(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.maxlength($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.maxlength($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2826,7 +3035,10 @@ extension MethodAttrable {
     @discardableResult
     public func method<S>(_ value: S) -> Self where S: StateConvertible, S.Value == MethodType {
         method(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.method($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.method($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2862,7 +3074,10 @@ extension MinAttrable {
     @discardableResult
     public func min<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Double {
         min(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.min($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.min($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2884,9 +3099,10 @@ extension MinDateAttrable {
     @discardableResult
     public func min<U>(_ value: U) -> Self where U: UniValue, U.UniValue == String {
         attribute("min", value.uniValue)
-        value.uniStateValue?.listen {
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.attribute("min", $0)
-        }
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2925,7 +3141,10 @@ extension MinLengthAttrable {
     @discardableResult
     public func minlength<S>(_ value: S) -> Self where S: StateConvertible, S.Value == UInt {
         minlength(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.minlength($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.minlength($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -2966,7 +3185,10 @@ extension MultipleAttrable {
     @discardableResult
     public func multiple<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         multiple(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.multiple($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.multiple($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3004,7 +3226,10 @@ extension MutedAttrable {
     @discardableResult
     public func muted<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         muted(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.muted($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.muted($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3043,7 +3268,10 @@ extension NameAttrable {
     @discardableResult
     public func name<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         name(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.name($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.name($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3113,7 +3341,10 @@ extension NoValidateAttrable {
     @discardableResult
     public func noValidate<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         noValidate(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.noValidate($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.noValidate($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3149,7 +3380,10 @@ extension OpenAttrable {
     @discardableResult
     public func open<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         open(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.open($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.open($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3185,7 +3419,10 @@ extension OptimumAttrable {
     @discardableResult
     public func optimum<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Double {
         optimum(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.optimum($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.optimum($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3221,7 +3458,10 @@ extension PatternAttrable {
     @discardableResult
     public func pattern<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         pattern(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.pattern($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.pattern($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3283,7 +3523,10 @@ extension PingAttrable {
     @discardableResult
     public func ping<S>(_ value: S) -> Self where S: StateConvertible, S.Value: URLConformable {
         ping(value: value.stateValue.wrappedValue)
-        value.stateValue.listen { self.ping(value: $0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.ping(value: $0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -3295,7 +3538,10 @@ extension PingAttrable {
     @discardableResult
     public func ping<S>(_ value: S) -> Self where S: StateConvertible, S.Value == [URLConformable] {
         ping(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.ping($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.ping($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3332,7 +3578,10 @@ extension PlaceholderAttrable {
     @discardableResult
     public func placeholder<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         placeholder(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.placeholder($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.placeholder($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3380,7 +3629,10 @@ extension PosterAttrable {
     @discardableResult
     public func poster<S>(_ value: S) -> Self where S: StateConvertible, S.Value: URLConformable {
         poster(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.poster($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.poster($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3416,7 +3668,10 @@ extension PreloadAttrable {
     @discardableResult
     public func preload<S>(_ value: S) -> Self where S: StateConvertible, S.Value == PreloadType {
         preload(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.preload($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.preload($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3453,7 +3708,10 @@ extension ReadOnlyAttrable {
     @discardableResult
     public func readonly<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         readonly(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.readonly($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.readonly($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3511,7 +3769,10 @@ extension RelAttrable {
     @discardableResult
     public func rel<S>(_ value: S) -> Self where S: StateConvertible, S.Value == RelType {
         rel(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.rel($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.rel($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3549,7 +3810,10 @@ extension RequiredAttrable {
     @discardableResult
     public func required<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         required(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.required($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.required($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3608,7 +3872,10 @@ extension ReversedAttrable {
     @discardableResult
     public func reversed<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         reversed(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.reversed($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.reversed($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3644,7 +3911,10 @@ extension RowSpanAttrable {
     @discardableResult
     public func rowSpan<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         rowSpan(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.rowSpan($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.rowSpan($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3681,7 +3951,10 @@ extension RowsAttrable {
     @discardableResult
     public func rows<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         rows(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.rows($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.rows($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3717,7 +3990,10 @@ extension SandboxAttrable {
     @discardableResult
     public func sandbox<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         sandbox(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.sandbox($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.sandbox($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3753,7 +4029,10 @@ extension ScopeAttrable {
     @discardableResult
     public func scope<S>(_ value: S) -> Self where S: StateConvertible, S.Value == ScopeType {
         scope(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.scope($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.scope($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3789,7 +4068,10 @@ extension SelectedAttrable {
     @discardableResult
     public func selected<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         selected(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.selected($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.selected($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3825,7 +4107,10 @@ extension ShapeAttrable {
     @discardableResult
     public func shape<S>(_ value: S) -> Self where S: StateConvertible, S.Value == ShapeType {
         shape(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.shape($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.shape($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3878,7 +4163,10 @@ extension SizeAttrable {
     @discardableResult
     public func size<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         size(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.size($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.size($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3923,7 +4211,10 @@ extension SizesAttrable {
     @discardableResult
     public func sizes<W>(_ w: W, _ h: Int) -> Self where W: StateConvertible, W.Value == Int {
         sizes(w.stateValue.wrappedValue, h)
-        w.stateValue.listen { self.sizes($0, h) }
+        w.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.sizes($0, h)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -3937,7 +4228,10 @@ extension SizesAttrable {
     @discardableResult
     public func sizes<H>(_ w: Int, _ h: H) -> Self where H: StateConvertible, H.Value == Int {
         sizes(w, h.stateValue.wrappedValue)
-        h.stateValue.listen { self.sizes(w, $0) }
+        h.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.sizes(w, $0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -3951,7 +4245,10 @@ extension SizesAttrable {
     @discardableResult
     public func sizes<W, H>(_ w: W, _ h: H) -> Self where W: StateConvertible, W.Value == Int, H: StateConvertible, H.Value == Int {
         sizes(w.stateValue.wrappedValue, h.stateValue.wrappedValue)
-        w.stateValue.and(h.stateValue).listen { self.sizes($0, $1) }
+        w.stateValue.and(h.stateValue).listen { [weak self] in
+            guard let self else { return }
+            self.sizes($0, $1)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -3987,7 +4284,10 @@ extension SlotAttrable {
     @discardableResult
     public func slot<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         slot(value.stateValue)
-        value.stateValue.listen { self.slot($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.slot($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4023,7 +4323,10 @@ extension SpanAttrable {
     @discardableResult
     public func span<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         span(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.span($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.span($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4056,7 +4359,10 @@ extension SpellCheckAttrable {
     @discardableResult
     public func spellcheck<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         spellcheck(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.spellcheck($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.spellcheck($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4094,7 +4400,10 @@ extension SrcAttrable {
     @discardableResult
     public func src<S>(_ value: S) -> Self where S: StateConvertible, S.Value: URLConformable {
         src(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.src($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.src($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4166,7 +4475,10 @@ extension SrcDocAttrable {
     @discardableResult
     public func srcDoc<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         srcDoc(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.srcDoc($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.srcDoc($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4206,7 +4518,10 @@ extension SrcLangAttrable {
     @discardableResult
     public func srcLang<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         srcLang(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.srcLang($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.srcLang($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4242,7 +4557,10 @@ extension SrcSetAttrable {
     @discardableResult
     public func srcSet<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         srcSet(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.srcSet($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.srcSet($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4279,7 +4597,10 @@ extension StartAttrable {
     @discardableResult
     public func start<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         start(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.start($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.start($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4321,7 +4642,10 @@ extension StepAttrable {
     @discardableResult
     public func step<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Double {
         step(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.step($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.step($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4371,7 +4695,10 @@ extension SummaryAttrable {
     @discardableResult
     public func summary<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         summary(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.summary($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.summary($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4403,7 +4730,10 @@ extension TabIndexAttrable {
     @discardableResult
     public func tabIndex<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Int {
         tabIndex(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.tabIndex($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.tabIndex($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4441,7 +4771,10 @@ extension TargetAttrable {
     @discardableResult
     public func target<S>(_ value: S) -> Self where S: StateConvertible, S.Value == TargetType {
         target(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.target($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.target($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4476,7 +4809,10 @@ extension TitleAttrable {
     @discardableResult
     public func title<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         title(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.title($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.title($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4510,7 +4846,10 @@ extension TranslateAttrable {
     @discardableResult
     public func translate<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         translate(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.translate($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.translate($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4562,7 +4901,10 @@ extension TypeAttrable {
     @discardableResult
     public func type<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         type(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.type($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.type($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4616,7 +4958,10 @@ extension UseMapAttrable {
     @discardableResult
     public func useMap<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         useMap(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.useMap($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.useMap($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4664,7 +5009,10 @@ extension ValueAttrable {
     @discardableResult
     public func value<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
         self.value(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.value($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.value($0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -4687,7 +5035,10 @@ extension ValueAttrable {
     @discardableResult
     public func value<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Double {
         self.value(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.value($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.value($0)
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -4710,7 +5061,10 @@ extension ValueAttrable {
     @discardableResult
     public func value<S>(_ value: S) -> Self where S: StateConvertible, S.Value == String {
         self.value(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.value($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.value($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4770,7 +5124,10 @@ extension WrapAttrable {
     @discardableResult
     public func wrap<S>(_ value: S) -> Self where S: StateConvertible, S.Value == WrapType {
         wrap(value.stateValue.wrappedValue)
-        value.stateValue.listen { self.wrap($0) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.wrap($0)
+        }.hold(in: _stateBindings)
         return self
     }
 }
@@ -4818,7 +5175,10 @@ extension DataAttrable {
     @discardableResult
     public func data<S>(_ tag: String, _ value: S) -> Self where S: StateConvertible, S.Value == String {
         data(tag, value.stateValue.wrappedValue)
-        value.stateValue.listen { self.data($0, $1) }
+        value.stateValue.listen { [weak self] in
+            guard let self else { return }
+            self.data($0, $1)
+        }.hold(in: _stateBindings)
         return self
     }
 }

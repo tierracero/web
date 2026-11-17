@@ -545,6 +545,8 @@ public struct BackgroundRepeatType: Initialable, Inheritable, PropertyValueImpor
 }
 
 public final class BackgroundSizeType: Autoable, Initialable, Inheritable, Lengthable, Percentable, PropertyValueImportantable, _StringPropertyValue, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
     
     var _changeHandler = {}
@@ -558,9 +560,10 @@ public final class BackgroundSizeType: Autoable, Initialable, Inheritable, Lengt
                 self._changeHandler()
             })
         } else {
-            $value.listen {
+            $value.listen { [weak self] in
+                guard let self else { return }
                 self._changeHandler()
-            }
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -2887,6 +2890,8 @@ public struct TextUnderlinePositionType: Autoable, PropertyValueImportantable, _
 }
 
 public final class TimeType: Initialable, Inheritable, PropertyValueImportantable, _StringPropertyValue, _PropertyValueInnerChangeable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value = ""
     
     var _changeHandler = {}
@@ -2900,7 +2905,10 @@ public final class TimeType: Initialable, Inheritable, PropertyValueImportantabl
     convenience init <A>(_ value: A) where A: StateConvertible, A.Value: TimeUnitValue {
         let value = value.stateValue
         self.init(value.wrappedValue)
-        value.listen { self._changeHandler() }
+        value.listen { [weak self] in
+            guard let self else { return }
+            self._changeHandler()
+        }.hold(in: _stateBindings)
     }
     
     /// Specifies how many seconds or milliseconds a transition effect takes to complete.

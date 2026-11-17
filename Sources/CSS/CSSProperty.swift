@@ -53,7 +53,7 @@ class _PropertyContent<Value: CustomStringConvertible> {
     init () {}
 }
 
-protocol _Property: Property {
+protocol _Property: AnyObject, Property {
     var _content: _PropertyContent<Value> { get }
     func _changed(to newValue: Value)
 }

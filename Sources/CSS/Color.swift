@@ -13,6 +13,8 @@ protocol _PropertyValueInnerChangeable: AnyObject {
 
 public typealias WColor = Color
 open class Color: CustomStringConvertible, _PropertyValueInnerChangeable, Hashable, ExpressibleByIntegerLiteral, PropertyValueImportantable {
+    private let _stateBindings = TempStatesHolder()
+
     @State public var value: ColorType = .css(.black)
     
     var _changeHandler = {}
@@ -26,10 +28,11 @@ open class Color: CustomStringConvertible, _PropertyValueInnerChangeable, Hashab
     
     public convenience init (_ value: State<ColorType>) {
         self.init(value.wrappedValue)
-        value.listen {
+        value.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
     
     public required init(integerLiteral value: IntegerLiteralType) {
@@ -38,10 +41,11 @@ open class Color: CustomStringConvertible, _PropertyValueInnerChangeable, Hashab
     
     public init<I>(_ hex: I) where I: UniValue, I.UniValue == Int {
         value = .hex(hex.uniValue)
-        hex.uniStateValue?.listen {
+        hex.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = .hex($0)
             self._changeHandler()
-        }
+        }.hold(in: _stateBindings)
     }
     
     public init <R, G, B, A>(r: R, g: G, b: B, a: A)
@@ -50,16 +54,16 @@ open class Color: CustomStringConvertible, _PropertyValueInnerChangeable, Hashab
         value = .rgba(r.uniValue, g.uniValue, b.uniValue, a.uniValue)
         r.uniStateValue?.listen { [weak self] in
             self?.value = .rgba($0, g.uniValue, b.uniValue, a.uniValue)
-        }
+        }.hold(in: _stateBindings)
         g.uniStateValue?.listen { [weak self] in
             self?.value = .rgba(r.uniValue, $0, b.uniValue, a.uniValue)
-        }
+        }.hold(in: _stateBindings)
         b.uniStateValue?.listen { [weak self] in
             self?.value = .rgba(r.uniValue, g.uniValue, $0, a.uniValue)
-        }
+        }.hold(in: _stateBindings)
         a.uniStateValue?.listen { [weak self] in
             self?.value = .rgba(r.uniValue, g.uniValue, b.uniValue, $0)
-        }
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <R, G, B>(r: R, g: G, b: B)
@@ -74,16 +78,16 @@ open class Color: CustomStringConvertible, _PropertyValueInnerChangeable, Hashab
         value = .hsla(h.uniValue, s.uniValue, l.uniValue, a.uniValue)
         h.uniStateValue?.listen { [weak self] in
             self?.value = .hsla($0, s.uniValue, l.uniValue, a.uniValue)
-        }
+        }.hold(in: _stateBindings)
         s.uniStateValue?.listen { [weak self] in
             self?.value = .hsla(h.uniValue, $0, l.uniValue, a.uniValue)
-        }
+        }.hold(in: _stateBindings)
         l.uniStateValue?.listen { [weak self] in
             self?.value = .hsla(h.uniValue, s.uniValue, $0, a.uniValue)
-        }
+        }.hold(in: _stateBindings)
         a.uniStateValue?.listen { [weak self] in
             self?.value = .hsla(h.uniValue, s.uniValue, l.uniValue, $0)
-        }
+        }.hold(in: _stateBindings)
     }
     
     public convenience init <H, S, L>(h: H, s: S, l: L)

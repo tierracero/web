@@ -103,9 +103,10 @@ extension BaseContentElementable {
     /// - Parameter value: Pass `String` or `State<String>`
     public func innerText<U>(_ value: U) -> Self where U: UniValue, U.UniValue == String {
         self.innerText = value.uniValue
-        value.uniStateValue?.listen {
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.innerText = $0
-        }
+        }.hold(in: _stateBindings)
         return self
     }
     
@@ -113,9 +114,10 @@ extension BaseContentElementable {
     /// - Parameter value: Pass `String` or `State<String>`
     public func innerHTML<U>(_ value: U) -> Self where U: UniValue, U.UniValue == String {
         self.innerHTML = value.uniValue
-        value.uniStateValue?.listen {
+        value.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.innerHTML = $0
-        }
+        }.hold(in: _stateBindings)
         return self
     }
 }

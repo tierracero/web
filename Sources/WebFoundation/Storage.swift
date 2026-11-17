@@ -14,6 +14,7 @@ public struct Storage {
         var onShutdown: (() -> Void)?
         @MainActor
         func shutdown() {
+            (value as? AnyStorageValue)?.shutdown()
             onShutdown?()
         }
     }

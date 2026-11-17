@@ -10,6 +10,7 @@ public protocol StatesHolder: AnyObject {
 
 public final class StatesHolderValuesBox {
     package var heldListeners: [UUID: StateListener] = [:]
+    var heldSources: [UUID: AnyState] = [:]
     var callbacks: [() -> Void] = []
     var isInvalidated = false
 
@@ -33,6 +34,7 @@ public extension StatesHolder {
         statesValues.callbacks.removeAll()
 
         listeners.forEach { $0.cancel() }
+        statesValues.heldSources.removeAll()
         callbacks.forEach { $0() }
     }
 }
@@ -50,6 +52,7 @@ public extension StatesHolder {
         statesValues.callbacks.removeAll()
 
         listeners.forEach { $0.cancel() }
+        statesValues.heldSources.removeAll()
         callbacks.forEach { $0() }
     }
 }
@@ -75,10 +78,14 @@ public extension StatesHolder {
     }
 }
 
-public final class TempStatesHolder: StatesHolder {
+public final class TempStatesHolder: StatesHolder, AnyStorageValue {
     public let statesValues = StatesHolderValuesBox()
 
     public init() {}
+
+    @MainActor public func shutdown() {
+        releaseStates()
+    }
 
     deinit {
         invalidateStates()

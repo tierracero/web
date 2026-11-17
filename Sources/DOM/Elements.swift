@@ -55,9 +55,10 @@ open class H1: BaseActiveElement, ScrollHandleable, _StringInitializable {
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -76,9 +77,10 @@ open class H2: BaseActiveElement, ScrollHandleable, _StringInitializable {
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -97,9 +99,10 @@ open class H3: BaseActiveElement, ScrollHandleable, _StringInitializable {
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -118,9 +121,10 @@ open class H4: BaseActiveElement, ScrollHandleable, _StringInitializable {
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -139,9 +143,10 @@ open class H5: BaseActiveElement, ScrollHandleable, _StringInitializable {
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -160,9 +165,10 @@ open class H6: BaseActiveElement, ScrollHandleable, _StringInitializable {
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -314,9 +320,10 @@ open class Title: BaseContentElement, _StringInitializable {
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
 }
 
@@ -525,7 +532,7 @@ open class InputCheckbox: BaseActiveElement, ChangeHandleable, InvalidHandleable
         } else {
             _checked.listen { [weak self] in
                 self?.attribute("checked", $0, .keyWithoutValue)
-            }
+            }.hold(in: _stateBindings)
         }
         if let state = indeterminate.uniStateValue {
             _indeterminate.merge(with: state, leftChanged: { [weak self] in
@@ -536,7 +543,7 @@ open class InputCheckbox: BaseActiveElement, ChangeHandleable, InvalidHandleable
         } else {
             _indeterminate.listen { [weak self] in
                 self?.attribute("indeterminate", $0, .keyWithoutValue)
-            }
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -608,7 +615,7 @@ open class InputColor: BaseActiveElement, ChangeHandleable, InvalidHandleable, I
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -668,7 +675,7 @@ open class InputDate: BaseActiveElement, _StringInitializable, ChangeHandleable,
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -747,7 +754,7 @@ open class InputDateTime: BaseActiveElement, _StringInitializable, ChangeHandlea
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -827,7 +834,7 @@ open class InputEmail: BaseActiveElement, _StringInitializable, ChangeHandleable
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -905,7 +912,7 @@ open class InputHidden: BaseActiveElement {
         } else {
             _value.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1001,7 +1008,7 @@ open class InputMonth: BaseActiveElement, _StringInitializable, ChangeHandleable
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -1081,7 +1088,7 @@ open class InputNumber: BaseActiveElement, ChangeHandleable, InvalidHandleable, 
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -1160,7 +1167,7 @@ open class InputPassword: BaseActiveElement, _StringInitializable, ChangeHandlea
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1205,7 +1212,7 @@ open class InputRadio: BaseActiveElement, ChangeHandleable, InvalidHandleable, S
         } else {
             _checked.listen { [weak self] in
                 self?.attribute("checked", $0, .keyWithoutValue)
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1266,7 +1273,7 @@ open class InputRange: BaseActiveElement, ChangeHandleable, InputHandleable, Inv
         } else {
             _value.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -1370,7 +1377,7 @@ open class InputSearch: BaseActiveElement, _StringInitializable, ChangeHandleabl
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1447,7 +1454,7 @@ open class InputTel: BaseActiveElement, _StringInitializable, ChangeHandleable, 
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1507,7 +1514,7 @@ open class InputText: BaseActiveElement, _StringInitializable, ChangeHandleable,
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1566,7 +1573,7 @@ open class InputTime: BaseActiveElement, _StringInitializable, ChangeHandleable,
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -1648,7 +1655,7 @@ open class InputURL: BaseActiveElement, _StringInitializable, ChangeHandleable, 
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1707,7 +1714,7 @@ open class InputWeek: BaseActiveElement, _StringInitializable, ChangeHandleable,
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 
@@ -1754,7 +1761,7 @@ open class Label: BaseActiveElement, _StringInitializable {
         } else {
             _text.listen { [weak self] in
                 self?.value = $0
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1780,7 +1787,7 @@ open class Legend: BaseActiveElement, _StringInitializable {
         } else {
             _text.listen { [weak self] in
                 self?.value = $0
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1808,7 +1815,7 @@ open class Meter: BaseActiveElement {
         } else {
             _value.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
         innerText = shadowText.uniValue
         self.shadowText = shadowText.uniValue
@@ -1821,7 +1828,7 @@ open class Meter: BaseActiveElement {
         } else {
             _shadowText.listen { [weak self] in
                 self?.innerText = $0
-            }
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -1851,7 +1858,7 @@ open class OptGroup: BaseActiveElement {
         } else {
             _label.listen { [weak self] in
                 self?.attribute("label", $0)
-            }
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -1888,7 +1895,7 @@ open class Option: BaseActiveElement, _StringInitializable {
         } else {
             _text.listen { [weak self] in
                 self?.value = $0
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -1930,7 +1937,7 @@ open class Progress: BaseActiveElement {
         } else {
             _value.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
         innerText = shadowText.uniValue
         self.shadowText = shadowText.uniValue
@@ -1943,7 +1950,7 @@ open class Progress: BaseActiveElement {
         } else {
             _shadowText.listen { [weak self] in
                 self?.innerText = $0
-            }
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -2009,7 +2016,7 @@ open class Select: BaseActiveElement, ChangeHandleable, ScrollHandleable {
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
     
@@ -2079,7 +2086,7 @@ open class TextArea: BaseActiveElement, _StringInitializable, ChangeHandleable, 
         } else {
             _text.listen { [weak self] in
                 self?.domElement.value = $0.jsValue
-            }
+            }.hold(in: _stateBindings)
         }
     }
 }
@@ -2469,9 +2476,10 @@ open class Script: BaseContentElement, ErrorHandleable, LoadHandleable, _StringI
     required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
         self.init()
         value = title.uniValue
-        title.uniStateValue?.listen {
+        title.uniStateValue?.listen { [weak self] in
+            guard let self else { return }
             self.value = $0
-        }
+        }.hold(in: _stateBindings)
     }
     open func addedToDocument() {}
 }
