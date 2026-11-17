@@ -159,9 +159,18 @@ open class ServiceWorker {
     //    var registration: Registration
     //    debugPrint("JSObject.global.registration: \(String(describing: JSObject.global.registration))")
         
-	nonisolated public static func main() async {
-		await Self.startForMain()
-	}
+    #if arch(wasm32)
+    @MainActor public static func main() {
+        JavaScriptEventLoop.installGlobalExecutor()
+        Task { @WebWorkerActor in
+            _ = Self.start()
+        }
+    }
+    #else
+    nonisolated public static func main() async {
+        await Self.startForMain()
+    }
+    #endif
 
     @WebWorkerActor
     private static func startForMain() {

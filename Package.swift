@@ -54,7 +54,8 @@ var deps: [Dep] = []
 deps.append(
 	.github("swiftwasm/JavaScriptKit", exact: "0.17.0"),
 		.product("JavaScriptKit", "JavaScriptKit"),
-		.product("JavaScriptBigIntSupport", "JavaScriptKit")
+		.product("JavaScriptBigIntSupport", "JavaScriptKit"),
+		.product("JavaScriptEventLoop", "JavaScriptKit")
 )
 
 // MARK: - Package

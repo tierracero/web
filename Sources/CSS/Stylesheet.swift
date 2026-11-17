@@ -251,6 +251,12 @@ open class Stylesheet: BaseElement, Stylesheetable {
     }
     
     public private(set) var _disabled = false
+    private var disabledState: State<Bool>?
+    private var disabledStateListener: StateListener?
+
+    isolated deinit {
+        disabledStateListener?.cancel()
+    }
     
     /// Disables stylesheet
     @discardableResult
@@ -265,11 +271,15 @@ open class Stylesheet: BaseElement, Stylesheetable {
     /// Disables stylesheet
     @discardableResult
     public func disabled<S>(_ value: S) -> Self where S: StateConvertible, S.Value == Bool {
-        disabled(value.stateValue.wrappedValue)
-        value.stateValue.listen { [self] newValue in
-            let snapshot: Bool = newValue
-            Task { @MainActor [self] in
-                self.disabled(snapshot)
+        disabledStateListener?.cancel()
+        let state = value.stateValue
+        disabledState = state
+        disabled(state.wrappedValue)
+        let stateID = state.id
+        disabledStateListener = state.listen { [weak self] newValue in
+            Task { @MainActor [weak self] in
+                guard let self, self.disabledState?.id == stateID else { return }
+                self.disabled(newValue)
             }
         }
         return self

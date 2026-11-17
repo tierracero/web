@@ -21,12 +21,10 @@ open class WebApp {
 
     private static var singleton: WebApp?
     
-    nonisolated public static func main() async {
-        await startForMain()
-    }
-
-    @MainActor
-    private static func startForMain() {
+    public static func main() {
+        #if arch(wasm32)
+        JavaScriptEventLoop.installGlobalExecutor()
+        #endif
         _ = Self.start()
     }
     
