@@ -12,6 +12,7 @@ import Foundation
 #endif
 import JavaScriptKit
 import WorkersAPI
+import WebFoundation
 
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 open class ServiceWorker {
