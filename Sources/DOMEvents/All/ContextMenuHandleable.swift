@@ -9,7 +9,7 @@ import Events
 
 public protocol ContextMenuHandleable: DOMEventable {
     @discardableResult
-    func onContextMenu(_ handler: @escaping () -> Void) -> Self
+    func onContextMenu(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ContextMenuContainer: Container<MouseEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension ContextMenuHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncontextmenu.asp)
     @discardableResult
-    public func onContextMenu(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onContextMenu(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("oncontextmenu", createOrUpdate(ContextMenuContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension ContextMenuHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncontextmenu.asp)
     @discardableResult
-    public func onContextMenu(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onContextMenu(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onContextMenu { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension ContextMenuHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncontextmenu.asp)
     @discardableResult
-    public func onContextMenu(_ handler: @escaping () -> Void) -> Self {
+    public func onContextMenu(_ handler: @escaping @MainActor () -> Void) -> Self {
         onContextMenu { _ in handler() }
     }
 }

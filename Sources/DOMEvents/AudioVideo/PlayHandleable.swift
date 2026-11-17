@@ -9,7 +9,7 @@ import Events
 
 public protocol PlayHandleable: DOMEventable {
     @discardableResult
-    func onPlay(_ handler: @escaping () -> Void) -> Self
+    func onPlay(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class PlayContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension PlayHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onplay.asp)
     @discardableResult
-    public func onPlay(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onPlay(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onplay", createOrUpdate(PlayContainer.self, handler))
     }
     
     @discardableResult
-    public func onPlay(_ handler: @escaping () -> Void) -> Self {
+    public func onPlay(_ handler: @escaping @MainActor () -> Void) -> Self {
         onPlay { _ in handler() }
     }
 }

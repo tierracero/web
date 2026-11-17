@@ -9,7 +9,7 @@ import Events
 
 public protocol DragEndHandleable: DOMEventable {
     @discardableResult
-    func onDragEnd(_ handler: @escaping () -> Void) -> Self
+    func onDragEnd(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DragEndContainer: Container<DragEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DragEndHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragend.asp)
     @discardableResult
-    public func onDragEnd(_ handler: @escaping (Self, DragEvent) -> Void) -> Self {
+    public func onDragEnd(_ handler: @escaping @MainActor (Self, DragEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondragend", createOrUpdate(DragEndContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DragEndHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragend.asp)
     @discardableResult
-    public func onDragEnd(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDragEnd(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDragEnd { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DragEndHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragend.asp)
     @discardableResult
-    public func onDragEnd(_ handler: @escaping () -> Void) -> Self {
+    public func onDragEnd(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDragEnd { _ in handler() }
     }
 }

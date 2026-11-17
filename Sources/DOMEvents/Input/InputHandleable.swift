@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol InputHandleable: DOMEventable {
     @discardableResult
-    func onInput(_ handler: @escaping () -> Void) -> Self
+    func onInput(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class InputContainer: Container<InputEvent>, StorageKey {
@@ -31,7 +31,7 @@ extension InputHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oninput.asp)
     @discardableResult
-    public func onInput(_ handler: @escaping (InputEvent, Self) -> Void) -> Self {
+    public func onInput(_ handler: @escaping @MainActor (InputEvent, Self) -> Void) -> Self {
         setDOMHandlerIfNeeded("oninput", createOrUpdate(InputContainer.self) { [weak self] in
             guard let self = self else { return }
             handler($0, self)
@@ -40,7 +40,7 @@ extension InputHandleable {
     
     /// The oninput event occurs when an element gets user input.
     @discardableResult
-    public func onInput(_ handler: @escaping (InputEvent) -> Void) -> Self {
+    public func onInput(_ handler: @escaping @MainActor (InputEvent) -> Void) -> Self {
         onInput { event, _ in
             handler(event)
         }
@@ -48,7 +48,7 @@ extension InputHandleable {
     
     /// The oninput event occurs when an element gets user input.
     @discardableResult
-    public func onInput(_ handler: @escaping () -> Void) -> Self {
+    public func onInput(_ handler: @escaping @MainActor () -> Void) -> Self {
         onInput { _ in handler() }
     }
 }

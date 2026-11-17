@@ -9,7 +9,7 @@ import Events
 
 public protocol FocusHandleable: DOMEventable {
     @discardableResult
-    func onFocus(_ handler: @escaping () -> Void) -> Self
+    func onFocus(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class FocusContainer: Container<FocusEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension FocusHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onfocus.asp)
     @discardableResult
-    func onFocus(_ handler: @escaping (Self, FocusEvent) -> Void) -> Self {
+    func onFocus(_ handler: @escaping @MainActor (Self, FocusEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onfocus", createOrUpdate(FocusContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension FocusHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onfocus.asp)
     @discardableResult
-    public func onFocus(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onFocus(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onFocus { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension FocusHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onfocus.asp)
     @discardableResult
-    public func onFocus(_ handler: @escaping () -> Void) -> Self {
+    public func onFocus(_ handler: @escaping @MainActor () -> Void) -> Self {
         onFocus { _ in handler() }
     }
 }

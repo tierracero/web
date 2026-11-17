@@ -9,7 +9,7 @@ import Events
 
 public protocol MouseLeaveHandleable: DOMEventable {
     @discardableResult
-    func onMouseLeave(_ handler: @escaping () -> Void) -> Self
+    func onMouseLeave(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class MouseLeaveContainer: Container<MouseEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension MouseLeaveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseleave.asp)
     @discardableResult
-    public func onMouseLeave(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onMouseLeave(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onmouseleave", createOrUpdate(MouseLeaveContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension MouseLeaveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseleave.asp)
     @discardableResult
-    public func onMouseLeave(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onMouseLeave(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onMouseLeave { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension MouseLeaveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseleave.asp)
     @discardableResult
-    public func onMouseLeave(_ handler: @escaping () -> Void) -> Self {
+    public func onMouseLeave(_ handler: @escaping @MainActor () -> Void) -> Self {
         onMouseLeave { _ in handler() }
     }
 }

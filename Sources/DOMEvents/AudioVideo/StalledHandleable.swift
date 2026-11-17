@@ -9,7 +9,7 @@ import Events
 
 public protocol StalledHandleable: DOMEventable {
     @discardableResult
-    func onStalled(_ handler: @escaping () -> Void) -> Self
+    func onStalled(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class StalledContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension StalledHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onstalled.asp)
     @discardableResult
-    public func onStalled(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onStalled(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onstalled", createOrUpdate(StalledContainer.self, handler))
     }
     
     @discardableResult
-    public func onStalled(_ handler: @escaping () -> Void) -> Self {
+    public func onStalled(_ handler: @escaping @MainActor () -> Void) -> Self {
         onStalled { _ in handler() }
     }
 }

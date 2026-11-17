@@ -9,7 +9,7 @@ import Events
 
 public protocol OpenHandleable: DOMEventable {
     @discardableResult
-    func onOpen(_ handler: @escaping () -> Void) -> Self
+    func onOpen(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class OpenContainer: Container<Event>, StorageKey {
@@ -23,7 +23,7 @@ extension OpenHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onopen_sse.asp)
     @discardableResult
-    public func onOpen(_ handler: @escaping (Self, Event) -> Void) -> Self {
+    public func onOpen(_ handler: @escaping @MainActor (Self, Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onopen", createOrUpdate(OpenContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension OpenHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onopen_sse.asp)
     @discardableResult
-    public func onOpen(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onOpen(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onOpen { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension OpenHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onopen_sse.asp)
     @discardableResult
-    public func onOpen(_ handler: @escaping () -> Void) -> Self {
+    public func onOpen(_ handler: @escaping @MainActor () -> Void) -> Self {
         onOpen { _ in handler() }
     }
 }

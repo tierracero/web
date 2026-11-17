@@ -9,7 +9,7 @@ import Events
 
 public protocol DragHandleable: DOMEventable {
     @discardableResult
-    func onDrag(_ handler: @escaping () -> Void) -> Self
+    func onDrag(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DragContainer: Container<DragEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DragHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondrag.asp)
     @discardableResult
-    public func onDrag(_ handler: @escaping (Self, DragEvent) -> Void) -> Self {
+    public func onDrag(_ handler: @escaping @MainActor (Self, DragEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondrag", createOrUpdate(DragContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DragHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondrag.asp)
     @discardableResult
-    public func onDrag(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDrag(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDrag { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DragHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondrag.asp)
     @discardableResult
-    public func onDrag(_ handler: @escaping () -> Void) -> Self {
+    public func onDrag(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDrag { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import Events
 
 public protocol MouseOverHandleable: DOMEventable {
     @discardableResult
-    func onMouseOver(_ handler: @escaping () -> Void) -> Self
+    func onMouseOver(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class MouseOverContainer: Container<MouseEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension MouseOverHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseover.asp)
     @discardableResult
-    public func onMouseOver(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onMouseOver(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onmouseover", createOrUpdate(MouseOverContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension MouseOverHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseover.asp)
     @discardableResult
-    public func onMouseOver(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onMouseOver(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onMouseOver { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension MouseOverHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseover.asp)
     @discardableResult
-    public func onMouseOver(_ handler: @escaping () -> Void) -> Self {
+    public func onMouseOver(_ handler: @escaping @MainActor () -> Void) -> Self {
         onMouseOver { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol ToggleHandleable: DOMEventable {
     @discardableResult
-    func onToggle(_ handler: @escaping () -> Void) -> Self
+    func onToggle(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ToggleContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension ToggleHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ontoggle.asp)
     @discardableResult
-    public func onToggle(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onToggle(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("ontoggle", createOrUpdate(ToggleContainer.self, handler))
     }
     
     @discardableResult
-    public func onToggle(_ handler: @escaping () -> Void) -> Self {
+    public func onToggle(_ handler: @escaping @MainActor () -> Void) -> Self {
         onToggle { _ in handler() }
     }
 }

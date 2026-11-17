@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol OnlineHandleable: DOMEventable {
     @discardableResult
-    func onOnline(_ handler: @escaping () -> Void) -> Self
+    func onOnline(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class OnlineContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension OnlineHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ononline.asp)
     @discardableResult
-    public func onOnline(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onOnline(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("ononline", createOrUpdate(OnlineContainer.self, handler))
     }
     
     @discardableResult
-    public func onOnline(_ handler: @escaping () -> Void) -> Self {
+    public func onOnline(_ handler: @escaping @MainActor () -> Void) -> Self {
         onOnline { _ in handler() }
     }
 }

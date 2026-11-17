@@ -9,7 +9,7 @@ import Events
 
 public protocol AnimationStartHandleable: DOMEventable {
     @discardableResult
-    func onAnimationStart(_ handler: @escaping () -> Void) -> Self
+    func onAnimationStart(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class AnimationStartContainer: Container<AnimationEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension AnimationStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_animationstart.asp)
     @discardableResult
-    public func onAnimationStart(_ handler: @escaping (Self, AnimationEvent) -> Void) -> Self {
+    public func onAnimationStart(_ handler: @escaping @MainActor (Self, AnimationEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onanimationstart", createOrUpdate(AnimationStartContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension AnimationStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_animationstart.asp)
     @discardableResult
-    public func onAnimationStart(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onAnimationStart(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onAnimationStart { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension AnimationStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_animationstart.asp)
     @discardableResult
-    public func onAnimationStart(_ handler: @escaping () -> Void) -> Self {
+    public func onAnimationStart(_ handler: @escaping @MainActor () -> Void) -> Self {
         onAnimationStart { _ in handler() }
     }
 }

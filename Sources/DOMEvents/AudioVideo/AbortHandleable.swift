@@ -9,7 +9,7 @@ import Events
 
 public protocol AbortHandleable: DOMEventable {
     @discardableResult
-    func onAbort(_ handler: @escaping () -> Void) -> Self
+    func onAbort(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class AbortContainer: Container<UIEvent>, StorageKey {
@@ -25,12 +25,12 @@ extension AbortHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onabort_media.asp)
     @discardableResult
-    public func onAbort(_ handler: @escaping (UIEvent) -> Void) -> Self {
+    public func onAbort(_ handler: @escaping @MainActor (UIEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onabort", createOrUpdate(AbortContainer.self, handler))
     }
     
     @discardableResult
-    public func onAbort(_ handler: @escaping () -> Void) -> Self {
+    public func onAbort(_ handler: @escaping @MainActor () -> Void) -> Self {
         onAbort { _ in handler() }
     }
 }

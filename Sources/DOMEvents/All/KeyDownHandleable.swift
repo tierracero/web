@@ -9,7 +9,7 @@ import Events
 
 public protocol KeyDownHandleable: DOMEventable {
     @discardableResult
-    func onKeyDown(_ handler: @escaping () -> Void) -> Self
+    func onKeyDown(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class KeyDownContainer: Container<KeyboardEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension KeyDownHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onkeydown.asp)
     @discardableResult
-    public func onKeyDown(_ handler: @escaping (Self, KeyboardEvent) -> Void) -> Self {
+    public func onKeyDown(_ handler: @escaping @MainActor (Self, KeyboardEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onkeydown", createOrUpdate(KeyDownContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension KeyDownHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onkeydown.asp)
     @discardableResult
-    public func onKeyDown(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onKeyDown(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onKeyDown { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension KeyDownHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onkeydown.asp)
     @discardableResult
-    public func onKeyDown(_ handler: @escaping () -> Void) -> Self {
+    public func onKeyDown(_ handler: @escaping @MainActor () -> Void) -> Self {
         onKeyDown { _ in handler() }
     }
 }

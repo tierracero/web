@@ -9,7 +9,7 @@ import Events
 
 public protocol DragStartHandleable: DOMEventable {
     @discardableResult
-    func onDragStart(_ handler: @escaping () -> Void) -> Self
+    func onDragStart(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DragStartContainer: Container<DragEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DragStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragstart.asp)
     @discardableResult
-    public func onDragStart(_ handler: @escaping (Self, DragEvent) -> Void) -> Self {
+    public func onDragStart(_ handler: @escaping @MainActor (Self, DragEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondragstart", createOrUpdate(DragStartContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DragStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragstart.asp)
     @discardableResult
-    public func onDragStart(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDragStart(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDragStart { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DragStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragstart.asp)
     @discardableResult
-    public func onDragStart(_ handler: @escaping () -> Void) -> Self {
+    public func onDragStart(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDragStart { _ in handler() }
     }
 }

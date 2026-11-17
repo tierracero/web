@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol PageHideHandleable: DOMEventable {
     @discardableResult
-    func onPageHide(_ handler: @escaping () -> Void) -> Self
+    func onPageHide(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class PageHideContainer: Container<PageTransitionEvent>, StorageKey {
@@ -23,12 +23,12 @@ extension PageHideHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onpagehide.asp)
     @discardableResult
-    public func onPageHide(_ handler: @escaping (PageTransitionEvent) -> Void) -> Self {
+    public func onPageHide(_ handler: @escaping @MainActor (PageTransitionEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onpagehide", createOrUpdate(PageHideContainer.self, handler))
     }
     
     @discardableResult
-    public func onPageHide(_ handler: @escaping () -> Void) -> Self {
+    public func onPageHide(_ handler: @escaping @MainActor () -> Void) -> Self {
         onPageHide { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import Events
 
 public protocol LoadStartHandleable: DOMEventable {
     @discardableResult
-    func onLoadStart(_ handler: @escaping () -> Void) -> Self
+    func onLoadStart(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class LoadStartContainer: Container<ProgressEvent>, StorageKey {
@@ -24,12 +24,12 @@ extension LoadStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onloadstart.asp)
     @discardableResult
-    public func onLoadStart(_ handler: @escaping (ProgressEvent) -> Void) -> Self {
+    public func onLoadStart(_ handler: @escaping @MainActor (ProgressEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onloadstart", createOrUpdate(LoadStartContainer.self, handler))
     }
     
     @discardableResult
-    public func onLoadStart(_ handler: @escaping () -> Void) -> Self {
+    public func onLoadStart(_ handler: @escaping @MainActor () -> Void) -> Self {
         onLoadStart { _ in handler() }
     }
 }

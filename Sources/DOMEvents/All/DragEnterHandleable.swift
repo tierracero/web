@@ -9,7 +9,7 @@ import Events
 
 public protocol DragEnterHandleable: DOMEventable {
     @discardableResult
-    func onDragEnter(_ handler: @escaping () -> Void) -> Self
+    func onDragEnter(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DragEnterContainer: Container<DragEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DragEnterHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragenter.asp)
     @discardableResult
-    public func onDragEnter(_ handler: @escaping (Self, DragEvent) -> Void) -> Self {
+    public func onDragEnter(_ handler: @escaping @MainActor (Self, DragEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondragenter", createOrUpdate(DragEnterContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DragEnterHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragenter.asp)
     @discardableResult
-    public func onDragEnter(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDragEnter(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDragEnter { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DragEnterHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragenter.asp)
     @discardableResult
-    public func onDragEnter(_ handler: @escaping () -> Void) -> Self {
+    public func onDragEnter(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDragEnter { _ in handler() }
     }
 }

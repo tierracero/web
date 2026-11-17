@@ -9,7 +9,7 @@ import Events
 
 public protocol LoadedDataHandleable: DOMEventable {
     @discardableResult
-    func onLoadedData(_ handler: @escaping () -> Void) -> Self
+    func onLoadedData(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class LoadedDataContainer: Container<Event>, StorageKey {
@@ -24,12 +24,12 @@ extension LoadedDataHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onloadeddata.asp)
     @discardableResult
-    public func onLoadedData(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onLoadedData(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onloadeddata", createOrUpdate(LoadedDataContainer.self, handler))
     }
     
     @discardableResult
-    public func onLoadedData(_ handler: @escaping () -> Void) -> Self {
+    public func onLoadedData(_ handler: @escaping @MainActor () -> Void) -> Self {
         onLoadedData { _ in handler() }
     }
 }

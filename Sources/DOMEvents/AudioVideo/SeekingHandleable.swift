@@ -9,7 +9,7 @@ import Events
 
 public protocol SeekingHandleable: DOMEventable {
     @discardableResult
-    func onSeeking(_ handler: @escaping () -> Void) -> Self
+    func onSeeking(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class SeekingContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension SeekingHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onseeking.asp)
     @discardableResult
-    public func onSeeking(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onSeeking(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onseeking", createOrUpdate(SeekingContainer.self, handler))
     }
     
     @discardableResult
-    public func onSeeking(_ handler: @escaping () -> Void) -> Self {
+    public func onSeeking(_ handler: @escaping @MainActor () -> Void) -> Self {
         onSeeking { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol AfterPrintHandleable: DOMEventable {
     @discardableResult
-    func onAfterPrint(_ handler: @escaping () -> Void) -> Self
+    func onAfterPrint(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class AfterPrintContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension AfterPrintHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onafterprint.asp)
     @discardableResult
-    public func onAfterPrint(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onAfterPrint(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onafterprint", createOrUpdate(AfterPrintContainer.self, handler))
     }
     
     @discardableResult
-    public func onAfterPrint(_ handler: @escaping () -> Void) -> Self {
+    public func onAfterPrint(_ handler: @escaping @MainActor () -> Void) -> Self {
         onAfterPrint { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import Events
 
 public protocol CanPlayHandleable: DOMEventable {
     @discardableResult
-    func onCanPlay(_ handler: @escaping () -> Void) -> Self
+    func onCanPlay(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class CanPlayContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension CanPlayHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncanplay.asp)
     @discardableResult
-    public func onCanPlay(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onCanPlay(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("oncanplay", createOrUpdate(CanPlayContainer.self, handler))
     }
     
     @discardableResult
-    public func onCanPlay(_ handler: @escaping () -> Void) -> Self {
+    public func onCanPlay(_ handler: @escaping @MainActor () -> Void) -> Self {
         onCanPlay { _ in handler() }
     }
 }

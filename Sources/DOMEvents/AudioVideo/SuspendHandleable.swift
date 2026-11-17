@@ -9,7 +9,7 @@ import Events
 
 public protocol SuspendHandleable: DOMEventable {
     @discardableResult
-    func onSuspend(_ handler: @escaping () -> Void) -> Self
+    func onSuspend(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class SuspendContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension SuspendHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onsuspend.asp)
     @discardableResult
-    public func onSuspend(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onSuspend(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onsuspend", createOrUpdate(SuspendContainer.self, handler))
     }
     
     @discardableResult
-    public func onSuspend(_ handler: @escaping () -> Void) -> Self {
+    public func onSuspend(_ handler: @escaping @MainActor () -> Void) -> Self {
         onSuspend { _ in handler() }
     }
 }

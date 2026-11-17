@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol ChangeHandleable: DOMEventable {
     @discardableResult
-    func onChange(_ handler: @escaping () -> Void) -> Self
+    func onChange(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ChangeContainer: Container<Event>, StorageKey {
@@ -28,7 +28,7 @@ extension ChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onchange.asp)
     @discardableResult
-    public func onChange(_ handler: @escaping (Event, Self) -> Void) -> Self {
+    public func onChange(_ handler: @escaping @MainActor (Event, Self) -> Void) -> Self {
         setDOMHandlerIfNeeded("onchange", createOrUpdate(ChangeContainer.self) { [weak self] in
             guard let self = self else { return }
             handler($0, self)
@@ -37,7 +37,7 @@ extension ChangeHandleable {
     
     /// The onchange event occurs when the value of an element has been changed.
     @discardableResult
-    public func onChange(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onChange(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         onChange { event, _ in
             handler(event)
         }
@@ -45,7 +45,7 @@ extension ChangeHandleable {
     
     /// The onchange event occurs when the value of an element has been changed.
     @discardableResult
-    public func onChange(_ handler: @escaping () -> Void) -> Self {
+    public func onChange(_ handler: @escaping @MainActor () -> Void) -> Self {
         onChange { _ in handler() }
     }
 }

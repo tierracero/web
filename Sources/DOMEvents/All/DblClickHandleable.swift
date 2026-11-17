@@ -9,7 +9,7 @@ import Events
 
 public protocol DblClickHandleable: DOMEventable {
     @discardableResult
-    func onDblClick(_ handler: @escaping () -> Void) -> Self
+    func onDblClick(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DblClickContainer: Container<MouseEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DblClickHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondblclick.asp)
     @discardableResult
-    public func onDblClick(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onDblClick(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondblclick", createOrUpdate(DblClickContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DblClickHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondblclick.asp)
     @discardableResult
-    public func onDblClick(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDblClick(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDblClick { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DblClickHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondblclick.asp)
     @discardableResult
-    public func onDblClick(_ handler: @escaping () -> Void) -> Self {
+    public func onDblClick(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDblClick { _ in handler() }
     }
 }

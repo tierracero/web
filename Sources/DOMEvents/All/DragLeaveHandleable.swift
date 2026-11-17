@@ -9,7 +9,7 @@ import Events
 
 public protocol DragLeaveHandleable: DOMEventable {
     @discardableResult
-    func onDragLeave(_ handler: @escaping () -> Void) -> Self
+    func onDragLeave(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DragLeaveContainer: Container<DragEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DragLeaveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragleave.asp)
     @discardableResult
-    public func onDragLeave(_ handler: @escaping (Self, DragEvent) -> Void) -> Self {
+    public func onDragLeave(_ handler: @escaping @MainActor (Self, DragEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondragleave", createOrUpdate(DragLeaveContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DragLeaveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragleave.asp)
     @discardableResult
-    public func onDragLeave(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDragLeave(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDragLeave { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DragLeaveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragleave.asp)
     @discardableResult
-    public func onDragLeave(_ handler: @escaping () -> Void) -> Self {
+    public func onDragLeave(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDragLeave { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import Events
 
 public protocol AnimationIterationHandleable: DOMEventable {
     @discardableResult
-    func onAnimationIteration(_ handler: @escaping () -> Void) -> Self
+    func onAnimationIteration(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class AnimationIterationContainer: Container<AnimationEvent>, StorageKey {
@@ -25,7 +25,7 @@ extension AnimationIterationHandleable {
     ///
     /// [More info →](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onanimationiteration)
     @discardableResult
-    public func onAnimationIteration(_ handler: @escaping (Self, AnimationEvent) -> Void) -> Self {
+    public func onAnimationIteration(_ handler: @escaping @MainActor (Self, AnimationEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onanimationiteration", createOrUpdate(AnimationIterationContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -40,7 +40,7 @@ extension AnimationIterationHandleable {
     ///
     /// [More info →](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onanimationiteration)
     @discardableResult
-    public func onAnimationIteration(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onAnimationIteration(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onAnimationIteration { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -55,7 +55,7 @@ extension AnimationIterationHandleable {
     ///
     /// [More info →](https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onanimationiteration)
     @discardableResult
-    public func onAnimationIteration(_ handler: @escaping () -> Void) -> Self {
+    public func onAnimationIteration(_ handler: @escaping @MainActor () -> Void) -> Self {
         onAnimationIteration { _ in handler() }
     }
 }

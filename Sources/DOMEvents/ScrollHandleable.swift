@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol ScrollHandleable: DOMEventable {
     @discardableResult
-    func onScroll(_ handler: @escaping () -> Void) -> Self
+    func onScroll(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ScrollContainer: Container<UIEvent>, StorageKey {
@@ -25,12 +25,12 @@ extension ScrollHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onscroll.asp)
     @discardableResult
-    public func onScroll(_ handler: @escaping (UIEvent) -> Void) -> Self {
+    public func onScroll(_ handler: @escaping @MainActor (UIEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onscroll", createOrUpdate(ScrollContainer.self, handler))
     }
     
     @discardableResult
-    public func onScroll(_ handler: @escaping () -> Void) -> Self {
+    public func onScroll(_ handler: @escaping @MainActor () -> Void) -> Self {
         onScroll { _ in handler() }
     }
 }

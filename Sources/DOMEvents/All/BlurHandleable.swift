@@ -9,7 +9,7 @@ import Events
 
 public protocol BlurHandleable: DOMEventable {
     @discardableResult
-    func onBlur(_ handler: @escaping () -> Void) -> Self
+    func onBlur(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class BlurContainer: Container<FocusEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension BlurHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onblur.asp)
     @discardableResult
-    public func onBlur(_ handler: @escaping (Self, FocusEvent) -> Void) -> Self {
+    public func onBlur(_ handler: @escaping @MainActor (Self, FocusEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onblur", createOrUpdate(BlurContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension BlurHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onblur.asp)
     @discardableResult
-    public func onBlur(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onBlur(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onBlur { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension BlurHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onblur.asp)
     @discardableResult
-    public func onBlur(_ handler: @escaping () -> Void) -> Self {
+    public func onBlur(_ handler: @escaping @MainActor () -> Void) -> Self {
         onBlur { _ in handler() }
     }
 }

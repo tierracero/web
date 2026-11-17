@@ -9,7 +9,7 @@ import Events
 
 public protocol LoadedMetadataHandleable: DOMEventable {
     @discardableResult
-    func onLoadedMetadata(_ handler: @escaping () -> Void) -> Self
+    func onLoadedMetadata(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class LoadedMetadataContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension LoadedMetadataHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onloadedmetadata.asp)
     @discardableResult
-    public func onLoadedMetadata(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onLoadedMetadata(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onloadedmetadata", createOrUpdate(LoadedMetadataContainer.self, handler))
     }
     
     @discardableResult
-    public func onLoadedMetadata(_ handler: @escaping () -> Void) -> Self {
+    public func onLoadedMetadata(_ handler: @escaping @MainActor () -> Void) -> Self {
         onLoadedMetadata { _ in handler() }
     }
 }

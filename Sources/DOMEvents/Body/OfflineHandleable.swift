@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol OfflineHandleable: DOMEventable {
     @discardableResult
-    func onOffline(_ handler: @escaping () -> Void) -> Self
+    func onOffline(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class OfflineContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension OfflineHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onoffline.asp)
     @discardableResult
-    public func onOffline(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onOffline(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onoffline", createOrUpdate(OfflineContainer.self, handler))
     }
     
     @discardableResult
-    public func onOffline(_ handler: @escaping () -> Void) -> Self {
+    public func onOffline(_ handler: @escaping @MainActor () -> Void) -> Self {
         onOffline { _ in handler() }
     }
 }

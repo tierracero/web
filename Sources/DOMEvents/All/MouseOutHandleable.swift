@@ -9,7 +9,7 @@ import Events
 
 public protocol MouseOutHandleable: DOMEventable {
     @discardableResult
-    func onMouseOut(_ handler: @escaping () -> Void) -> Self
+    func onMouseOut(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class MouseOutContainer: Container<MouseEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension MouseOutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseout.asp)
     @discardableResult
-    public func onMouseOut(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onMouseOut(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onmouseout", createOrUpdate(MouseOutContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension MouseOutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseout.asp)
     @discardableResult
-    public func onMouseOut(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onMouseOut(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onMouseOut { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension MouseOutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseout.asp)
     @discardableResult
-    public func onMouseOut(_ handler: @escaping () -> Void) -> Self {
+    public func onMouseOut(_ handler: @escaping @MainActor () -> Void) -> Self {
         onMouseOut { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol ErrorHandleable: DOMEventable {
     @discardableResult
-    func onError(_ handler: @escaping () -> Void) -> Self
+    func onError(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ErrorContainer: Container<ProgressEvent>, StorageKey {
@@ -23,12 +23,12 @@ extension ErrorHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onerror.asp)
     @discardableResult
-    public func onError(_ handler: @escaping (ProgressEvent) -> Void) -> Self {
+    public func onError(_ handler: @escaping @MainActor (ProgressEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onerror", createOrUpdate(ErrorContainer.self, handler))
     }
     
     @discardableResult
-    public func onError(_ handler: @escaping () -> Void) -> Self {
+    public func onError(_ handler: @escaping @MainActor () -> Void) -> Self {
         onError { _ in handler() }
     }
 }

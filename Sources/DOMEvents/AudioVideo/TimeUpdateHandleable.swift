@@ -9,7 +9,7 @@ import Events
 
 public protocol TimeUpdateHandleable: DOMEventable {
     @discardableResult
-    func onTimeUpdate(_ handler: @escaping () -> Void) -> Self
+    func onTimeUpdate(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class TimeUpdateContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension TimeUpdateHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ontimeupdate.asp)
     @discardableResult
-    public func onTimeUpdate(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onTimeUpdate(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("ontimeupdate", createOrUpdate(TimeUpdateContainer.self, handler))
     }
     
     @discardableResult
-    public func onTimeUpdate(_ handler: @escaping () -> Void) -> Self {
+    public func onTimeUpdate(_ handler: @escaping @MainActor () -> Void) -> Self {
         onTimeUpdate { _ in handler() }
     }
 }

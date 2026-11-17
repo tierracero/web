@@ -9,7 +9,7 @@ import Events
 
 public protocol MessageHandleable: DOMEventable {
     @discardableResult
-    func onMessage(_ handler: @escaping () -> Void) -> Self
+    func onMessage(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class MessageContainer: Container<Event>, StorageKey {
@@ -29,7 +29,7 @@ extension MessageHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmessage_sse.asp)
     @discardableResult
-    public func onMessage(_ handler: @escaping (Self, Event) -> Void) -> Self {
+    public func onMessage(_ handler: @escaping @MainActor (Self, Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onmessage", createOrUpdate(MessageContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -48,7 +48,7 @@ extension MessageHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmessage_sse.asp)
     @discardableResult
-    public func onMessage(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onMessage(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onMessage { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -67,7 +67,7 @@ extension MessageHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmessage_sse.asp)
     @discardableResult
-    public func onMessage(_ handler: @escaping () -> Void) -> Self {
+    public func onMessage(_ handler: @escaping @MainActor () -> Void) -> Self {
         onMessage { _ in handler() }
     }
 }

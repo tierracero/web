@@ -9,7 +9,7 @@ import Events
 
 public protocol PasteHandleable: DOMEventable {
     @discardableResult
-    func onPaste(_ handler: @escaping () -> Void) -> Self
+    func onPaste(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class PasteContainer: Container<ClipboardEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension PasteHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onpaste.asp)
     @discardableResult
-    public func onPaste(_ handler: @escaping (Self, ClipboardEvent) -> Void) -> Self {
+    public func onPaste(_ handler: @escaping @MainActor (Self, ClipboardEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onpaste", createOrUpdate(PasteContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension PasteHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onpaste.asp)
     @discardableResult
-    public func onPaste(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onPaste(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onPaste { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension PasteHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onpaste.asp)
     @discardableResult
-    public func onPaste(_ handler: @escaping () -> Void) -> Self {
+    public func onPaste(_ handler: @escaping @MainActor () -> Void) -> Self {
         onPaste { _ in handler() }
     }
 }

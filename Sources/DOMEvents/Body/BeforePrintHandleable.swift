@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol BeforePrintHandleable: DOMEventable {
     @discardableResult
-    func onBeforePrint(_ handler: @escaping () -> Void) -> Self
+    func onBeforePrint(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class BeforePrintContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension BeforePrintHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onbeforeprint.asp)
     @discardableResult
-    public func onBeforePrint(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onBeforePrint(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onbeforeprint", createOrUpdate(BeforePrintContainer.self, handler))
     }
     
     @discardableResult
-    public func onBeforePrint(_ handler: @escaping () -> Void) -> Self {
+    public func onBeforePrint(_ handler: @escaping @MainActor () -> Void) -> Self {
         onBeforePrint { _ in handler() }
     }
 }

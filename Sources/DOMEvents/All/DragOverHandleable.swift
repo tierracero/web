@@ -9,7 +9,7 @@ import Events
 
 public protocol DragOverHandleable: DOMEventable {
     @discardableResult
-    func onDragOver(_ handler: @escaping () -> Void) -> Self
+    func onDragOver(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DragOverContainer: Container<DragEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DragOverHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragover.asp)
     @discardableResult
-    public func onDragOver(_ handler: @escaping (Self, DragEvent) -> Void) -> Self {
+    public func onDragOver(_ handler: @escaping @MainActor (Self, DragEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondragover", createOrUpdate(DragOverContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DragOverHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragover.asp)
     @discardableResult
-    public func onDragOver(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDragOver(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDragOver { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DragOverHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondragover.asp)
     @discardableResult
-    public func onDragOver(_ handler: @escaping () -> Void) -> Self {
+    public func onDragOver(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDragOver { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol ResizeHandleable: DOMEventable {
     @discardableResult
-    func onResize(_ handler: @escaping () -> Void) -> Self
+    func onResize(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ResizeContainer: Container<UIEvent>, StorageKey {
@@ -23,12 +23,12 @@ extension ResizeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onresize.asp)
     @discardableResult
-    public func onResize(_ handler: @escaping (UIEvent) -> Void) -> Self {
+    public func onResize(_ handler: @escaping @MainActor (UIEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onresize", createOrUpdate(ResizeContainer.self, handler))
     }
     
     @discardableResult
-    public func onResize(_ handler: @escaping () -> Void) -> Self {
+    public func onResize(_ handler: @escaping @MainActor () -> Void) -> Self {
         onResize { _ in handler() }
     }
 }

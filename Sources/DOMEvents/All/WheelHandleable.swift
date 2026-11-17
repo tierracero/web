@@ -9,7 +9,7 @@ import Events
 
 public protocol WheelHandleable: DOMEventable {
     @discardableResult
-    func onWheel(_ handler: @escaping () -> Void) -> Self
+    func onWheel(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate final class WheelContainer: Container<WheelEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension WheelHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onwheel.asp)
     @discardableResult
-    public func onWheel(_ handler: @escaping (Self, WheelEvent) -> Void) -> Self {
+    public func onWheel(_ handler: @escaping @MainActor (Self, WheelEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onwheel", createOrUpdate(WheelContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension WheelHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onwheel.asp)
     @discardableResult
-    public func onWheel(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onWheel(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onWheel { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension WheelHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onwheel.asp)
     @discardableResult
-    public func onWheel(_ handler: @escaping () -> Void) -> Self {
+    public func onWheel(_ handler: @escaping @MainActor () -> Void) -> Self {
         onWheel { _ in handler() }
     }
 }

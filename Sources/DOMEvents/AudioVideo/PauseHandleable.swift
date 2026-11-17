@@ -9,7 +9,7 @@ import Events
 
 public protocol PauseHandleable: DOMEventable {
     @discardableResult
-    func onPause(_ handler: @escaping () -> Void) -> Self
+    func onPause(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class PauseContainer: Container<Event>, StorageKey {
@@ -21,12 +21,12 @@ extension PauseHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onpause.asp)
     @discardableResult
-    public func onPause(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onPause(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onpause", createOrUpdate(PauseContainer.self, handler))
     }
     
     @discardableResult
-    public func onPause(_ handler: @escaping () -> Void) -> Self {
+    public func onPause(_ handler: @escaping @MainActor () -> Void) -> Self {
         onPause { _ in handler() }
     }
 }

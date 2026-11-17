@@ -9,7 +9,7 @@ import Events
 
 public protocol FocusOutHandleable: DOMEventable {
     @discardableResult
-    func onFocusOut(_ handler: @escaping () -> Void) -> Self
+    func onFocusOut(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class FocusOutContainer: Container<FocusEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension FocusOutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onfocusout.asp)
     @discardableResult
-    public func onFocusOut(_ handler: @escaping (Self, FocusEvent) -> Void) -> Self {
+    public func onFocusOut(_ handler: @escaping @MainActor (Self, FocusEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onfocusout", createOrUpdate(FocusOutContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension FocusOutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onfocusout.asp)
     @discardableResult
-    public func onFocusOut(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onFocusOut(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onFocusOut { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension FocusOutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onfocusout.asp)
     @discardableResult
-    public func onFocusOut(_ handler: @escaping () -> Void) -> Self {
+    public func onFocusOut(_ handler: @escaping @MainActor () -> Void) -> Self {
         onFocusOut { _ in handler() }
     }
 }

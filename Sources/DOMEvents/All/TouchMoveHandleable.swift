@@ -9,7 +9,7 @@ import Events
 
 public protocol TouchMoveHandleable: DOMEventable {
     @discardableResult
-    func onTouchMove(_ handler: @escaping () -> Void) -> Self
+    func onTouchMove(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class TouchMoveContainer: Container<TouchEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension TouchMoveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchmove.asp)
     @discardableResult
-    public func onTouchMove(_ handler: @escaping (Self, TouchEvent) -> Void) -> Self {
+    public func onTouchMove(_ handler: @escaping @MainActor (Self, TouchEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ontouchmove", createOrUpdate(TouchMoveContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension TouchMoveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchmove.asp)
     @discardableResult
-    public func onTouchMove(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onTouchMove(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onTouchMove { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension TouchMoveHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchmove.asp)
     @discardableResult
-    public func onTouchMove(_ handler: @escaping () -> Void) -> Self {
+    public func onTouchMove(_ handler: @escaping @MainActor () -> Void) -> Self {
         onTouchMove { _ in handler() }
     }
 }

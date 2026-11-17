@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol LoadHandleable: DOMEventable {
     @discardableResult
-    func onLoad(_ handler: @escaping () -> Void) -> Self
+    func onLoad(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class LoadContainer: Container<UIEvent>, StorageKey {
@@ -23,12 +23,12 @@ extension LoadHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onload.asp)
     @discardableResult
-    public func onLoad(_ handler: @escaping (UIEvent) -> Void) -> Self {
+    public func onLoad(_ handler: @escaping @MainActor (UIEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onload", createOrUpdate(LoadContainer.self, handler))
     }
     
     @discardableResult
-    public func onLoad(_ handler: @escaping () -> Void) -> Self {
+    public func onLoad(_ handler: @escaping @MainActor () -> Void) -> Self {
         onLoad { _ in handler() }
     }
 }

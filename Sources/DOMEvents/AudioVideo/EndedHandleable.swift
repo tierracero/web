@@ -9,7 +9,7 @@ import Events
 
 public protocol EndedHandleable: DOMEventable {
     @discardableResult
-    func onEnded(_ handler: @escaping () -> Void) -> Self
+    func onEnded(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class EndedContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension EndedHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onended.asp)
     @discardableResult
-    public func onEnded(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onEnded(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onended", createOrUpdate(EndedContainer.self, handler))
     }
     
     @discardableResult
-    public func onEnded(_ handler: @escaping () -> Void) -> Self {
+    public func onEnded(_ handler: @escaping @MainActor () -> Void) -> Self {
         onEnded { _ in handler() }
     }
 }

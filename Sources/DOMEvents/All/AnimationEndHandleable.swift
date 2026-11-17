@@ -9,7 +9,7 @@ import Events
 
 public protocol AnimationEndHandleable: DOMEventable {
     @discardableResult
-    func onAnimationEnd(_ handler: @escaping () -> Void) -> Self
+    func onAnimationEnd(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class AnimationEndContainer: Container<AnimationEvent>, StorageKey {
@@ -26,7 +26,7 @@ extension AnimationEndHandleable {
     ///
     /// [More info →](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/animationend_event)
     @discardableResult
-    public func onAnimationEnd(_ handler: @escaping (Self, AnimationEvent) -> Void) -> Self {
+    public func onAnimationEnd(_ handler: @escaping @MainActor (Self, AnimationEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onanimationend", createOrUpdate(AnimationEndContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -42,7 +42,7 @@ extension AnimationEndHandleable {
     ///
     /// [More info →](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/animationend_event)
     @discardableResult
-    public func onAnimationEnd(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onAnimationEnd(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onAnimationEnd { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -58,7 +58,7 @@ extension AnimationEndHandleable {
     ///
     /// [More info →](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/animationend_event)
     @discardableResult
-    public func onAnimationEnd(_ handler: @escaping () -> Void) -> Self {
+    public func onAnimationEnd(_ handler: @escaping @MainActor () -> Void) -> Self {
         onAnimationEnd { _ in handler() }
     }
 }

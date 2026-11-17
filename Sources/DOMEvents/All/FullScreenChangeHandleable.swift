@@ -9,7 +9,7 @@ import Events
 
 public protocol FullScreenChangeHandleable: DOMEventable {
     @discardableResult
-    func onFullScreenChange(_ handler: @escaping () -> Void) -> Self
+    func onFullScreenChange(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class FullScreenChangeContainer: Container<Event>, StorageKey {
@@ -23,7 +23,7 @@ extension FullScreenChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_fullscreenchange.asp)
     @discardableResult
-    public func onFullScreenChange(_ handler: @escaping (Self, Event) -> Void) -> Self {
+    public func onFullScreenChange(_ handler: @escaping @MainActor (Self, Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onfullscreenchange", createOrUpdate(FullScreenChangeContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension FullScreenChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_fullscreenchange.asp)
     @discardableResult
-    public func onFullScreenChange(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onFullScreenChange(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onFullScreenChange { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension FullScreenChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_fullscreenchange.asp)
     @discardableResult
-    public func onFullScreenChange(_ handler: @escaping () -> Void) -> Self {
+    public func onFullScreenChange(_ handler: @escaping @MainActor () -> Void) -> Self {
         onFullScreenChange { _ in handler() }
     }
 }

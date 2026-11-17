@@ -9,7 +9,7 @@ import Events
 
 public protocol DurationChangeHandleable: DOMEventable {
     @discardableResult
-    func onDurationChange(_ handler: @escaping () -> Void) -> Self
+    func onDurationChange(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DurationChangeContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension DurationChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondurationchange.asp)
     @discardableResult
-    public func onDurationChange(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onDurationChange(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondurationchange", createOrUpdate(DurationChangeContainer.self, handler))
     }
     
     @discardableResult
-    public func onDurationChange(_ handler: @escaping () -> Void) -> Self {
+    public func onDurationChange(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDurationChange { _ in handler() }
     }
 }

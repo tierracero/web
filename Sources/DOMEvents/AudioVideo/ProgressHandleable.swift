@@ -9,7 +9,7 @@ import Events
 
 public protocol ProgressHandleable: DOMEventable {
     @discardableResult
-    func onProgress(_ handler: @escaping () -> Void) -> Self
+    func onProgress(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ProgressContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension ProgressHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onprogress.asp)
     @discardableResult
-    public func onProgress(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onProgress(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onprogress", createOrUpdate(ProgressContainer.self, handler))
     }
     
     @discardableResult
-    public func onProgress(_ handler: @escaping () -> Void) -> Self {
+    public func onProgress(_ handler: @escaping @MainActor () -> Void) -> Self {
         onProgress { _ in handler() }
     }
 }

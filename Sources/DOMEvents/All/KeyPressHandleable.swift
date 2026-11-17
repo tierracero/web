@@ -9,7 +9,7 @@ import Events
 
 public protocol KeyPressHandleable: DOMEventable {
     @discardableResult
-    func onKeyPress(_ handler: @escaping () -> Void) -> Self
+    func onKeyPress(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class KeyPressContainer: Container<KeyboardEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension KeyPressHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onkeypress.asp)
     @discardableResult
-    public func onKeyPress(_ handler: @escaping (Self, KeyboardEvent) -> Void) -> Self {
+    public func onKeyPress(_ handler: @escaping @MainActor (Self, KeyboardEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onkeypress", createOrUpdate(KeyPressContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension KeyPressHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onkeypress.asp)
     @discardableResult
-    public func onKeyPress(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onKeyPress(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onKeyPress { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension KeyPressHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onkeypress.asp)
     @discardableResult
-    public func onKeyPress(_ handler: @escaping () -> Void) -> Self {
+    public func onKeyPress(_ handler: @escaping @MainActor () -> Void) -> Self {
         onKeyPress { _ in handler() }
     }
 }

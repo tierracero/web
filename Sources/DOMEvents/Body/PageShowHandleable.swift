@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol PageShowHandleable: DOMEventable {
     @discardableResult
-    func onPageShow(_ handler: @escaping () -> Void) -> Self
+    func onPageShow(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class PageShowContainer: Container<PageTransitionEvent>, StorageKey {
@@ -23,12 +23,12 @@ extension PageShowHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onpageshow.asp)
     @discardableResult
-    public func onPageShow(_ handler: @escaping (PageTransitionEvent) -> Void) -> Self {
+    public func onPageShow(_ handler: @escaping @MainActor (PageTransitionEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onpageshow", createOrUpdate(PageShowContainer.self, handler))
     }
     
     @discardableResult
-    public func onPageShow(_ handler: @escaping () -> Void) -> Self {
+    public func onPageShow(_ handler: @escaping @MainActor () -> Void) -> Self {
         onPageShow { _ in handler() }
     }
 }

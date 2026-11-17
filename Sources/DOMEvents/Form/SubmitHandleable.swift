@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol SubmitHandleable: DOMEventable {
     @discardableResult
-    func onSubmit(_ handler: @escaping () -> Void) -> Self
+    func onSubmit(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class SubmitContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension SubmitHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onsubmit.asp)
     @discardableResult
-    public func onSubmit(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onSubmit(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onsubmit", createOrUpdate(SubmitContainer.self, handler))
     }
     
     @discardableResult
-    public func onSubmit(_ handler: @escaping () -> Void) -> Self {
+    public func onSubmit(_ handler: @escaping @MainActor () -> Void) -> Self {
         onSubmit { _ in handler() }
     }
     

@@ -9,7 +9,7 @@ import Events
 
 public protocol MouseUpHandleable: DOMEventable {
     @discardableResult
-    func onMouseUp(_ handler: @escaping () -> Void) -> Self
+    func onMouseUp(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class MouseUpContainer: Container<MouseEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension MouseUpHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseup.asp)
     @discardableResult
-    public func onMouseUp(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onMouseUp(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onmouseup", createOrUpdate(MouseUpContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension MouseUpHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseup.asp)
     @discardableResult
-    public func onMouseUp(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onMouseUp(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onMouseUp { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension MouseUpHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmouseup.asp)
     @discardableResult
-    public func onMouseUp(_ handler: @escaping () -> Void) -> Self {
+    public func onMouseUp(_ handler: @escaping @MainActor () -> Void) -> Self {
         onMouseUp { _ in handler() }
     }
 }

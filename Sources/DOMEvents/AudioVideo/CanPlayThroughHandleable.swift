@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol CanPlayThroughHandleable: DOMEventable {
     @discardableResult
-    func onCanPlayThrough(_ handler: @escaping () -> Void) -> Self
+    func onCanPlayThrough(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class CanPlayThroughContainer: Container<Event>, StorageKey {
@@ -24,12 +24,12 @@ extension CanPlayThroughHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncanplaythrough.asp)
     @discardableResult
-    public func onCanPlayThrough(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onCanPlayThrough(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("oncanplaythrough", createOrUpdate(CanPlayThroughContainer.self, handler))
     }
     
     @discardableResult
-    public func onCanPlayThrough(_ handler: @escaping () -> Void) -> Self {
+    public func onCanPlayThrough(_ handler: @escaping @MainActor () -> Void) -> Self {
         onCanPlayThrough { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import Events
 
 public protocol VolumeChangeHandleable: DOMEventable {
     @discardableResult
-    func onVolumeChange(_ handler: @escaping () -> Void) -> Self
+    func onVolumeChange(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class VolumeChangeContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension VolumeChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onvolumechange.asp)
     @discardableResult
-    public func onVolumeChange(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onVolumeChange(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onvolumechange", createOrUpdate(VolumeChangeContainer.self, handler))
     }
     
     @discardableResult
-    public func onVolumeChange(_ handler: @escaping () -> Void) -> Self {
+    public func onVolumeChange(_ handler: @escaping @MainActor () -> Void) -> Self {
         onVolumeChange { _ in handler() }
     }
 }

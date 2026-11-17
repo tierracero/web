@@ -9,7 +9,7 @@ import Events
 
 public protocol RateChangeHandleable: DOMEventable {
     @discardableResult
-    func onRateChange(_ handler: @escaping () -> Void) -> Self
+    func onRateChange(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class RateChangeContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension RateChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onratechange.asp)
     @discardableResult
-    public func onRateChange(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onRateChange(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onratechange", createOrUpdate(RateChangeContainer.self, handler))
     }
     
     @discardableResult
-    public func onRateChange(_ handler: @escaping () -> Void) -> Self {
+    public func onRateChange(_ handler: @escaping @MainActor () -> Void) -> Self {
         onRateChange { _ in handler() }
     }
 }

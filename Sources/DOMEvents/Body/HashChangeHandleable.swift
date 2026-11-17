@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol HashChangeHandleable: DOMEventable {
     @discardableResult
-    func onHashChange(_ handler: @escaping () -> Void) -> Self
+    func onHashChange(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class HashChangeContainer: Container<HashChangeEvent>, StorageKey {
@@ -23,12 +23,12 @@ extension HashChangeHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onhashchange.asp)
     @discardableResult
-    public func onHashChange(_ handler: @escaping (HashChangeEvent) -> Void) -> Self {
+    public func onHashChange(_ handler: @escaping @MainActor (HashChangeEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onhashchange", createOrUpdate(HashChangeContainer.self, handler))
     }
     
     @discardableResult
-    public func onHashChange(_ handler: @escaping () -> Void) -> Self {
+    public func onHashChange(_ handler: @escaping @MainActor () -> Void) -> Self {
         onHashChange { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol ResetHandleable: DOMEventable {
     @discardableResult
-    func onReset(_ handler: @escaping () -> Void) -> Self
+    func onReset(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ResetContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension ResetHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onreset.asp)
     @discardableResult
-    public func onReset(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onReset(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onreset", createOrUpdate(ResetContainer.self, handler))
     }
     
     @discardableResult
-    public func onReset(_ handler: @escaping () -> Void) -> Self {
+    public func onReset(_ handler: @escaping @MainActor () -> Void) -> Self {
         onReset { _ in handler() }
     }
     

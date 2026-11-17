@@ -9,7 +9,7 @@ import Events
 
 public protocol CutHandleable: DOMEventable {
     @discardableResult
-    func onCut(_ handler: @escaping () -> Void) -> Self
+    func onCut(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class CutContainer: Container<ClipboardEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension CutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncut.asp)
     @discardableResult
-    public func onCut(_ handler: @escaping (Self, ClipboardEvent) -> Void) -> Self {
+    public func onCut(_ handler: @escaping @MainActor (Self, ClipboardEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("oncut", createOrUpdate(CutContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension CutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncut.asp)
     @discardableResult
-    public func onCut(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onCut(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onCut { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension CutHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncut.asp)
     @discardableResult
-    public func onCut(_ handler: @escaping () -> Void) -> Self {
+    public func onCut(_ handler: @escaping @MainActor () -> Void) -> Self {
         onCut { _ in handler() }
     }
 }

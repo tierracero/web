@@ -9,7 +9,7 @@ import Events
 
 public protocol WaitingHandleable: DOMEventable {
     @discardableResult
-    func onWaiting(_ handler: @escaping () -> Void) -> Self
+    func onWaiting(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class WaitingContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension WaitingHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onwaiting.asp)
     @discardableResult
-    public func onWaiting(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onWaiting(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onwaiting", createOrUpdate(WaitingContainer.self, handler))
     }
     
     @discardableResult
-    public func onWaiting(_ handler: @escaping () -> Void) -> Self {
+    public func onWaiting(_ handler: @escaping @MainActor () -> Void) -> Self {
         onWaiting { _ in handler() }
     }
 }

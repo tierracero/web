@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol UnloadHandleable: DOMEventable {
     @discardableResult
-    func onUnload(_ handler: @escaping () -> Void) -> Self
+    func onUnload(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class UnloadContainer: Container<UIEvent>, StorageKey {
@@ -23,12 +23,12 @@ extension UnloadHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onunload.asp)
     @discardableResult
-    public func onUnload(_ handler: @escaping (UIEvent) -> Void) -> Self {
+    public func onUnload(_ handler: @escaping @MainActor (UIEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onunload", createOrUpdate(UnloadContainer.self, handler))
     }
     
     @discardableResult
-    public func onUnload(_ handler: @escaping () -> Void) -> Self {
+    public func onUnload(_ handler: @escaping @MainActor () -> Void) -> Self {
         onUnload { _ in handler() }
     }
 }

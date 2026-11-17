@@ -7,7 +7,7 @@
 
 public protocol InvalidHandleable: DOMEventable {
     @discardableResult
-    func onInvalid(_ handler: @escaping () -> Void) -> Self
+    func onInvalid(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class InvalidContainer: Container<Event>, StorageKey {
@@ -21,7 +21,7 @@ extension InvalidHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oninvalid.asp)
     @discardableResult
-    public func onInvalid(_ handler: @escaping (Event, Self) -> Void) -> Self {
+    public func onInvalid(_ handler: @escaping @MainActor (Event, Self) -> Void) -> Self {
         setDOMHandlerIfNeeded("oninvalid", createOrUpdate(InvalidContainer.self) { [weak self] in
             guard let self = self else { return }
             handler($0, self)
@@ -30,7 +30,7 @@ extension InvalidHandleable {
     
     /// The oninvalid event occurs when a submittable `<input>` element is invalid.
     @discardableResult
-    public func onInvalid(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onInvalid(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         onInvalid { event, _ in
             handler(event)
         }
@@ -38,7 +38,7 @@ extension InvalidHandleable {
     
     /// The oninvalid event occurs when a submittable `<input>` element is invalid.
     @discardableResult
-    public func onInvalid(_ handler: @escaping () -> Void) -> Self {
+    public func onInvalid(_ handler: @escaping @MainActor () -> Void) -> Self {
         onInvalid { _ in handler() }
     }
 }

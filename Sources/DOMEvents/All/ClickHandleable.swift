@@ -9,7 +9,7 @@ import Events
 
 public protocol ClickHandleable: DOMEventable {
     @discardableResult
-    func onClick(_ handler: @escaping () -> Void) -> Self
+    func onClick(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ClickContainer: Container<MouseEvent>, StorageKey {
@@ -28,7 +28,7 @@ extension ClickHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onclick.asp)
     @discardableResult
-    public func onClick(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onClick(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onclick", createOrUpdate(ClickContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -46,7 +46,7 @@ extension ClickHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onclick.asp)
     @discardableResult
-    public func onClick(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onClick(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onClick { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -64,7 +64,7 @@ extension ClickHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onclick.asp)
     @discardableResult
-    public func onClick(_ handler: @escaping () -> Void) -> Self {
+    public func onClick(_ handler: @escaping @MainActor () -> Void) -> Self {
         onClick { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import Events
 
 public protocol TouchStartHandleable: DOMEventable {
     @discardableResult
-    func onTouchStart(_ handler: @escaping () -> Void) -> Self
+    func onTouchStart(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class TouchStartContainer: Container<TouchEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension TouchStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchstart.asp)
     @discardableResult
-    public func onTouchStart(_ handler: @escaping (Self, TouchEvent) -> Void) -> Self {
+    public func onTouchStart(_ handler: @escaping @MainActor (Self, TouchEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ontouchstart", createOrUpdate(TouchStartContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension TouchStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchstart.asp)
     @discardableResult
-    public func onTouchStart(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onTouchStart(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onTouchStart { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension TouchStartHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchstart.asp)
     @discardableResult
-    public func onTouchStart(_ handler: @escaping () -> Void) -> Self {
+    public func onTouchStart(_ handler: @escaping @MainActor () -> Void) -> Self {
         onTouchStart { _ in handler() }
     }
 }

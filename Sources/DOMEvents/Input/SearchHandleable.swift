@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol SearchHandleable: DOMEventable {
     @discardableResult
-    func onSearch(_ handler: @escaping () -> Void) -> Self
+    func onSearch(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class SearchContainer: Container<Event>, StorageKey {
@@ -23,7 +23,7 @@ extension SearchHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onsearch.asp)
     @discardableResult
-    public func onSearch(_ handler: @escaping (Event, Self) -> Void) -> Self {
+    public func onSearch(_ handler: @escaping @MainActor (Event, Self) -> Void) -> Self {
         setDOMHandlerIfNeeded("onsearch", createOrUpdate(SearchContainer.self) { [weak self] in
             guard let self = self else { return }
             handler($0, self)
@@ -32,7 +32,7 @@ extension SearchHandleable {
     
     /// The onsearch event occurs when a user presses the "ENTER" key or clicks the "x" button in an `<input>` element with type="search".
     @discardableResult
-    public func onSearch(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onSearch(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         onSearch { event, _ in
             handler(event)
         }
@@ -40,7 +40,7 @@ extension SearchHandleable {
     
     /// The onsearch event occurs when a user presses the "ENTER" key or clicks the "x" button in an `<input>` element with type="search".
     @discardableResult
-    public func onSearch(_ handler: @escaping () -> Void) -> Self {
+    public func onSearch(_ handler: @escaping @MainActor () -> Void) -> Self {
         onSearch { _ in handler() }
     }
 }

@@ -9,7 +9,7 @@ import Events
 
 public protocol CopyHandleable: DOMEventable {
     @discardableResult
-    func onCopy(_ handler: @escaping () -> Void) -> Self
+    func onCopy(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class CopyContainer: Container<ClipboardEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension CopyHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncopy.asp)
     @discardableResult
-    public func onCopy(_ handler: @escaping (Self, ClipboardEvent) -> Void) -> Self {
+    public func onCopy(_ handler: @escaping @MainActor (Self, ClipboardEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("oncopy", createOrUpdate(CopyContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension CopyHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncopy.asp)
     @discardableResult
-    public func onCopy(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onCopy(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onCopy { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension CopyHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_oncopy.asp)
     @discardableResult
-    public func onCopy(_ handler: @escaping () -> Void) -> Self {
+    public func onCopy(_ handler: @escaping @MainActor () -> Void) -> Self {
         onCopy { _ in handler() }
     }
 }

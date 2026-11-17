@@ -9,7 +9,7 @@ import Events
 
 public protocol MouseDownHandleable: DOMEventable {
     @discardableResult
-    func onMouseDown(_ handler: @escaping () -> Void) -> Self
+    func onMouseDown(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class MouseDownContainer: Container<MouseEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension MouseDownHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmousedown.asp)
     @discardableResult
-    public func onMouseDown(_ handler: @escaping (Self, MouseEvent) -> Void) -> Self {
+    public func onMouseDown(_ handler: @escaping @MainActor (Self, MouseEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("onmousedown", createOrUpdate(MouseDownContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension MouseDownHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmousedown.asp)
     @discardableResult
-    public func onMouseDown(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onMouseDown(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onMouseDown { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension MouseDownHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onmousedown.asp)
     @discardableResult
-    public func onMouseDown(_ handler: @escaping () -> Void) -> Self {
+    public func onMouseDown(_ handler: @escaping @MainActor () -> Void) -> Self {
         onMouseDown { _ in handler() }
     }
 }

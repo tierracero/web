@@ -9,7 +9,7 @@ import JavaScriptKit
 
 public protocol ShowHandleable: DOMEventable {
     @discardableResult
-    func onShow(_ handler: @escaping () -> Void) -> Self
+    func onShow(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class ShowContainer: Container<Event>, StorageKey {
@@ -23,12 +23,12 @@ extension ShowHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_onshow.asp)
     @discardableResult
-    public func onShow(_ handler: @escaping (Event) -> Void) -> Self {
+    public func onShow(_ handler: @escaping @MainActor (Event) -> Void) -> Self {
         setDOMHandlerIfNeeded("onshow", createOrUpdate(ShowContainer.self, handler))
     }
     
     @discardableResult
-    public func onShow(_ handler: @escaping () -> Void) -> Self {
+    public func onShow(_ handler: @escaping @MainActor () -> Void) -> Self {
         onShow { _ in handler() }
     }
 }

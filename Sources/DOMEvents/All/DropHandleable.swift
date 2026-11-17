@@ -9,7 +9,7 @@ import Events
 
 public protocol DropHandleable: DOMEventable {
     @discardableResult
-    func onDrop(_ handler: @escaping () -> Void) -> Self
+    func onDrop(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class DropContainer: Container<DragEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension DropHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondrop.asp)
     @discardableResult
-    public func onDrop(_ handler: @escaping (Self, DragEvent) -> Void) -> Self {
+    public func onDrop(_ handler: @escaping @MainActor (Self, DragEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ondrop", createOrUpdate(DropContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension DropHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondrop.asp)
     @discardableResult
-    public func onDrop(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onDrop(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onDrop { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension DropHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_ondrop.asp)
     @discardableResult
-    public func onDrop(_ handler: @escaping () -> Void) -> Self {
+    public func onDrop(_ handler: @escaping @MainActor () -> Void) -> Self {
         onDrop { _ in handler() }
     }
 }

@@ -16,7 +16,7 @@ class Container<Event: AnyEvent>: GenericContainer {
     typealias E = Event
     
     var isAddedToDOM: Bool = false
-    var handlers: [(E) -> Void]
+    var handlers: [@MainActor (E) -> Void]
     
     lazy var closure: JSClosure = JSClosure { [weak self] args -> JSValue in
         MainActor.assumeIsolated {
@@ -26,7 +26,7 @@ class Container<Event: AnyEvent>: GenericContainer {
         }
     }
     
-    required init (_ handler: @escaping (Event) -> Void) {
+    required init (_ handler: @escaping @MainActor (Event) -> Void) {
         handlers = [handler]
     }
     
@@ -47,8 +47,8 @@ protocol AnyContainer: AnyObject {
 protocol GenericContainer: AnyContainer, AnyStorageValue {
     associatedtype E: AnyEvent
     
-    var handlers: [(E) -> Void] { get set }
-    init (_ handler: @escaping (E) -> Void)
+    var handlers: [@MainActor (E) -> Void] { get set }
+    init (_ handler: @escaping @MainActor (E) -> Void)
 }
 
 extension GenericContainer {
@@ -58,7 +58,7 @@ extension GenericContainer {
 }
 
 extension Storageable {
-    func createOrUpdate<GC>(_ type: GC.Type, _ handler: @escaping (GC.Value.E) -> Void) -> GC.Value
+    func createOrUpdate<GC>(_ type: GC.Type, _ handler: @escaping @MainActor (GC.Value.E) -> Void) -> GC.Value
     where GC: StorageKey, GC.Value: GenericContainer {
         var container: GC.Value
         if let cached = storage[GC.self] {

@@ -9,7 +9,7 @@ import Events
 
 public protocol TouchCancelHandleable: DOMEventable {
     @discardableResult
-    func onTouchCancel(_ handler: @escaping () -> Void) -> Self
+    func onTouchCancel(_ handler: @escaping @MainActor () -> Void) -> Self
 }
 
 fileprivate class TouchCancelContainer: Container<TouchEvent>, StorageKey {
@@ -23,7 +23,7 @@ extension TouchCancelHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchcancel.asp)
     @discardableResult
-    public func onTouchCancel(_ handler: @escaping (Self, TouchEvent) -> Void) -> Self {
+    public func onTouchCancel(_ handler: @escaping @MainActor (Self, TouchEvent) -> Void) -> Self {
         setDOMHandlerIfNeeded("ontouchcancel", createOrUpdate(TouchCancelContainer.self) { [weak self] in
             guard let self = self else { return }
             handler(self, $0)
@@ -36,7 +36,7 @@ extension TouchCancelHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchcancel.asp)
     @discardableResult
-    public func onTouchCancel(_ handler: @escaping (Self) -> Void) -> Self {
+    public func onTouchCancel(_ handler: @escaping @MainActor (Self) -> Void) -> Self {
         onTouchCancel { [weak self] _,_ in
             guard let self = self else { return }
             handler(self)
@@ -49,7 +49,7 @@ extension TouchCancelHandleable {
     ///
     /// [More info →](https://www.w3schools.com/jsref/event_touchcancel.asp)
     @discardableResult
-    public func onTouchCancel(_ handler: @escaping () -> Void) -> Self {
+    public func onTouchCancel(_ handler: @escaping @MainActor () -> Void) -> Self {
         onTouchCancel { _ in handler() }
     }
 }
