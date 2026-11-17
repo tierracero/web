@@ -23,7 +23,7 @@ open class WebApp {
     
     public static func main() {
         #if arch(wasm32)
-        JavaScriptEventLoop.installGlobalExecutor()
+        WebRuntime.installEventLoop()
         #endif
         _ = Self.start()
     }

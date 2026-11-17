@@ -162,7 +162,7 @@ open class ServiceWorker {
         
     #if arch(wasm32)
     @MainActor public static func main() {
-        JavaScriptEventLoop.installGlobalExecutor()
+        WebRuntime.installEventLoop()
         Task { @WebWorkerActor in
             _ = Self.start()
         }
