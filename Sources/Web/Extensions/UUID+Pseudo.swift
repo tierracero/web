@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 18.11.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import WebFoundation
 
 extension UUID {

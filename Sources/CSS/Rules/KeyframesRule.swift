@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 11.07.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import JavaScriptKit
 
 /// Describes the aspect of intermediate steps in a CSS animation sequence.

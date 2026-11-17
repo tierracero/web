@@ -6,7 +6,11 @@
 //  Credits to https://github.com/vapor/vapor
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// Decodes instances of `Decodable` types from `application/x-www-form-urlencoded` `Data`.
 ///

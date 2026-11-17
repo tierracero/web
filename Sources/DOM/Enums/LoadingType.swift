@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 22.12.2020.
 //
 
-import Foundation
 
 public final class LoadingType {
     public let value: String

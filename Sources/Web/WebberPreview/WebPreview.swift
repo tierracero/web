@@ -5,13 +5,18 @@
 //  Created by Mihael Isaev on 12.03.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import WebFoundation
 
 extension Language: RenderBuilderContent {
-    public var renderBuilderContent: Preview.Item { .language(self) }
+    @MainActor public var renderBuilderContent: Preview.Item { .language(self) }
 }
 
+@MainActor
 open class WebPreview {
     @available(*, deprecated, message: "🧨 This variable is deprecated and not working. Please switch to `Language.en` in the @Preview content body declaration.")
     open class var language: Language { .en }
@@ -25,7 +30,7 @@ open class WebPreview {
     @Preview open class var content: Preview.Content { _RenderBuilderContent(renderBuilderContent: .none) }
     
     public struct Title: RenderBuilderContent {
-        public var renderBuilderContent: Preview.Item { .title(self) }
+        @MainActor public var renderBuilderContent: Preview.Item { .title(self) }
         
         let title: String
         
@@ -35,7 +40,7 @@ open class WebPreview {
     }
     
     public struct Size: RenderBuilderContent {
-        public var renderBuilderContent: Preview.Item { .size(self) }
+        @MainActor public var renderBuilderContent: Preview.Item { .size(self) }
         
         public let width: UInt
         public let height: UInt

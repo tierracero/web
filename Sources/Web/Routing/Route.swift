@@ -6,7 +6,11 @@
 //  Credits to https://github.com/vapor/vapor
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 public protocol AnyRoute: AnyObject {
     associatedtype P: AnyPageController

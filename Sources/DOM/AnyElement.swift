@@ -7,7 +7,7 @@
 
 import WebFoundation
 
-public protocol BaseContentElementable: DOMElement {
+@MainActor public protocol BaseContentElementable: DOMElement {
     init ()
     init(@DOM content: @escaping DOM.Block)
     
@@ -21,10 +21,10 @@ public protocol BaseContentElementable: DOMElement {
     var innerHTML: String { get set }
 }
 
-protocol _BaseContentElementable: BaseContentElementable {
+@MainActor protocol _BaseContentElementable: BaseContentElementable {
     func postBuildUI()
     func parseDOMItem(_ item: DOMItem)
-    #if WEBPREVIEW
+    #if !arch(wasm32)
     var __innerText: String { get set }
     #endif
 }
@@ -66,7 +66,7 @@ extension BaseContentElementable {
                 child.textContent = newValue.jsValue
             } else {
                 s?.properties.removeSubelementsRecursively()
-                s?.domElement.innerText = newValue.jsValue
+                s?.domElement.innerHTML = newValue.jsValue
             }
         }
     }
@@ -81,14 +81,14 @@ extension BaseContentElementable {
     #else
     public var innerText: String {
         get {
-            #if WEBPREVIEW
-            return s?.__innerText ?? ""
-            #else
+            #if arch(wasm32)
             return ""
+            #else
+            return s?.__innerText ?? ""
             #endif
         }
         set {
-            #if WEBPREVIEW
+            #if !arch(wasm32)
             s?.__innerText = newValue
             #endif
         }

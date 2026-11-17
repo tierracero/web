@@ -5,19 +5,40 @@
 //  Created by Mihael Isaev on 15.11.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import CSS
+#if !arch(wasm32)
+import Foundation
+#endif
 
-private var webapp: WebApp!
-
-open class WebApp: _PreviewableApp {
+@MainActor
+open class WebApp {
     public typealias Configuration = AppBuilder.Content
+
+    private static var singleton: WebApp?
     
-    public static func main() {
-        Self.start()
+    nonisolated public static func main() async {
+        await startForMain()
+    }
+
+    @MainActor
+    private static func startForMain() {
+        _ = Self.start()
     }
     
     private var isStarted = false
+    private var _rendered: JSFunction?
+    private var allowLocationChangeListener = true
+
+    func rendered(_ type: PageController.RenderedType = .expirable, expiresIn: TimeInterval = 10, lastModifiedAt: Date? = nil) {
+        Dispatch.async {
+            self._rendered?.callAsFunction(type == .static ? 0 : expiresIn, lastModifiedAt?.timeIntervalSince1970 ?? JSValue.undefined)
+        }
+    }
     
     #if !arch(wasm32)
     fileprivate var _scripts: [Script] = []
@@ -26,14 +47,10 @@ open class WebApp: _PreviewableApp {
     #endif
     
     public static var shared: WebApp {
-        #if WEBPREVIEW
-        guard webapp == nil else {
-            return webapp
-        }
-        webapp = WebApp.start()
-        return webapp
+        #if arch(wasm32)
+        return singleton!
         #else
-        return webapp
+        return singleton ?? Self.start()
         #endif
     }
     public class var current: Self { shared as! Self }
@@ -49,24 +66,102 @@ open class WebApp: _PreviewableApp {
     
     @discardableResult
     public static func start() -> WebApp {
-        guard webapp == nil else { return webapp }
-        webapp = Self()
-        guard !webapp.isStarted else { return webapp }
-        webapp.isStarted = true
-        #if WEBPREVIEW
-        webapp.previewStart()
+        if let singleton {
+            return singleton
+        }
+        let app = Self()
+        singleton = app
+        guard !app.isStarted else { return app }
+        app.isStarted = true
+        #if !arch(wasm32)
+        let args = CommandLine.arguments
+        if args.count > 1 {
+            if args.contains("--previews") {
+                app.previewStart(args)
+                return app
+            }
+            if args.contains("--index") {
+                app.renderIndex()
+                return app
+            }
+        }
         #else
-        webapp.start()
+        app.start()
         #endif
-        return webapp
+        return app
     }
     
     #if !arch(wasm32)
-    private func previewStart() {
-        var args = CommandLine.arguments
-        guard args.contains("--previews") else {
-            fatalError("Missing --previews argument")
+    private func renderIndex() {
+        var styles: [String] = []
+        var scripts: [String] = []
+        var links: [String] = []
+        var splash: Splash?
+        var index: Index?
+        func parseAppBuilderItem(_ item: AppBuilder.Item) {
+            switch item {
+            case .lifecycle(let v): ExtractWindowLifecycleListeners(v).didFinishLaunching.forEach { $0() }
+            case .items(let v):  for i in v { parseAppBuilderItem(i) }
+            case .splash(let v): splash = v
+            case .index(let v): index = v
+            case .stylesheet(let v): styles.append(v.renderPreview(singleQuotes: false))
+            default: break
+            }
         }
+        parseAppBuilderItem(app.appBuilderContent)
+        for s in _stylesheets {
+            styles.append(s.renderPreview(singleQuotes: false))
+        }
+        for s in _scripts {
+            scripts.append(s.renderPreview(singleQuotes: false))
+        }
+        for l in _links {
+            links.append(l.renderPreview(singleQuotes: false))
+        }
+        struct SplashData: Encodable {
+            let styles: [String]
+            let scripts: [String]
+            let links: [String]
+            let pathToFile: String?
+            let body: String?
+        }
+        var splashData: SplashData?
+        if let splash {
+            splashData = SplashData(
+                styles: styles.compactMap { $0.data(using: .utf8)?.base64EncodedString() },
+                scripts: scripts.compactMap { $0.data(using: .utf8)?.base64EncodedString() },
+                links: scripts.compactMap { $0.data(using: .utf8)?.base64EncodedString() },
+                pathToFile: splash.pathToHTML,
+                body: splash.pathToHTML != nil ? nil : splash.renderPreview(singleQuotes: false).data(using: .utf8)?.base64EncodedString()
+            )
+        }
+        struct IndexData: Encodable {
+            let title: String?
+            let lang: String?
+            let metas: [[String: String]]?
+            let links: [[String: String]]?
+            let scripts: [[String: String]]?
+            let splash: SplashData?
+        }
+        let indexData = IndexData(
+            title: index?.title,
+            lang: index?.lang,
+            metas: index?.metas,
+            links: index?.links,
+            scripts: index?.scripts,
+            splash: splashData
+        )
+        if let data = try? JSONEncoder().encode(indexData), let str = String(data: data, encoding: .utf8) {
+            print("==INDEX-START==")
+            print(str)
+            print("==INDEX-END==")
+        }
+    }
+    #endif
+    
+    #if !arch(wasm32)
+    private func previewStart(_ args: [String]) {
+        var args = args
         struct PassedPreview {
             let module, `class`: String
         }
@@ -120,7 +215,6 @@ open class WebApp: _PreviewableApp {
         } catch {
             fatalError("\(error)")
         }
-        exit(0)
     }
     #endif
     
@@ -131,25 +225,90 @@ open class WebApp: _PreviewableApp {
             $0.processRules()
         }
         window.appDidStarted()
-        handleRoute(.init(
-            application: self,
-            path: window.location.pathname,
-            search: window.location.search,
-            hash: window.location.hash
-        ))
-        window.$location.listenOnlyIfChanged { location in
-            self.handleRoute(.init(
-                application: self,
-                path: location.pathname,
-                search: location.search,
-                hash: location.hash
-            ))
+        JSObject.global.wasiDisableLocationChangeListener = JSClosure { args in
+            MainActor.assumeIsolated {
+                self.allowLocationChangeListener = false
+                return .undefined
+            }
+        }.jsValue
+        JSObject.global.wasiChangeRoute = JSClosure { args in
+            MainActor.assumeIsolated {
+                let pathname = args.count > 0 ? args[0].string ?? "" : ""
+                let search = args.count > 1 ? args[1].string ?? "" : ""
+                self._rendered = args.count > 2 ? args[2].function : nil
+                self.handleRoute(.init(
+                    application: self,
+                    path: pathname,
+                    search: search,
+                    hash: ""
+                ))
+                return .undefined
+            }
+        }.jsValue
+        if let wasiAppOnStart = JSObject.global.wasiAppOnStart.function {
+            if let index {
+                window.document.querySelector("html")?.attribute("lang", index.lang)
+                let head = window.document.querySelector("head")
+                for mmm in window.document.querySelectorAll("meta") {
+                    head?.domElement.removeChild.function?.callAsFunction(optionalThis: head?.domElement.object, mmm.domElement)
+                }
+                for data in index.metas {
+                    let meta = Meta()
+                    for key in data.keys {
+                        meta.attribute(key, data[key]!)
+                    }
+                    self.document.head.appendChild(meta)
+                }
+                for data in index.links {
+                    let link = Link()
+                    for key in data.keys {
+                        link.attribute(key, data[key]!)
+                    }
+                    document.head.appendChild(link)
+                }
+                for data in index.scripts {
+                    let script = Script()
+                    for key in data.keys {
+                        if ["async", "crossorigin"].contains(key) {
+                            script.attribute(key, true)
+                        } else {
+                            script.attribute(key, data[key]!)
+                        }
+                    }
+                    document.head.appendChild(script)
+                }
+            }
+            wasiAppOnStart.callAsFunction()
+        }
+        Dispatch.async {
+            if self.allowLocationChangeListener {
+                self.handleRoute(.init(
+                    application: self,
+                    path: self.window.location.pathname,
+                    search: self.window.location.search,
+                    hash: self.window.location.hash
+                ))
+            }
+            self.window.$location.listenOnlyIfChanged { location in
+                let pathname = location.pathname
+                let search = location.search
+                let hash = location.hash
+                Task { @MainActor in
+                    guard self.allowLocationChangeListener else { return }
+                    self.handleRoute(.init(
+                        application: self,
+                        path: pathname,
+                        search: search,
+                        hash: hash
+                    ))
+                }
+            }
         }
     }
     
     private var _previewStarted = false
-    
-    func _previewStart() {
+    /// Calls only once from `renderPreview()`
+    internal func _previewStart() {
         guard !_previewStarted else { return }
         _previewStarted = true
         parseAppBuilderItem(app.appBuilderContent)
@@ -212,16 +371,15 @@ open class WebApp: _PreviewableApp {
     
     @AppBuilder open var app: AppBuilder.Content { _AppContent(appBuilderContent: .none) }
     
-    #if WEBPREVIEW
     public var stylesheets: [Stylesheet] = []
-    #else
-    var stylesheets: [Stylesheet] = []
-    #endif
+    private var index: Index?
     
     private func parseAppBuilderItem(_ item: AppBuilder.Item) {
         switch item {
         case .items(let v): v.forEach { parseAppBuilderItem($0) }
         case .lifecycle(let v): window.addLifecycleListener(v)
+        case .splash: break
+        case .index(let v): index = v
         case .routes(let v): v.addRoutes(into: routes)
         case .stylesheet(let v): stylesheets.append(v)
         case .none: break

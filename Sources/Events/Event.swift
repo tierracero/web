@@ -74,7 +74,7 @@ open class Event: AnyEvent {
 //    public let target: Any
     
     /// Returns the time (in milliseconds relative to the epoch) at which the event was created
-    public let timeStamp: Int
+    public let timeStamp: Double
     
     public required init (_ event: JSValue) {
         jsEvent = event
@@ -86,6 +86,6 @@ open class Event: AnyEvent {
         defaultPrevented = event.defaultPrevented.boolean ?? false
         eventPhase = HandledEventPhase(rawValue: Int(event.eventPhase.number ?? 0)) ?? .none
         isTrusted = event.isTrusted.boolean ?? false
-        timeStamp = Int(event.timeStamp.number ?? 0)
+        timeStamp = event.timeStamp.number ?? 0
     }
 }

@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 06.07.2020.
 //
 
-//import Foundation
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
+import Foundation
+#endif
 //import WebCore
 //
 //class IndexWebPage: WebPage {

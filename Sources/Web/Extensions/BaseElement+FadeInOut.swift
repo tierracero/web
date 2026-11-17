@@ -6,7 +6,11 @@
 //
 
 import DOM
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 extension BaseElement {
     public enum FadeInBegin {
@@ -55,7 +59,7 @@ extension BaseElement {
         var opacity: Double = 1
         self.filter(.opacity(opacity * 100))
         Dispatch.interval(interval) { task in
-            opacity = Double(round(1000 * opacity) / 1000) - step
+            opacity = Double((1000 * opacity).rounded() / 1000) - step
             if opacity <= 0 {
                 self.filter(.opacity(0))
             } else {

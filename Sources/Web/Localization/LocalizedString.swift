@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 31.07.2022.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 public enum LocalizedString {
 	/// Afrikaans (Namibia)

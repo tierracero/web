@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 09.07.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 public protocol URLValue: CustomStringConvertible {
     var urlValue: String { get }

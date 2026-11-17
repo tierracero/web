@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 16.11.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 public final class Point: InnerStateChangeable, Equatable, CustomStringConvertible {
     @State public var x: Double = 0

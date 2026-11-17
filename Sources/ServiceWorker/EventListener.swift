@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 22.02.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import JavaScriptKit
 
 class EventListener {

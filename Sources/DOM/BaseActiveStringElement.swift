@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 02.07.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import JavaScriptKit
 
 open class BaseActiveStringElement: BaseActiveElement, _StringInitializable {

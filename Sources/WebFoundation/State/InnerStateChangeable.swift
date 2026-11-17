@@ -19,7 +19,11 @@ public protocol InnerStateChangeable: AnyObject, Copyable {
 
 extension InnerStateChangeable {
     public func innerStatesListen() {
-        innerStates.forEach { [self] in $0.listen(_handleChange) }
+        innerStates.forEach { state in
+            state.listen { [weak self] in
+                self?._handleChange()
+            }
+        }
     }
     
     public func innerStatesManualUpdateStarted() {

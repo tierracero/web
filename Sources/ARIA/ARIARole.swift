@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 04.12.2022.
 //
 
-import Web
 
 public struct ARIARoleType {
     let value: String
@@ -292,13 +291,6 @@ public struct ARIARoleType {
     ///
     /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/searchbox_role)
     public static var searchBox: ARIARoleType { .init(value: "searchbox") }
-    
-    /// <#T##Result#>
-    ///
-    /// (when focusable)
-    ///
-    /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/separator_role)
-    public static var separator: ARIARoleType { .init(value: "separator") }
     
     /// <#T##Result#>
     ///

@@ -5,13 +5,12 @@
 //  Created by Mihael Isaev on 27.02.2021.
 //
 
-import Foundation
 import WebFoundation
 
 /// DOM interface implemented by objects that can receive events and may have listeners for them.
 ///
 /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)
-public protocol EventTarget: JSValuable, Storageable {}
+@MainActor public protocol EventTarget: JSValuable, Storageable {}
 
 /// Specifies characteristics about the event listener
 public struct EventListenerAddOptions: ConvertibleToJSValue {
@@ -94,7 +93,9 @@ extension EventTarget {
         var eventHandler: EventListenerContainer.Handler!
         eventHandler = EventListenerContainer.Handler(closure: {
             if options.once {
-                self.container.remove(from: name, handler: eventHandler)
+                MainActor.assumeIsolated {
+                    self.container.remove(from: name, handler: eventHandler)
+                }
             }
             handler($0)
         })
@@ -190,7 +191,7 @@ extension EventTarget {
     }
 }
 
-class EventTargetContainer: AnyStorageValue, StorageKey {
+@MainActor class EventTargetContainer: AnyStorageValue, StorageKey {
     typealias Value = EventTargetContainer
     
     private lazy var eventListeners: [EventName: EventListenerContainer] = [:]
@@ -222,7 +223,7 @@ class EventTargetContainer: AnyStorageValue, StorageKey {
     }
 }
 
-class EventListenerContainer: AnyStorageValue {
+@MainActor class EventListenerContainer: AnyStorageValue {
     final class BaseEvent: AnyEvent {
         let jsEvent: JSValue
         let type: EventName
@@ -242,20 +243,32 @@ class EventListenerContainer: AnyStorageValue {
     }
     
     var handlers: [Handler]
+    private var isShutdown = false
     
     struct Handler: Equatable {
-        let id = UUID()
+        let id: UInt64
         let closure: (BaseEvent) -> Void
-        
+
+        @MainActor
+        init(closure: @escaping (BaseEvent) -> Void) {
+            Self.nextID &+= 1
+            self.id = Self.nextID
+            self.closure = closure
+        }
+
+        @MainActor private static var nextID: UInt64 = 0
+
         static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.id == rhs.id
         }
     }
     
     lazy var closure: JSClosure = JSClosure { args -> JSValue in
-        self.handlers.forEach { handler in
-            handler.closure(.init(args.first))
-            self.handlers.removeAll(where: { $0 == handler })
+        MainActor.assumeIsolated {
+            self.handlers.forEach { handler in
+                handler.closure(.init(args.first))
+                self.handlers.removeAll(where: { $0 == handler })
+            }
         }
         return .undefined
     }
@@ -264,13 +277,13 @@ class EventListenerContainer: AnyStorageValue {
         handlers = [handler]
     }
     
-    deinit {
-        #if JAVASCRIPTKIT_WITHOUT_WEAKREFS
-        closure.release()
-        #endif
+    isolated deinit {
+        shutdown()
     }
-    
+
     func shutdown() {
+        guard !isShutdown else { return }
+        isShutdown = true
         #if JAVASCRIPTKIT_WITHOUT_WEAKREFS
         closure.release()
         #endif

@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 18.12.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import JavaScriptKit
 
 public protocol URLConformable: ConvertibleToJSValue {
@@ -19,6 +23,8 @@ extension URLConformable {
 extension String: URLConformable {
     public var stringValue: String { self }
 }
+
+extension URL: @retroactive ConvertibleToJSValue {}
 
 extension URL: URLConformable {
 	public var stringValue: String { self.absoluteString }

@@ -5,36 +5,45 @@
 //  Created by Mihael Isaev on 24.02.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
+@MainActor
 class Container<Event: AnyEvent>: GenericContainer {
     typealias E = Event
     
     var isAddedToDOM: Bool = false
     var handlers: [(E) -> Void]
     
-    lazy var closure: JSClosure = JSClosure { args -> JSValue in
-        guard let event = args.first else { return .undefined }
-        self.handlers.forEach { $0(.init(event)) }
-        return .undefined
+    lazy var closure: JSClosure = JSClosure { [weak self] args -> JSValue in
+        MainActor.assumeIsolated {
+            guard let self, let event = args.first else { return .undefined }
+            self.handlers.forEach { $0(.init(event)) }
+            return .undefined
+        }
     }
     
     required init (_ handler: @escaping (Event) -> Void) {
         handlers = [handler]
     }
     
-    deinit {
+    isolated deinit {
         #if JAVASCRIPTKIT_WITHOUT_WEAKREFS
         closure.release()
         #endif
     }
 }
 
+@MainActor
 protocol AnyContainer: AnyObject {
     var isAddedToDOM: Bool { get set }
     var closure: JSClosure { get }
 }
 
+@MainActor
 protocol GenericContainer: AnyContainer, AnyStorageValue {
     associatedtype E: AnyEvent
     

@@ -6,7 +6,11 @@
 //  Credits to https://github.com/vapor/vapor
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// A basic `CodingKey` implementation.
 public enum BasicCodingKey: CodingKey {

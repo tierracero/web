@@ -5,9 +5,13 @@
 //  Created by Mihael Isaev on 15.11.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
-public final class WindowLifecycle {
+@MainActor public final class WindowLifecycle {
     private init () {}
     
     // MARK: Finish Launching
@@ -98,5 +102,13 @@ public final class WindowLifecycle {
     /// Called when window is going into foreground, e.g. user switch back to tab with the app
     public static func willEnterForeground(_ handler: @escaping () -> Void) -> Self {
         Self().willEnterForeground(handler)
+    }
+}
+
+@MainActor public struct ExtractWindowLifecycleListeners {
+    public let didFinishLaunching: [() -> Void]
+    
+    public init (_ lifecycle: WindowLifecycle) {
+        didFinishLaunching = lifecycle._didFinishLaunching
     }
 }

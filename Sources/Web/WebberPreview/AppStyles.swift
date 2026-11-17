@@ -11,10 +11,12 @@ import CSS
 public enum AppStyles: WebPreviewRenderable, RenderBuilderContent {
     case all, enabled, disabled, ids([Id]), id(Id), classes([Class]), `class`(Class)
     
-    public var renderBuilderContent: Preview.Item { .item(self) }
+    @MainActor public var renderBuilderContent: Preview.Item { .item(self) }
     
-    public func renderPreview(singleQuotes: Bool) -> String {
-        #if WEBPREVIEW
+    @MainActor public func renderPreview(singleQuotes: Bool) -> String {
+        #if arch(wasm32)
+        return ""
+        #else
         WebApp.shared._previewStart()
         let styles: [Stylesheet]
         switch self {
@@ -44,8 +46,6 @@ public enum AppStyles: WebPreviewRenderable, RenderBuilderContent {
             result.append("</style>")
         }
         return result
-        #else
-        return ""
         #endif
     }
 }

@@ -31,6 +31,7 @@ enum CSSRuleType: Int {
     case region = 16
 }
 
+@MainActor
 open class CSSRule: RulesContent, CSSRulable {
     public var rulesContent: Rules.Item { .rule(self) }
     
@@ -138,7 +139,7 @@ open class CSSRule: RulesContent, CSSRulable {
         if let index = _properties.firstIndex(where: { $0.key == key }) {
             _properties.remove(at: index)
         }
-        #if !WEBPREVIEW
+        #if arch(wasm32)
         domElement?.style.object?[key] = JSValue.null
         #endif
     }
@@ -156,7 +157,7 @@ public protocol CSSRulable {}
 
 extension BaseElement: CSSRulable {}
 
-extension CSSRulable {
+@MainActor extension CSSRulable {
     func _addProperty<P: _Property>(_ property: P) {
         let key = property.key
         func invokeResizeEvent() {
@@ -187,26 +188,32 @@ extension CSSRulable {
                 PropertyType.borderLeftWidth.description,
                 PropertyType.borderRightWidth.description,
                 PropertyType.borderBottomWidth.description
-            ].contains(property.key) {
+            ].contains(key) {
                 s.invokeResizeEvent()
             }
         }
         _setProperty(key, property.value, important: false)
         invokeResizeEvent()
         if let internalChangeable = property.propertyValue as? _PropertyValueInnerChangeable {
-            internalChangeable._changeHandler = {
-                self._setProperty(key, property.propertyValue.description, important: false)
-                invokeResizeEvent()
+            internalChangeable._changeHandler = { [self, property] in
+                let snapshot = property.propertyValue.description
+                Task { @MainActor [self] in
+                    self._setProperty(key, snapshot, important: false)
+                    invokeResizeEvent()
+                }
             }
         }
-        property._content._changeHandler = { newValue in
-            guard let newValue = newValue else {
-                self._removeProperty(key)
+        property._content._changeHandler = { [self] newValue in
+            let snapshot: String? = newValue?.description
+            Task { @MainActor [self] in
+                guard let snapshot = snapshot else {
+                    self._removeProperty(key)
+                    invokeResizeEvent()
+                    return
+                }
+                self._setProperty(key, snapshot, important: false)
                 invokeResizeEvent()
-                return
             }
-            self._setProperty(key, newValue.description, important: false)
-            invokeResizeEvent()
         }
     }
     
@@ -230,10 +237,8 @@ extension CSSRulable {
             s.domElement.style.object?[key] = .null
         }
         #else
-        #if WEBPREVIEW
         guard let s = self as? DOMElement else { return }
         s.properties.styles.removeValue(forKey: key)
-        #endif
         #endif
     }
 
@@ -254,13 +259,11 @@ extension CSSRulable {
             }
         }
         #else
-        #if WEBPREVIEW
         if let s = self as? CSSRule {
             s.set(key, value)
         } else if let s = self as? DOMElement {
             s.properties.styles[key] = value
         }
-        #endif
         #endif
     }
 }

@@ -6,7 +6,11 @@
 //
 
 import WebFoundation
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import Events
 
 public final class XMLHttpRequest: _XMLHttpRequestEventTarget {
@@ -30,7 +34,7 @@ public final class XMLHttpRequest: _XMLHttpRequestEventTarget {
 		_isForUploading = uploading
 	}
     
-    deinit {
+    isolated deinit {
         #if JAVASCRIPTKIT_WITHOUT_WEAKREFS
         readyStateChangeClosures.forEach { $0.release() }
         loadStartClosures.forEach { $0.release() }

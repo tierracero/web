@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 11.07.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// Define common names in font-variant-alternates for feature activated differently in OpenType.
 /// (at the Candidate Recommendation stage, but only implemented in Gecko as of writing)

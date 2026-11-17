@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 11.07.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// Describes the aspects of the viewport for small screen devices.
 /// (currently at the Working Draft stage)

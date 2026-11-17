@@ -6,7 +6,11 @@
 //  Credits to https://github.com/vapor/vapor
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 struct CachedRoute {
     let route: any AnyRoute
@@ -54,7 +58,7 @@ internal struct DefaultResponder: Responder {
         }
     }
     
-    func respond(to request: Request) throws -> AnyPageController? {
+    @MainActor func respond(to request: Request) throws -> AnyPageController? {
         if let cachedRoute = getRoute(for: request) {
             request.route = cachedRoute.route
             return try cachedRoute.responder.respond(to: request)
@@ -80,11 +84,12 @@ extension DefaultResponder {
 }
 
 private struct NotFoundResponder: Responder {
-    func respond(to request: Request) throws -> AnyPageController? {
+    @MainActor func respond(to request: Request) throws -> AnyPageController? {
         NotFoundPageController()
     }
 }
 
+@MainActor
 private class NotFoundPageController: PageController {
     required init() {
         super.init()

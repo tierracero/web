@@ -1,0 +1,31 @@
+//
+//  Splash.swift
+//  Web
+//
+//  Created by Mihael Isaev on 28.02.2024.
+//
+
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
+import Foundation
+#endif
+
+open class Splash: Div, AppBuilderContent {
+    @MainActor public var appBuilderContent: AppBuilder.Item { .splash(self) }
+    
+    open override class var name: String { "div" }
+    
+    var pathToHTML: String?
+    
+    public required init() {
+        super.init()
+        self.id("splash")
+    }
+    
+    public init(pathToHTML: String) {
+        self.pathToHTML = pathToHTML
+        super.init()
+        self.id("splash")
+    }
+}

@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 25.02.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import WebFoundation
 
 // MARK: - Content sectioning
@@ -301,8 +305,8 @@ open class Style: BaseElement, LoadHandleable {
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title)
 open class Title: BaseContentElement, _StringInitializable {
     var value: String {
-        get { innerText }
-        set { innerText = newValue }
+        get { innerHTML }
+        set { innerHTML = newValue }
     }
 
     /// String initializer
@@ -475,7 +479,7 @@ open class Input: BaseActiveElement {}
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputButton: BaseActiveElement {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     public required init() {
         super.init()
@@ -492,7 +496,7 @@ open class InputButton: BaseActiveElement {
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox)
 open class InputCheckbox: BaseActiveElement, ChangeHandleable, InvalidHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var checked = false
     @State public var indeterminate = false
@@ -559,7 +563,7 @@ open class InputCheckbox: BaseActiveElement, ChangeHandleable, InvalidHandleable
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color)
 open class InputColor: BaseActiveElement, ChangeHandleable, InvalidHandleable, InputHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = "#000000"
 
@@ -619,7 +623,7 @@ open class InputColor: BaseActiveElement, ChangeHandleable, InvalidHandleable, I
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date)
 open class InputDate: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -698,7 +702,7 @@ open class InputDate: BaseActiveElement, _StringInitializable, ChangeHandleable,
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputDateTime: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -778,7 +782,7 @@ open class InputDateTime: BaseActiveElement, _StringInitializable, ChangeHandlea
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email)
 open class InputEmail: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, SearchHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -838,7 +842,7 @@ open class InputEmail: BaseActiveElement, _StringInitializable, ChangeHandleable
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputFile: BaseActiveElement, ChangeHandleable, InvalidHandleable, SelectHandleable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public internal(set) var files: [File] = []
 
@@ -876,7 +880,7 @@ open class InputFile: BaseActiveElement, ChangeHandleable, InvalidHandleable, Se
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/hidden)
 open class InputHidden: BaseActiveElement {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var value = ""
 
@@ -917,7 +921,7 @@ open class InputHidden: BaseActiveElement {
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/image)
 open class InputImage: BaseActiveElement, ErrorHandleable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     public required init() {
         super.init()
@@ -932,7 +936,7 @@ open class InputImage: BaseActiveElement, ErrorHandleable {
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputList: BaseActiveElement, ChangeHandleable, InvalidHandleable, SelectHandleable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     public required init() {
         super.init()
@@ -952,7 +956,7 @@ open class InputList: BaseActiveElement, ChangeHandleable, InvalidHandleable, Se
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputMonth: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1032,7 +1036,7 @@ open class InputMonth: BaseActiveElement, _StringInitializable, ChangeHandleable
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputNumber: BaseActiveElement, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, SearchHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1111,7 +1115,7 @@ open class InputNumber: BaseActiveElement, ChangeHandleable, InvalidHandleable, 
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputPassword: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, SearchHandleable, Selectable, RangeTextable, SelectionRangeable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1170,7 +1174,7 @@ open class InputPassword: BaseActiveElement, _StringInitializable, ChangeHandlea
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputRadio: BaseActiveElement, ChangeHandleable, InvalidHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var checked = false
 
@@ -1217,7 +1221,7 @@ open class InputRadio: BaseActiveElement, ChangeHandleable, InvalidHandleable, S
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range)
 open class InputRange: BaseActiveElement, ChangeHandleable, InputHandleable, InvalidHandleable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var value: Double = 0
 
@@ -1300,7 +1304,7 @@ open class InputRange: BaseActiveElement, ChangeHandleable, InputHandleable, Inv
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputReset: BaseActiveElement {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     public required init() {
         super.init()
@@ -1321,7 +1325,7 @@ open class InputReset: BaseActiveElement {
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputSearch: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, SearchHandleable, Selectable, RangeTextable, SelectionRangeable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1380,7 +1384,7 @@ open class InputSearch: BaseActiveElement, _StringInitializable, ChangeHandleabl
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputSubmit: BaseActiveElement {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     public required init() {
         super.init()
@@ -1398,7 +1402,7 @@ open class InputSubmit: BaseActiveElement {
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputTel: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, SearchHandleable, Selectable, RangeTextable, SelectionRangeable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1458,7 +1462,7 @@ open class InputTel: BaseActiveElement, _StringInitializable, ChangeHandleable, 
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputText: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, SearchHandleable, Selectable, RangeTextable, SelectionRangeable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1517,7 +1521,7 @@ open class InputText: BaseActiveElement, _StringInitializable, ChangeHandleable,
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputTime: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, Selectable, RangeTextable, SelectionRangeable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1597,7 +1601,7 @@ open class InputTime: BaseActiveElement, _StringInitializable, ChangeHandleable,
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputURL: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, SearchHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -1658,7 +1662,7 @@ open class InputURL: BaseActiveElement, _StringInitializable, ChangeHandleable, 
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
 open class InputWeek: BaseActiveElement, _StringInitializable, ChangeHandleable, InvalidHandleable, InputHandleable, SelectHandleable, Selectable {
-    public override class var name: String { "input" }
+    nonisolated public override class var name: String { "input" }
 
     @State public var text: String = ""
 
@@ -2461,7 +2465,14 @@ open class NoScript: BaseElement {
 /// this is typically used to embed or refer to JavaScript code.
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
-open class Script: BaseElement, ErrorHandleable, LoadHandleable {
+open class Script: BaseContentElement, ErrorHandleable, LoadHandleable, _StringInitializable {
+    required public convenience init <U>(_ title: U) where U: UniValue, U.UniValue == String {
+        self.init()
+        value = title.uniValue
+        title.uniStateValue?.listen {
+            self.value = $0
+        }
+    }
     open func addedToDocument() {}
 }
 
@@ -2478,7 +2489,7 @@ open class Html: BaseElement {
 /// There can be only one `<body>` element in a document.
 ///
 /// [Learn more ->](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/body)
-open class Body: BaseElement, AfterPrintHandleable, BeforePrintHandleable, BeforeUnloadHandleable, HashChangeHandleable, OfflineHandleable, OnlineHandleable, PageHideHandleable, PageShowHandleable, ResizeHandleable, UnloadHandleable, ScrollHandleable, LoadHandleable {
+open class Body: BaseContentElement, AfterPrintHandleable, BeforePrintHandleable, BeforeUnloadHandleable, HashChangeHandleable, OfflineHandleable, OnlineHandleable, PageHideHandleable, PageShowHandleable, ResizeHandleable, UnloadHandleable, ScrollHandleable, LoadHandleable {
     
 }
 

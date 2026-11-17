@@ -7,13 +7,13 @@
 
 import WebFoundation
 
-public protocol DOMElementable: Storageable {
+@MainActor public protocol DOMElementable: Storageable {
     #if arch(wasm32)
     var domElement: JSValue { get set }
     #endif
 }
 
-public protocol DOMElement: DOMElementable, AnyElement {
+@MainActor public protocol DOMElement: DOMElementable, AnyElement {
     static var name: String { get }
     
     var properties: DOMElementProperties { get }
@@ -100,9 +100,10 @@ extension DOMElement {
         domElement.appendChild.function?.callAsFunction(optionalThis: domElement.object, element.domElement)
         properties.subElements.append(element)
         element.properties.parent = self
-        Dispatch.async(element.didAddToDOM)
-        #endif
-        #if WEBPREVIEW
+        Dispatch.async {
+            element.didAddToDOM()
+        }
+        #else
         properties.subElements.append(element)
         #endif
     }
@@ -119,9 +120,10 @@ extension DOMElement {
             properties.subElements.append(element)
         }
         element.properties.parent = self
-        Dispatch.async(element.didAddToDOM)
-        #endif
-        #if WEBPREVIEW
+        Dispatch.async {
+            element.didAddToDOM()
+        }
+        #else
         if let index = properties.subElements.firstIndex(where: { $0.properties._id == before.properties._id }) {
             properties.subElements.insert(element, at: index > 0 ? index - 1 : 0)
         } else {
@@ -153,9 +155,10 @@ extension DOMElement {
             properties.subElements.append(element)
         }
         element.properties.parent = self
-        Dispatch.async(element.didAddToDOM)
-        #endif
-        #if WEBPREVIEW
+        Dispatch.async {
+            element.didAddToDOM()
+        }
+        #else
         if let index = properties.subElements.firstIndex(where: { $0.properties._id == after.properties._id }) {
             properties.subElements.insert(element, at: index)
         } else {
@@ -276,8 +279,8 @@ extension DOMElement {
     }
 }
 
-public final class DOMElementProperties {
-    let uid: String = .shuffledAlphabet(8, letters: "AaBbCcDdEeFfGgJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz")
+@MainActor public final class DOMElementProperties {
+    package let uid: String = .shuffledAlphabet(8, letters: "AaBbCcDdEeFfGgJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz")
     
     public lazy var _id = uid
     public lazy var _classes: Set<String> = []
@@ -285,7 +288,7 @@ public final class DOMElementProperties {
     public internal(set) var parent: DOMElement? = nil
     public internal(set) var subElements: [DOMElement] = []
     public var positionChangeListeners: [() -> Void] = []
-    #if WEBPREVIEW
+    #if !arch(wasm32)
     public var styles: [String: String] = [:]
     #endif
     public var attributes: [String: String] = [:]

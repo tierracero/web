@@ -5,19 +5,25 @@
 //  Created by Mihael Isaev on 20.11.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import JavaScriptKit
 import DOM
 
 @available(*, unavailable, renamed: "PageController")
 public typealias ViewController = PageController
 
+@MainActor
 public protocol AnyPageController: AnyObject {
     static var fragmentRoutes: [FragmentRoutes] { get }
     
     var controller: PageController { get }
 }
 
+@MainActor
 open class PageController: BaseContentElement, AnyPageController {
     open override class var name: String { "div" }
     
@@ -28,8 +34,8 @@ open class PageController: BaseContentElement, AnyPageController {
     
     public var view: JSValue { domElement }
     
-    @State public var title = ""
-    @State public var metaDescription = ""
+    @State public var title = WebApp.shared.window.document.title
+    @State public var metaDescription = WebApp.shared.window.document.metaDescription
     
     public init (@DOM closure: @escaping (PageController) -> DOM.Content) {
         super.init()
@@ -42,14 +48,30 @@ open class PageController: BaseContentElement, AnyPageController {
     
     open override func buildUI() {
         super.buildUI()
-        title = WebApp.shared.window.document.title
         $title.listen {
-            WebApp.shared.window.document.title = $0
+            let title = $0
+            Task { @MainActor in
+                WebApp.shared.window.document.title = title
+            }
         }
-        metaDescription = WebApp.shared.window.document.metaDescription
         $metaDescription.listen {
-            WebApp.shared.window.document.metaDescription = $0
+            let metaDescription = $0
+            Task { @MainActor in
+                WebApp.shared.window.document.metaDescription = metaDescription
+            }
         }
+    }
+
+    var isRendered = false
+
+    public enum RenderedType {
+        case expirable, `static`
+    }
+
+    public func rendered(_ type: RenderedType = .expirable, expiresIn: TimeInterval = 10, lastModifiedAt: Date? = nil) {
+        guard !isRendered else { return }
+        isRendered = true
+        WebApp.shared.rendered(type, expiresIn: expiresIn, lastModifiedAt: lastModifiedAt)
     }
     
     var willLoadHandlers: [() -> Void] = []

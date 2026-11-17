@@ -6,7 +6,11 @@
 //
 
 import JavaScriptKit
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// The `ArrayBuffer` object is used to represent a generic, fixed-length raw binary data buffer.
 ///

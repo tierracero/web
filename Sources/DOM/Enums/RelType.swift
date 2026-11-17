@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 19.12.2020.
 //
 
-import Foundation
 
 public final class RelType {
     public let value: String

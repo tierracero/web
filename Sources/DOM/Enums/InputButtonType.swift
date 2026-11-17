@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 24.12.2020.
 //
 
-import Foundation
 
 public final class InputButtonType {
     public let value: String

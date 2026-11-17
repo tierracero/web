@@ -979,7 +979,7 @@ extension Pointerable {
     /// div > p
     /// ```
     public func parent(for values: Pointerable...) -> Pointer {
-        parent(values)
+        parent(for: values)
     }
 
     @available(*, deprecated, renamed: "parent(for:)") // TODO: remove in next major version

@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 24.02.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import JavaScriptKit
 
 /// [More info →](https://developer.mozilla.org/en-US/docs/Web/API/File/File)

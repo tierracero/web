@@ -9,7 +9,7 @@ import WebFoundation
 import WorkersAPI
 import ChannelMessagingAPI
 
-private var worker: Worker!
+nonisolated(unsafe) private var worker: Worker!
 
 open class Worker {
     private var isStarted = false

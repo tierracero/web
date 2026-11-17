@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 27.02.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import WebFoundation
 import Events
 import ChannelMessagingAPI
@@ -198,7 +202,7 @@ open class Worker: AbstractWorker, EventTarget {
         unhandledrejectionHandlers.removeAll()
     }
     
-    deinit {
+    isolated deinit {
         shutdown()
     }
 }

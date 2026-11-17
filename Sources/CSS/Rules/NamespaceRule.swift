@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 11.07.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// Tells the CSS engine that all its content must be considered prefixed with an XML namespace.
 

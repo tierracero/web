@@ -6,11 +6,11 @@
 //
 
 public class ForEach<Item>: BaseElement, ScrollHandleable, AlignAttrable where Item: Hashable {
-    public override class var name: String { Div.name }
+    nonisolated public override class var name: String { Div.name }
     
-    public typealias Handler = (Int, Item) -> DOMContent
-    public typealias HandlerValue = (Item) -> DOMContent
-    public typealias HandlerSimple = () -> DOMContent
+    public typealias Handler = @MainActor (Int, Item) -> DOMContent
+    public typealias HandlerValue = @MainActor (Item) -> DOMContent
+    public typealias HandlerSimple = @MainActor () -> DOMContent
     
     let items: State<[Item]>
     let block: Handler
@@ -74,42 +74,34 @@ public class ForEach<Item>: BaseElement, ScrollHandleable, AlignAttrable where I
         _postInit()
     }
     
+    private var addedToDOM = false
+    
     func _postInit() {
-        for item in allItems() {
-            parseDOMItem(item.domContentItem)
+        onDidAddToDOM { [weak self] in
+            guard let self, !self.addedToDOM else { return }
+            self.addedToDOM = true
+            self.renderItems(self.items.wrappedValue)
+            self.items.listen { [weak self] _, _ in
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    self.renderItems(self.items.wrappedValue)
+                }
+            }
         }
-        subscribeToChanges({}, { [weak self] deletions, insertions, modifications in
-            guard let self = self else { return }
-            for element in self.properties.subElements.enumerated().compactMap({ deletions.contains($0.offset) ? $0.element : nil }) {
-                element.remove()
-            }
-            insertions.forEach { insertion in
-                func addAsDiv() {
-                    let div = Div()
-                    div.parseDOMItem(self.items(at: insertion).domContentItem)
-                    self.insertChild(div, at: insertion)
-                }
-                func parse(_ item: DOMItem) {
-                    switch item {
-                    case .items(let items):
-                        if items.count == 1, let item = items.first {
-                            parse(item)
-                        } else {
-                            addAsDiv()
-                        }
-                    case .elements(let elements):
-                        if elements.count == 1, let element = elements.first {
-                            self.insertChild(element, at: insertion)
-                        } else {
-                            fallthrough
-                        }
-                    default:
-                        addAsDiv()
-                    }
-                }
-                parse(self.items(at: insertion).domContentItem)
-            }
-        }) {}
+    }
+
+    @MainActor
+    private func renderItems(_ snapshot: [Item]) {
+        for child in Array(properties.subElements) {
+            child.remove()
+        }
+        #if !arch(wasm32)
+        properties.subElements.removeAll()
+        #endif
+
+        for (index, item) in snapshot.enumerated() {
+            parseDOMItem(block(index, item).domContentItem)
+        }
     }
     
     func parseDOMItem(_ item: DOMItem) {
@@ -121,56 +113,39 @@ public class ForEach<Item>: BaseElement, ScrollHandleable, AlignAttrable where I
         }
     }
     
-    private func allItems() -> [DOMContent] {
-        items.wrappedValue.enumerated().compactMap { [weak self] in
-            self?.block($0.offset, $0.element)
-        }
-    }
-    
-    func items(at index: Int) -> DOMContent {
-        guard index < items.wrappedValue.count else { return DOM.none }
-        return block(index, items.wrappedValue[index])
-    }
-    
-    private func subscribeToChanges(_ begin: @escaping () -> Void, _ handler: @escaping ([Int], [Int], [Int]) -> Void, _ end: @escaping () -> Void) {
-        items.beginTrigger(begin)
-        items.listen { old, new in
-            let diff = old.difference(new)
-            let deletions = diff.removed.compactMap { $0.index }
-            let insertions = diff.inserted.compactMap { $0.index }
-            let modifications = diff.modified.compactMap { $0.index }
-            guard deletions.count > 0 || insertions.count > 0 || modifications.count > 0 else { return }
-            handler(deletions, insertions, modifications)
-        }
-        items.endTrigger(end)
-    }
 }
 
 extension ForEach where Item == Int {
+    @MainActor
     public convenience init (_ items: ClosedRange<Item>, @DOM block: @escaping Handler) {
         self.init(items.map { $0 }, block: block)
     }
     
+    @MainActor
     public convenience init (_ items: ClosedRange<Item>, @DOM block: @escaping HandlerValue) {
         self.init(items.map { $0 }, block: block)
     }
     
+    @MainActor
     public convenience init (_ items: ClosedRange<Item>, @DOM block: @escaping HandlerSimple) {
         self.init(items.map { $0 }, block: block)
     }
 }
 
 extension Int {
+    @MainActor
     public func times(@DOM block: @escaping ForEach<Int>.Handler, file: StaticString = #fileID, line: UInt = #line) -> ForEach<Int> {
         assert(self >= 2, "Should be 2 times and more", file: file, line: line)
         return .init(0...(self - 1), block: block)
     }
     
+    @MainActor
     public func times(@DOM block: @escaping ForEach<Int>.HandlerValue, file: StaticString = #fileID, line: UInt = #line) -> ForEach<Int> {
         assert(self >= 2, "Should be 2 times and more", file: file, line: line)
         return .init(0...(self - 1), block: block)
     }
     
+    @MainActor
     public func times(@DOM block: @escaping ForEach<Int>.HandlerSimple, file: StaticString = #fileID, line: UInt = #line) -> ForEach<Int> {
         assert(self >= 2, "Should be 2 times and more", file: file, line: line)
         return .init(0...(self - 1), block: block)
@@ -180,63 +155,66 @@ extension Int {
 // TODO: move to separate file
 
 public class BuilderFunction: DOMContent {
+    @MainActor
     public var domContentItem: DOMItem { .items([content.domContentItem]) }
     
     let content: DOMContent
+
+    public typealias Content<Value> = @MainActor (Value) -> DOMContent
     
-    public init (_ valueToPass: String, @DOM content: @escaping (String) -> DOMContent) {
+    @MainActor public init (_ valueToPass: String, @DOM content: @escaping Content<String>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: Int8, @DOM content: @escaping (Int8) -> DOMContent) {
+    @MainActor public init (_ valueToPass: Int8, @DOM content: @escaping Content<Int8>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: Int16, @DOM content: @escaping (Int16) -> DOMContent) {
+    @MainActor public init (_ valueToPass: Int16, @DOM content: @escaping Content<Int16>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: Int32, @DOM content: @escaping (Int32) -> DOMContent) {
+    @MainActor public init (_ valueToPass: Int32, @DOM content: @escaping Content<Int32>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: Int64, @DOM content: @escaping (Int64) -> DOMContent) {
+    @MainActor public init (_ valueToPass: Int64, @DOM content: @escaping Content<Int64>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: Double, @DOM content: @escaping (Double) -> DOMContent) {
+    @MainActor public init (_ valueToPass: Double, @DOM content: @escaping Content<Double>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: Float, @DOM content: @escaping (Float) -> DOMContent) {
+    @MainActor public init (_ valueToPass: Float, @DOM content: @escaping Content<Float>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: UInt8, @DOM content: @escaping (UInt8) -> DOMContent) {
+    @MainActor public init (_ valueToPass: UInt8, @DOM content: @escaping Content<UInt8>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: UInt16, @DOM content: @escaping (UInt16) -> DOMContent) {
+    @MainActor public init (_ valueToPass: UInt16, @DOM content: @escaping Content<UInt16>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: UInt32, @DOM content: @escaping (UInt32) -> DOMContent) {
+    @MainActor public init (_ valueToPass: UInt32, @DOM content: @escaping Content<UInt32>) {
         self.content = content(valueToPass)
     }
     
-    public init (_ valueToPass: UInt64, @DOM content: @escaping (UInt64) -> DOMContent) {
+    @MainActor public init (_ valueToPass: UInt64, @DOM content: @escaping Content<UInt64>) {
         self.content = content(valueToPass)
     }
     
-    public init <Element>(_ valueToPass: Array<Element>, @DOM content: @escaping (Array<Element>) -> DOMContent) {
+    @MainActor public init <Element>(_ valueToPass: Array<Element>, @DOM content: @escaping Content<Array<Element>>) {
         self.content = content(valueToPass)
     }
     
-    public init <Key, Value>(_ valueToPass: Dictionary<Key, Value>, @DOM content: @escaping (Dictionary<Key, Value>) -> DOMContent) {
+    @MainActor public init <Key, Value>(_ valueToPass: Dictionary<Key, Value>, @DOM content: @escaping Content<Dictionary<Key, Value>>) {
         self.content = content(valueToPass)
     }
     
-    public init <Result>(_ beforeRender: () -> Result, @DOM content: (Result) -> DOMContent) {
+    @MainActor public init <Result>(_ beforeRender: () -> Result, @DOM content: Content<Result>) {
         self.content = content(beforeRender())
     }
 }

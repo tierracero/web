@@ -9,13 +9,13 @@ import WebFoundation
 
 /// Represents any web page loaded in the browser
 /// and serves as an entry point into the web page's content.
-public class Document: DOMElement, EventTarget {
+@MainActor public class Document: DOMElement, EventTarget {
     public lazy var storage: Storage = .init()
     public var jsValue: JSValue { domElement }
     
     public private(set) lazy var properties: DOMElementProperties = .init()
     
-    public static var name: String { "\(Self.self)".lowercased() }
+    nonisolated public static var name: String { "\(Self.self)".lowercased() }
     
     public let window: Window
     
@@ -51,13 +51,11 @@ public class Document: DOMElement, EventTarget {
     init (_ window: Window) {
         #if arch(wasm32)
         domElement = JSObject.global.document
-        // reset body
-        domElement.body.object?.innerHTML = "";
         #else
         domElement = JSValue("")
         #endif
         self.window = window
-        #if !WEBPREVIEW
+        #if arch(wasm32)
         setupTitle()
         setupMetaDescription()
         window.$isInForeground.merge(with: $isInForeground)
@@ -76,7 +74,7 @@ public class Document: DOMElement, EventTarget {
             if let existingTitle = titles.item.function?.callAsFunction(optionalThis: titles.object, 0),
                !existingTitle.isNull,
                !existingTitle.isUndefined {
-                predefinedTitle = existingTitle.innerText.string ?? ""
+                predefinedTitle = existingTitle.innerHTML.string ?? ""
                 head.domElement.removeChild.function?.callAsFunction(optionalThis: head.domElement.object, existingTitle)
             }
         }
@@ -124,11 +122,11 @@ public class Document: DOMElement, EventTarget {
     /// Returns the first Element within the document that matches the specified selector.
     ///
     /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
-    public func querySelector(_ selector: String) -> BaseElement? {
+    public func querySelector(_ selector: String) -> BaseContentElement? {
         #if arch(wasm32)
         guard let element = domElement[dynamicMember: "querySelector"].function?.callAsFunction(optionalThis: domElement.object, selector) else { return nil }
         guard !element.isNull && !element.isUndefined else { return nil }
-        return BaseElement(element)
+        return BaseContentElement(element)
         #else
         return nil
         #endif
@@ -137,7 +135,7 @@ public class Document: DOMElement, EventTarget {
     /// Returns a list of the document's elements that match the specified group of selectors.
     ///
     /// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll)
-    public func querySelectorAll(_ selector: String) -> [BaseElement] {
+    public func querySelectorAll(_ selector: String) -> [BaseContentElement] {
         #if arch(wasm32)
 //        var items: [BaseElement] = []
 //        guard let result = domElement[dynamicMember: "querySelectorAll"].function?.callAsFunction(optionalThis: domElement.object, selector) else { return [] }
@@ -153,7 +151,7 @@ public class Document: DOMElement, EventTarget {
 //        return items
         JSObject.global.eval.function?.callAsFunction(arguments: ["Arr = function(selector) { return Array.from(document.querySelectorAll(selector)); }"])
         return JSObject.global[dynamicMember: "Arr"].function?.callAsFunction(arguments: [selector.jsValue]).array?.compactMap {
-            BaseElement($0)
+            BaseContentElement($0)
         } ?? []
         #else
         return []

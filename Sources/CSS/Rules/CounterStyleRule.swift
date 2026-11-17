@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 11.07.2020.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 ///  Defines specific counter styles that are not part of the predefined set of styles.
 ///  (at the Candidate Recommendation stage, but only implemented in Gecko as of writing)

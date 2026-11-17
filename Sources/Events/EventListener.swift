@@ -17,12 +17,12 @@ public protocol EventListenerCompatibleType {
     var rawValue: String { get }
 }
 
-public class EventListener {
+@MainActor public class EventListener {
     private let handler: ([JSValue]) -> Void
     private let closure: JSClosure
     private let object, event: String
     
-    deinit {
+    isolated deinit {
         #if arch(wasm32)
         JSObject.global[object].object!["removeEventListener"].function!.callAsFunction(event, closure)
         #if JAVASCRIPTKIT_WITHOUT_WEAKREFS

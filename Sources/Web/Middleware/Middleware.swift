@@ -6,7 +6,11 @@
 //  Credits to https://github.com/vapor/vapor
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// `Middleware` is placed between the server and your router. It is capable of
 /// mutating both incoming requests and outgoing responses. `Middleware` can choose
@@ -18,7 +22,7 @@ public protocol Middleware {
     ///     - request: The incoming `Request`.
     ///     - next: Next `Responder` in the chain, potentially another middleware or the main router.
     /// - returns: An asynchronous `Response`.
-    func respond(to request: Request, chainingTo next: any Responder) -> PageController
+    @MainActor func respond(to request: Request, chainingTo next: any Responder) -> PageController
 }
 
 extension Array where Element == Middleware {
@@ -49,7 +53,7 @@ private struct HTTPMiddlewareResponder: Responder {
         self.responder = responder
     }
     
-    func respond(to request: Request) throws -> AnyPageController? {
+    @MainActor func respond(to request: Request) throws -> AnyPageController? {
         middleware.respond(to: request, chainingTo: responder)
     }
 }

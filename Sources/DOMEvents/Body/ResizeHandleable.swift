@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 30.11.2020.
 //
 
-import Foundation
 import JavaScriptKit
 
 public protocol ResizeHandleable: DOMEventable {

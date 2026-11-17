@@ -1,45 +1,53 @@
-//
-//  AnyState.swift
-//  WebFoundation
-//
-//  Created by Mihael Isaev on 16.11.2020.
-//
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
+import Foundation
+#endif
 
 extension State {
     public func map<Result>(_ expression: @escaping () -> Result) -> State<Result> {
         .init(self, expression)
     }
-    
+
     public func map<Result>(_ expression: @escaping (Value) -> Result) -> State<Result> {
         .init(self, expression)
     }
+
+    public func map<Result>(
+        expressionTo: @escaping (Value) -> Result,
+        expressionFrom: @escaping (Result) -> Value
+    ) -> State<Result> {
+        .init(self, expressionTo, expressionFrom)
+    }
 }
 
-// MARK: Any States to Expressable
-
 public protocol AnyState: AnyObject {
-    func listen(_ listener: @escaping () -> Void)
+    var id: UUID { get }
+    @discardableResult
+    func listen(_ listener: @escaping () -> Void) -> StateListener
+    func removeListener(id: UUID)
+    func removeListeners()
 }
 
 public class AnyStates {
-    private var _expression: (() -> Void)?
-    
+    private var expression: (() -> Void)?
+
     @discardableResult
-    init (_ states: [AnyState], expression: @escaping () -> Void) {
-        _expression = expression
+    init(_ states: [AnyState], expression: @escaping () -> Void) {
+        self.expression = expression
         for state in states {
-            state.listen { [weak self] in
-                self?._expression?()
-            }
+            state.listen { [weak self] in self?.expression?() }
         }
     }
 }
 
 extension Array where Element == AnyState {
     public func map<Result>(_ expression: @escaping () -> Result) -> State<Result> {
-        let state = State<Result>.init(wrappedValue: expression())
-        AnyStates(self) { [weak state] in
-            state?.wrappedValue = expression()
+        let state = State<Result>(wrappedValue: expression())
+        for source in self {
+            source.listen { [weak state] in
+                state?.wrappedValue = expression()
+            }.hold(in: state)
         }
         return state
     }

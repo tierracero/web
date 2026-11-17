@@ -5,7 +5,11 @@
 //  Created by Mihael Isaev on 01.03.2021.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 public protocol WebWorkerAnyEvent: Codable {
     var event: String { get }

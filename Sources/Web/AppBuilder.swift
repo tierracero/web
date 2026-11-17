@@ -8,26 +8,30 @@
 import CSS
 
 public protocol AppBuilderContent {
-    var appBuilderContent: AppBuilder.Item { get }
+    @MainActor var appBuilderContent: AppBuilder.Item { get }
 }
 
 extension WindowLifecycle: AppBuilderContent {
-    public var appBuilderContent: AppBuilder.Item { .lifecycle(self) }
+    @MainActor public var appBuilderContent: AppBuilder.Item { .lifecycle(self) }
 }
 
+@MainActor
 struct _AppContent: AppBuilder.Content {
-    let appBuilderContent: AppBuilder.Item
+    @MainActor let appBuilderContent: AppBuilder.Item
 }
 
 public typealias Lifecycle = WindowLifecycle
 
+@MainActor
 @resultBuilder public struct AppBuilder {
-    public typealias Block = () -> AppBuilderContent
+    public typealias Block = @MainActor () -> AppBuilderContent
     public typealias Content = AppBuilderContent
     
     public enum Item {
         case none
         case lifecycle(Lifecycle)
+        case splash(Splash)
+        case index(Index)
         case routes(Routes)
         case stylesheet(Stylesheet)
         case items([Item])

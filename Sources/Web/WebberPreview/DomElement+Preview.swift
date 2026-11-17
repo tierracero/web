@@ -10,7 +10,7 @@ import DOM
 import CSS
 
 extension BaseElement: WebPreviewRenderable, RenderBuilderContent {
-    public var renderBuilderContent: Preview.Item { .item(self) }
+    @MainActor public var renderBuilderContent: Preview.Item { .item(self) }
 }
 
 extension DOMElement {
@@ -18,8 +18,8 @@ extension DOMElement {
     
     // MARK: _PreviewRenderable
     
-    public func renderPreview(singleQuotes: Bool) -> String {
-        #if WEBPREVIEW
+    @MainActor public func renderPreview(singleQuotes: Bool) -> String {
+        #if !arch(wasm32)
         if let s = self as? Stylesheet {
             var result = ""
             if s._rules.count > 0 {
@@ -60,7 +60,13 @@ extension DOMElement {
                 result += " id=\"\(properties._id)\""
             }
         }
-        #if WEBPREVIEW
+        #if arch(wasm32)
+        if properties.attributes.keys.contains("class") {
+            properties.attributes["class"] = (properties.attributes["class"] ?? "") + " " + properties._classes.joined(separator: " ")
+        } else {
+            properties.attributes["class"] = properties._classes.joined(separator: " ")
+        }
+        #else
         if style.count > 0 {
             if singleQuotes {
                 result += " style='\(style)'"
@@ -69,23 +75,16 @@ extension DOMElement {
             }
         }
         #endif
-        #if !WEBPREVIEW
-        if properties.attributes.keys.contains("class") {
-            properties.attributes["class"] = (properties.attributes["class"] ?? "") + " " + properties._classes.joined(separator: " ")
-        } else {
-            properties.attributes["class"] = properties._classes.joined(separator: " ")
-        }
-        #endif
-        properties.attributes.forEach { key, value in
-            result += " " + key
-            if value.count > 0 {
-                if singleQuotes {
-                    result += "='" + value + "'"
-                } else {
-                    result += "=\"" + value + "\""
-                }
+        properties.attributes.compactMap({ key, value in
+            guard value.count > 0 else { return nil }
+            if singleQuotes {
+                return key + "='" + value + "'"
+            } else {
+                return key + "=\"" + value + "\""
             }
-        }
+        })
+        .sorted(by: { $0 < $1 })
+        .joined(separator: " ")
         result += ">"
         if let s = self as? BaseContentElementable, s.innerText.count > 0 {
             result += s.innerText

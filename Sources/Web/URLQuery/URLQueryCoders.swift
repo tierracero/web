@@ -6,7 +6,11 @@
 //  Credits to https://github.com/vapor/vapor
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 public protocol URLQueryDecoder {
     func decode<D: Decodable>(_ decodable: D.Type, from query: String) throws -> D

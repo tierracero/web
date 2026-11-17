@@ -5,7 +5,11 @@
 //  Copied from https://github.com/vapor/vapor/blob/main/Sources/Vapor/Utilities/Array%2BRandom.swift
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 extension FixedWidthInteger {
     public static func random() -> Self {

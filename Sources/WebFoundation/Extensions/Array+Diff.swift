@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 31.12.2022.
 //
 
-import Foundation
 
 extension Array {
     public struct DiffItem<V: Hashable> {
@@ -52,6 +51,27 @@ extension Array {
     }
 }
 extension Array where Element: Hashable {
+    public func difference(_ new: [Element]) -> DiffResult<Element, Element> {
+        let changes = new.difference(from: self)
+        let removed = changes.compactMap { change -> DiffItem<Element>? in
+            guard case let .remove(offset, element, _) = change else { return nil }
+            return DiffItem(index: offset, value: element)
+        }
+        let inserted = changes.compactMap { change -> DiffItem<Element>? in
+            guard case let .insert(offset, element, _) = change else { return nil }
+            return DiffItem(index: offset, value: element)
+        }
+
+        var unmatchedNew = new
+        var common: [(Element, Element)] = []
+        for oldValue in self {
+            guard let index = unmatchedNew.firstIndex(of: oldValue) else { continue }
+            common.append((oldValue, unmatchedNew.remove(at: index)))
+        }
+
+        return DiffResult(common: common, removed: removed, inserted: inserted)
+    }
+
     public func difference<T2: Hashable>(_ new: [T2]) -> DiffResult<Element, T2> {
         difference(self, new, with: ==)
     }
